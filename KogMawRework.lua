@@ -1,6 +1,6 @@
 local myHero = GetMyChamp()
  if GetChampName(myHero) ~= "KogMaw" then return end
-__PrintDebug("KogMaw")
+--__PrintDebug("KogMaw")
 __PrintTextGame("KogMawRework Script loaded")
 
 
