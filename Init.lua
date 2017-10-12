@@ -6,6 +6,8 @@ function sleep(s)						 -- s=second
 end
 
 __PrintTextGame("--Injected .Lua --")
+__PrintTextGame("--Finish HotKey : END --")
+
 
 while(true)
 do

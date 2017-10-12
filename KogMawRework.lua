@@ -1,14 +1,19 @@
 local myHero = GetMyChamp()
  if GetChampName(myHero) ~= "KogMaw" then return end
 --__PrintDebug("KogMaw")
-__PrintTextGame("KogMawRework Script loaded")
-
-
+__PrintTextGame("KogMawRework v1.2 loaded")
 
 local Q = 0
 local W = 1
 local E = 2
 local R = 3
+
+local SpaceKeyCode = 32
+local CKeyCode = 67
+local VKeyCode = 86
+
+local config_Combo_RStacks = 5
+local config_Harass_RStacks = 2
 
 local SpellQ = {Speed = 1550, Range = 925, Delay = 0.3667, Width = 60}
 local SpellW = {Speed = 1600, Range = 1000, Delay = 0.111, Width = 55}
@@ -21,6 +26,7 @@ local RStacks = 0
 local WRangeTable = {130, 150, 170, 190, 210}
 
 local ComboUseMana = 40
+local HarassUseMana = 60
 
 function Check()
 	myHero = GetMyChamp()
@@ -38,8 +44,7 @@ function Check()
 	RStacks = GetBuffCount(myHero, "kogmawlivingartillerycost")
 end
 
-function SpellQCollision(Target, Delay, Width, Range, Speed, vp_distance) -- need review
-	--local vp_distance = VPGetLineCastPosition(Target, Delay, Width, Range, Speed)
+function SpellQCollision(Target, Delay, Width, Range, Speed, vp_distance)
 
 	local PredPosX = GetPredictionPosX(Target, vp_distance)
 	local PredPosZ = GetPredictionPosZ(Target, vp_distance)
@@ -142,7 +147,7 @@ function CastQ(Target)
 		--__PrintDebug("Q")
 		local vp_distance = VPGetLineCastPosition(Target, SpellQ.Delay, SpellQ.Width, SpellQ.Range, SpellQ.Speed)
 		--__PrintDebug(vp_distance)
-		if vp_distance > 0 and vp_distance < SpellQ.Range then --and not SpellQCollision(Target, SpellQ.Delay, SpellQ.Width, SpellQ.Range, SpellQ.Speed)
+		if vp_distance > 0 and vp_distance < SpellQ.Range then
 			if not SpellQCollision(Target, SpellQ.Delay, SpellQ.Width, SpellQ.Range, SpellQ.Speed, vp_distance) then
 				--__PrintDebug("Q2")
 				CastSpellToPredictionPos(Target, Q, vp_distance)
@@ -175,7 +180,7 @@ function CastR(Target)
 		--__PrintDebug("CastR")
 		local vp_distance = VPGetCircularCastPosition(Target, SpellR.Delay, SpellR.Width)
 		--__PrintDebug(vp_distance)
-		if vp_distance > 0 and vp_distance < RRange and RStacks < 4 and not IsMyManaLowCombo() then
+		if vp_distance > 0 and vp_distance < RRange and RStacks < config_Combo_RStacks and not IsMyManaLowCombo() then
 			--__PrintDebug("CastR1")
 			CastSpellToPredictionPos(Target, R, vp_distance)
 			RStacks = GetBuffCount(myHero, "kogmawlivingartillerycost")
@@ -198,7 +203,6 @@ function Combo(Target)
 	end
 
 	if RReady and Setting_IsComboUseR() and not IsMyManaLowCombo() then
-		--__PrintDebug("R")
 		CastR(Target)
 	end
 end
@@ -210,12 +214,20 @@ function OnTick()
 
 	target = GetEnemyChampCanKillFastest(1300)
 
-	--Qtarget = nil
+	nKeyCode = GetKeyCode()
 
-	SetLuaCombo(true)
-	Combo(target)
+	if nKeyCode == SpaceKeyCode then
+		SetLuaCombo(true)
+		Combo(target)
+	end
 
-	--Harass(Qtarget)
+	if nKeyCode == CKeyCode then
+		Harass(target)
+	end
+
+	if nKeyCode == VKeyCode then
+		Farm()
+	end
 
 	CheckDashes()
 
@@ -231,9 +243,9 @@ function AutoUlt()
 	local Enemies = pObjChamp
 	for i, enemy in ipairs(Enemies) do
 		if enemy ~= 0 then
-			if RReady and ValidTargetRange(enemy, 1800) and GetDistance(enemy) < 1800 then
+			if RReady and ValidTargetRange(enemy, 1400) and GetDistance(enemy) < 1400 then
 				local vp_distance = VPGetCircularCastPosition(enemy, SpellR.Delay, SpellR.Width)
-				if vp_distance > 0 and vp_distance < RRange then
+				if vp_distance > 0 and vp_distance < RRange and RStacks < config_Harass_RStacks then
 					CastSpellToPredictionPos(enemy, R, vp_distance)
 				end
 			end
@@ -248,10 +260,8 @@ function CheckDashes()
 	for idx, enemy in ipairs(Enemies) do
 		if enemy ~= 0 then
 			if EReady and ValidTarget(enemy) and GetDistance(enemy) < SpellE.Range then
-				local _IsDashing = IsDashing(enemy)
-
 				local vp_distance = VPGetLineCastPosition(enemy, SpellE.Delay, SpellE.Width, SpellE.Range, SpellE.Speed)
-				if vp_distance > 0 and not _IsDashing and vp_distance < SpellE.Range then
+				if vp_distance > 0 and IsDashing(enemy) and vp_distance < SpellE.Range then
 					CastSpellToPredictionPos(enemy, E, vp_distance)
 				end
 			end
@@ -275,6 +285,7 @@ function KillSteal()
 				end
 
 				if RReady and getDmg(R, enemy) > GetHealthPoint(enemy) then
+					--__PrintDebug("KillSteal")
 					CastR(enemy)
 				end
 			end
@@ -291,6 +302,72 @@ function IsMyManaLowCombo()
     end
 end
 
+function IsMyManaLowHarass()
+    if GetManaPoint(myHero) < (GetManaPointMax(myHero) * ( HarassUseMana / 100)) then
+        return true
+    else
+        return false
+    end
+end
+
+function Farm()
+	if Setting_IsLaneClearUseE() then
+		FarmE()
+	end
+	if Setting_IsLaneClearUseW() then
+		FarmW()
+	end
+end
+
+function FarmE()
+	if not EReady then
+		return
+	end
+
+	GetAllObjectAroundAnObject(myHero, SpellE.Range)
+
+	local longest_distance = 0
+
+	local last_minion = 0
+
+	local count_minion = 0
+
+	local Enemies = pObject
+	for i, enemy in pairs(Enemies) do
+		if enemy ~= 0 then
+			if IsMinion(enemy) and IsEnemy(enemy) and not IsDead(enemy) and not IsInFog(enemy) and GetTargetableToTeam(enemy) == 4 then
+				count_minion = count_minion + 1
+				local distance = GetDistance(enemy)
+				if distance > longest_distance and distance < SpellE.Range then
+					longest_distance = distance
+					last_minion = enemy
+				end
+			end
+		end
+	end
+
+	if longest_distance > 0 and last_minion ~= 0 and count_minion > 3 then
+
+		local vp_distance = VPGetLineCastPosition(last_minion, SpellE.Delay, SpellE.Width, SpellE.Range, SpellE.Speed)
+		--__PrintDebug(vp_distance)
+		if vp_distance > 0 and vp_distance < SpellE.Range then
+			--__PrintDebug("E")
+			CastSpellToPredictionPos(last_minion, E, vp_distance)
+		end
+
+	end
+
+
+end
+
+function FarmW()
+	local jungle_monster = GetJungleMonster(1000)
+
+	if WReady and (CountEnemyMinionAroundObject(myHero, 1000) > 2 or jungle_monster ~= 0) then
+		CastSpellTarget(myHero, W)
+	end
+end
+
 function getDmg(Spell, Enemy)
 	local Damage = 0
 
@@ -302,8 +379,14 @@ function getDmg(Spell, Enemy)
 
 		local DamageSpellQ = DamageSpellQTable[GetSpellLevel(myHero,Q)]
 
-		local Enemy_SpellBlock = GetSpellBlock(Enemy) - GetMagicPenetration(myHero)
-		-- Add more Magic Penetration Item
+		local Enemy_SpellBlock = GetSpellBlock(Enemy)
+
+		local Void_Staff_Id = 3135
+		if GetItemByID(Void_Staff_Id) > 0 then
+			Enemy_SpellBlock = Enemy_SpellBlock * (1 - 35/100)
+		end
+
+		Enemy_SpellBlock = Enemy_SpellBlock - GetMagicPenetration(myHero)
 
 		if Enemy_SpellBlock >= 0 then
 			Damage = (DamageSpellQ + Percent_AP * AP) * (100/(100 + Enemy_SpellBlock))
@@ -322,8 +405,14 @@ function getDmg(Spell, Enemy)
 
 		local DamageSpellE = DamageSpellETable[GetSpellLevel(myHero,E)]
 
-		local Enemy_SpellBlock = GetSpellBlock(Enemy) - GetMagicPenetration(myHero)
-		-- Add more Magic Penetration Item
+		local Enemy_SpellBlock = GetSpellBlock(Enemy)
+
+		local Void_Staff_Id = 3135
+		if GetItemByID(Void_Staff_Id) > 0 then
+			Enemy_SpellBlock = Enemy_SpellBlock * (1 - 35/100)
+		end
+
+		Enemy_SpellBlock = Enemy_SpellBlock - GetMagicPenetration(myHero)
 
 		if Enemy_SpellBlock >= 0 then
 			Damage = (DamageSpellE + Percent_AP * AP) * (100/(100 + Enemy_SpellBlock))
@@ -346,8 +435,14 @@ function getDmg(Spell, Enemy)
 
 		local DamageSpellR = DamageSpellRTable[GetSpellLevel(myHero,R)]
 
-		local Enemy_SpellBlock = GetSpellBlock(Enemy) - GetMagicPenetration(myHero)
-		-- Add more Magic Penetration Item
+		local Enemy_SpellBlock = GetSpellBlock(Enemy)
+
+		local Void_Staff_Id = 3135
+		if GetItemByID(Void_Staff_Id) > 0 then
+			Enemy_SpellBlock = Enemy_SpellBlock * (1 - 35/100)
+		end
+
+		Enemy_SpellBlock = Enemy_SpellBlock - GetMagicPenetration(myHero)
 
 		if Enemy_SpellBlock >= 0 then
 			Damage = (DamageSpellR + Percent_BonusAD * BonusAD + Percent_AP * AP) * (100/(100 + Enemy_SpellBlock))
@@ -373,26 +468,26 @@ function getDmg(Spell, Enemy)
 end
 
 
---[[
+
 function Harass(Target)
-	if QReady and Config.HarassSub.useQ and not IsMyManaLowHarass() then
+	if QReady and Setting_IsHarassUseQ() and not IsMyManaLowHarass() then
 		CastQ(Target)
 	end
 
-	if EReady and Config.HarassSub.useE and not IsMyManaLowHarass() then
+	if EReady and Setting_IsHarassUseE() and not IsMyManaLowHarass() then
 		CastE(Target)
 	end
 
-	if RReady and Config.HarassSub.useR and RStacks < Config.HarassSub.RStacks and not IsMyManaLowHarass() and GetDistance(Target) > Config.Extras.RMinRange then
+	if RReady and Setting_IsHarassUseR() and RStacks < config_Harass_RStacks and not IsMyManaLowHarass() then
 		CastR(Target)
 	end
 
-	if WReady and Config.HarassSub.useW then
+	if WReady and Setting_IsHarassUseW() then
 		CastW(Target)
 	end
 end
 
---]]
+
 
 
 
