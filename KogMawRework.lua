@@ -1,7 +1,15 @@
-local myHero = GetMyChamp()
- if GetChampName(myHero) ~= "KogMaw" then return end
---__PrintDebug("KogMaw")
-__PrintTextGame("KogMawRework v1.3 loaded")
+
+
+function UpdateHeroInfo()
+	return GetMyChamp()
+end
+
+--__PrintDebug(GetChampName(UpdateHeroInfo()))
+
+if GetChampName(UpdateHeroInfo()) ~= "KogMaw" then return end
+
+__PrintTextGame("KogMawRework v1.4 loaded")
+__PrintDebug("KogMaw") 
 
 -- Configuration ----------------------------------------------------------------------------------------------
 
@@ -10,9 +18,9 @@ local W = 1
 local E = 2
 local R = 3
 
-local SpaceKeyCode = 32 -- Space
-local CKeyCode = 67	-- C
-local VKeyCode = 86	-- V
+local SpaceKeyCode = 32
+local CKeyCode = 67
+local VKeyCode = 86
 
 
 local config_Combo_RStacks = 8
@@ -279,7 +287,7 @@ function AutoUlt()
 	local Enemies = pObjChamp
 	for i, enemy in ipairs(Enemies) do
 		if enemy ~= 0 then
-			if RReady and ValidTargetRange(enemy, 1800) and GetDistance(enemy) < 1800 then
+			if RReady and ValidTargetRange(enemy, 1400) and GetDistance(enemy) < 1400 then
 				local vp_distance = VPGetCircularCastPosition(enemy, SpellR.Delay, SpellR.Width)
 				if vp_distance > 0 and vp_distance < RRange and RStacks < config_Harass_RStacks then
 					CastSpellToPredictionPos(enemy, R, vp_distance)
@@ -386,7 +394,7 @@ function FarmE()
 	if longest_distance > 0 and last_minion ~= 0 then
 		local vp_distance = VPGetLineCastPosition(last_minion, SpellE.Delay, SpellE.Width, SpellE.Range, SpellE.Speed)
 		--__PrintDebug(vp_distance)
-		if vp_distance > 0 and vp_distance < SpellE.Range and countminionshitE(last_minion, Delay, Width, Range, vp_distance) > 3 then
+		if vp_distance > 0 and vp_distance < SpellE.Range and countminionshitE(last_minion, Delay, Width, Range, vp_distance) > 2 then
 			--__PrintDebug("E")
 			CastSpellToPredictionPos(last_minion, E, vp_distance)
 		end
@@ -522,12 +530,5 @@ function Harass(Target)
 		CastW(Target)
 	end
 end
-
-
-
-
-
-
-
 
 

@@ -6,7 +6,7 @@ function sleep(s)						 -- s=second
 end
 
 __PrintTextGame("--Injected .Lua --")
-__PrintTextGame("--Finish HotKey : END --")
+__PrintTextGame("--Finish HotKey : END key --")
 
 
 while(true)
@@ -17,8 +17,6 @@ do
 		break
 	end
 
-	nKeyCode = GetKeyCode()
+	OnTick()
 	sleep(0.001)
-		OnTick()
-	end
 end
