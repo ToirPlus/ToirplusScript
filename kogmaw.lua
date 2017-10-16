@@ -6,6 +6,12 @@ Thanks Dienofail
 
 ]]
 
+--[[
+function UpdateHeroInfo()
+	return GetMyChamp()
+end
+]]
+
 __PrintTextGame("KogMawRework v1.4 loaded")
 
 --__PrintDebug(GetChampName(UpdateHeroInfo()))
