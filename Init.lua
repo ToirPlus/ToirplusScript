@@ -19,7 +19,7 @@ do
 	local bIsEndLua = IsEndLua()
 	
 	if bIsEndLua == 1 then
-		Debug("========>bIsEndLua: " .. tostring(bIsEndLua))
+		__PrintDebug("========>bIsEndLua: " .. tostring(bIsEndLua))
 		break
 	end
 
