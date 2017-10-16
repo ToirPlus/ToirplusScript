@@ -6,6 +6,12 @@ Thanks Celtech team
 
 ]]
 
+--[[
+function UpdateHeroInfo()
+	return GetMyChamp()
+end
+]]
+
 --__PrintDebug("Xayah")
 __PrintTextGame("Xayah v1.0 loaded")
 
