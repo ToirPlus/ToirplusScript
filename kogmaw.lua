@@ -8,10 +8,6 @@ Thanks Dienofail
 
 __PrintTextGame("KogMawRework v1.4 loaded")
 
-function UpdateHeroInfo()
-	return GetMyChamp()
-end
-
 --__PrintDebug(GetChampName(UpdateHeroInfo()))
 
 if GetChampName(UpdateHeroInfo()) ~= "KogMaw" then return end
