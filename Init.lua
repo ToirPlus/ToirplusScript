@@ -1,22 +1,31 @@
-IncludeFile("KogMawRework.lua")
+--IncludeFile("player.lua")
+
+IncludeFile("kogmaw.lua")
+IncludeFile("xayah.lua")
+
+
 
 function sleep(s)						 -- s=second
   local ntime = os.clock() + s
   repeat until os.clock() > ntime
 end
 
-__PrintTextGame("--Injected .Lua --")
-__PrintTextGame("--Finish HotKey : END key --")
 
+__PrintDebug("Injected")
 
 while(true)
 do
-	bIsEndLua = IsEndLua()
+
+	local bIsEndLua = IsEndLua()
+	
 	if bIsEndLua == 1 then
-		__PrintTextGame("--Finished .Lua --")
+		Debug("========>bIsEndLua: " .. tostring(bIsEndLua))
 		break
 	end
 
+
+
 	OnTick()
-	sleep(0.001)
+	sleep(0.01)
+
 end
