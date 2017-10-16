@@ -1,5 +1,9 @@
 --IncludeFile("player.lua")
 
+function UpdateHeroInfo()
+	return GetMyChamp()
+end
+
 IncludeFile("kogmaw.lua")
 IncludeFile("xayah.lua")
 
