@@ -9,10 +9,6 @@ Thanks Celtech team
 --__PrintDebug("Xayah")
 __PrintTextGame("Xayah v1.0 loaded")
 
-function UpdateHeroInfo()
-	return GetMyChamp()
-end
-
 --__PrintDebug(GetChampName(UpdateHeroInfo()))
 
 if GetChampName(UpdateHeroInfo()) ~= "Xayah" then return end
