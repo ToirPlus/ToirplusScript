@@ -6,14 +6,11 @@ Thanks Celtech team
 
 ]]
 
---[[
-function UpdateHeroInfo()
-	return GetMyChamp()
-end
-]]
+IncludeFile("Vector.lua")
 
 --__PrintDebug("Xayah")
 __PrintTextGame("Xayah v1.0 loaded")
+
 
 --__PrintDebug(GetChampName(UpdateHeroInfo()))
 
@@ -188,27 +185,55 @@ function CastW(Target)
 end
 
 
-function CountFeathers()
-	GetAllObjectAroundAnObject(UpdateHeroInfo(), SpellE.Range)
-	local count = 0
-	local fObjects = pObject
-	for i, object in pairs(fObjects) do
-		if object ~= 0 then
-			if GetTargetableToTeam(object) ~= 4 and GetObjName(object) == "Feather" and GetChampName(object) == "TestCubeRender" then
-				count = count + 1
-			end
-		end
-	end
-
-	return count
+function VectorPointProjectionOnLineSegment(v1, v2, v)
+    local cx, cy, ax, ay, bx, by = v.x, (v.z or v.y), v1.x, (v1.z or v1.y), v2.x, (v2.z or v2.y)
+    local rL = ((cx - ax) * (bx - ax) + (cy - ay) * (by - ay)) / ((bx - ax) ^ 2 + (by - ay) ^ 2)
+    local pointLine = { x = ax + rL * (bx - ax), z = ay + rL * (by - ay) }
+    local rS = rL < 0 and 0 or (rL > 1 and 1 or rL)
+    local isOnSegment = rS == rL
+    local pointSegment = isOnSegment and pointLine or { x = ax + rS * (bx - ax), z = ay + rS * (by - ay) }
+    return pointSegment, pointLine, isOnSegment
 end
 
+function rootLogic(target, obj)
+    local myHeroPos = { GetPosX(UpdateHeroInfo()), GetPosY(UpdateHeroInfo()), GetPosZ(UpdateHeroInfo()) }
+    local targetPos = { GetPosX(target), GetPosY(target), GetPosZ(target) }
+    local objPos = { GetPosX(obj), GetPosY(obj), GetPosZ(obj) }
+
+    local myHeroVector = Vector(myHeroPos)
+    local targetVector = Vector(targetPos)
+    local objVector = Vector(objPos)
+
+    local distanceToObj = myHeroVector:DistanceTo(objVector)
+    local endPos = myHeroVector:Extend(objVector, distanceToObj)
+    local pointSegment, pointLine, isOnSegment = VectorPointProjectionOnLineSegment(myHeroVector, endPos, targetVector)
+
+    local pointSegmentVector = Vector(pointSegment.x, targetVector.y, pointSegment.z)
+    if isOnSegment and targetVector:DistanceTo(pointSegmentVector) <= 85 then
+        return true
+    end
+    return false
+end
+
+function feathersHitCount(target)
+    GetAllObjectAroundAnObject(UpdateHeroInfo(), SpellE.Range * 2)
+    local count = 0
+    local fObjects = pObject
+    for i, object in pairs(fObjects) do
+        if object ~= 0 then
+            if GetTargetableToTeam(object) ~= 4 and GetObjName(object) == "Feather" and GetChampName(object) == "TestCubeRender" and rootLogic(target, object) then
+                count = count + 1
+            end
+        end
+    end
+    return count
+end
 
 function CastE(Target)
     if EReady() then
-		if ValidTarget(Target, SpellE.Range) and CountFeathers() > 2 then
-			CastSpellTarget(UpdateHeroInfo(), E)
-		end
+        if ValidTarget(Target, SpellE.Range) and feathersHitCount(Target) > 2 then
+            CastSpellTarget(UpdateHeroInfo(), E)
+        end
     end
 end
 
