@@ -1,4 +1,12 @@
+--[[
 
+Reference link  https://github.com/Dienofail/BoL/blob/master/KogMaw.lua
+
+Thanks Dienofail
+
+]]
+
+__PrintTextGame("KogMawRework v1.4 loaded")
 
 function UpdateHeroInfo()
 	return GetMyChamp()
@@ -7,9 +15,6 @@ end
 --__PrintDebug(GetChampName(UpdateHeroInfo()))
 
 if GetChampName(UpdateHeroInfo()) ~= "KogMaw" then return end
-
-__PrintTextGame("KogMawRework v1.4 loaded")
-__PrintDebug("KogMaw") 
 
 -- Configuration ----------------------------------------------------------------------------------------------
 
@@ -42,6 +47,11 @@ local QReady, WReady, EReady, RReady = nil, nil, nil, nil
 local RStacks = 0
 local WRangeTable = {130, 150, 170, 190, 210}
 
+local QReady = false
+local WReady = false
+local EReady = false
+local RReady = false
+
 -- Script function ---------------------------------------------------------------------------------------------
 
 function Check()
@@ -71,15 +81,15 @@ function SpellQCollision(Target, Delay, Width, Range, Speed, vp_distance)
 
 	local nCountMinionCollision = 0
 
-	--__PrintDebug("SpellQCollision")
+
 	if PredPosX ~= 0 and PredPosZ ~= 0 then
-		--__PrintDebug("SpellQCollision1")
-		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, PredPosX, PredPosZ, Width, Range, 10) --> crash
+
+		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, PredPosX, PredPosZ, Width, Range, 10)
 	else
-		--__PrintDebug("SpellQCollision2")
-		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, x2, z2, Width, Range, 10) --> crash
+
+		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, x2, z2, Width, Range, 10)
 	end
-	--__PrintDebug("SpellQCollision3")
+
 	if nCountMinionCollision == 0 then
 		return false
 	end
@@ -101,22 +111,22 @@ function countminionshitE(Target, Delay, Width, Range, vp_distance)
 
 	local nCountMinionCollision = 0
 
-	--__PrintDebug("SpellQCollision")
+
 	if PredPosX ~= 0 and PredPosZ ~= 0 then
-		--__PrintDebug("SpellQCollision1")
-		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, PredPosX, PredPosZ, Width, Range, 10) --> crash
+
+		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, PredPosX, PredPosZ, Width, Range, 10)
 	else
-		--__PrintDebug("SpellQCollision2")
-		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, x2, z2, Width, Range, 10) --> crash
+
+		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, x2, z2, Width, Range, 10)
 	end
-	--__PrintDebug("SpellQCollision3")
+
 
 	return nCountMinionCollision
 
 end
 
 
-function VPGetCircularCastPosition(Target, Delay, Width) -- need review
+function VPGetCircularCastPosition(Target, Delay, Width)
 	local x1 = GetPosX(UpdateHeroInfo())
 	local z1 = GetPosZ(UpdateHeroInfo())
 
@@ -151,7 +161,7 @@ function VPGetLineCastPosition(Target, Delay, Width, Range, Speed)
 
 	TimeMissile = Delay + distance/Speed
 	local real_distance = (TimeMissile * GetMoveSpeed(Target))
-	--__PrintDebug(GetMoveSpeed(Target))
+
 	if real_distance == 0 then return distance end
 	return real_distance
 
@@ -186,12 +196,12 @@ end
 
 function CastQ(Target)
 	if Target ~= 0 and ValidTarget(Target, 1300) and QReady then
-		--__PrintDebug("Q")
+
 		local vp_distance = VPGetLineCastPosition(Target, SpellQ.Delay, SpellQ.Width, SpellQ.Range, SpellQ.Speed)
-		--__PrintDebug(vp_distance)
+
 		if vp_distance > 0 and vp_distance < SpellQ.Range then
 			if not SpellQCollision(Target, SpellQ.Delay, SpellQ.Width, SpellQ.Range, SpellQ.Speed, vp_distance) then
-				--__PrintDebug("Q2")
+
 				CastSpellToPredictionPos(Target, Q, vp_distance)
 			end
 		end
@@ -200,18 +210,18 @@ end
 
 function CastW(Target)
 	if Target ~= 0 and ValidTarget(Target, 1300) and WReady and GetDistance(Target) < WRange then
-		--__PrintDebug("W")
+
 		CastSpellTarget(UpdateHeroInfo(), W)
 	end
 end
 
 function CastE(Target)
 	if Target ~= 0 and ValidTargetRange(Target, 1300) and EReady then
-		--__PrintDebug("E")
+
 		local vp_distance = VPGetLineCastPosition(Target, SpellE.Delay, SpellE.Width, SpellE.Range, SpellE.Speed)
-		--__PrintDebug(vp_distance)
+
 		if vp_distance > 0 and vp_distance < SpellE.Range then
-			--__PrintDebug("E")
+
 			CastSpellToPredictionPos(Target, E, vp_distance)
 		end
 	end
@@ -219,11 +229,11 @@ end
 
 function CastR(Target)
 	if Target ~= 0 and RReady and ValidTargetRange(Target, 1800) then
-		--__PrintDebug("CastR")
+
 		local vp_distance = VPGetCircularCastPosition(Target, SpellR.Delay, SpellR.Width)
-		--__PrintDebug(vp_distance)
+
 		if vp_distance > 0 and vp_distance < RRange and RStacks < config_Combo_RStacks and not IsMyManaLowCombo() then
-			--__PrintDebug("CastR1")
+
 			CastSpellToPredictionPos(Target, R, vp_distance)
 			RStacks = GetBuffCount(UpdateHeroInfo(), "kogmawlivingartillerycost")
 		end
@@ -231,7 +241,7 @@ function CastR(Target)
 end
 
 function Combo(Target)
-	--__PrintDebug("Combo")
+
 	if QReady and Setting_IsComboUseQ() and not IsMyManaLowCombo() then
 		CastQ(Target)
 	end
@@ -254,9 +264,9 @@ function OnTick()
 
 	Check()
 
-	target = GetEnemyChampCanKillFastest(1800)
+	local target = GetEnemyChampCanKillFastest(1800)
 
-	nKeyCode = GetKeyCode()
+	local nKeyCode = GetKeyCode()
 
 	if nKeyCode == SpaceKeyCode then
 		SetLuaCombo(true)
@@ -282,7 +292,7 @@ end
 
 
 function AutoUlt()
-	--__PrintDebug("AutoUlt")
+
 	SearchAllChamp()
 	local Enemies = pObjChamp
 	for i, enemy in ipairs(Enemies) do
@@ -299,7 +309,7 @@ function AutoUlt()
 end
 
 function CheckDashes()
-	--__PrintDebug("CheckDashes")
+
 	SearchAllChamp()
 	local Enemies = pObjChamp
 	for idx, enemy in ipairs(Enemies) do
@@ -315,7 +325,7 @@ function CheckDashes()
 end
 
 function KillSteal()
-	--__PrintDebug("KillSteal")
+
 	SearchAllChamp()
 	local Enemies = pObjChamp
 	for i, enemy in pairs(Enemies) do
@@ -330,7 +340,7 @@ function KillSteal()
 				end
 
 				if RReady and getDmg(R, enemy) > GetHealthPoint(enemy) then
-					--__PrintDebug("KillSteal")
+
 					CastR(enemy)
 				end
 			end
@@ -393,9 +403,9 @@ function FarmE()
 
 	if longest_distance > 0 and last_minion ~= 0 then
 		local vp_distance = VPGetLineCastPosition(last_minion, SpellE.Delay, SpellE.Width, SpellE.Range, SpellE.Speed)
-		--__PrintDebug(vp_distance)
+
 		if vp_distance > 0 and vp_distance < SpellE.Range and countminionshitE(last_minion, Delay, Width, Range, vp_distance) > 2 then
-			--__PrintDebug("E")
+
 			CastSpellToPredictionPos(last_minion, E, vp_distance)
 		end
 
@@ -416,7 +426,8 @@ function getDmg(Spell, Enemy)
 	local Damage = 0
 
 	if Spell == Q then
-		local DamageSpellQTable = {0, 80, 130, 180, 230, 280}
+		if GetSpellLevel(UpdateHeroInfo(),Q) == 0 then return 0 end
+		local DamageSpellQTable = {80, 130, 180, 230, 280}
 		local Percent_AP = 0.5
 
 		local AP = GetFlatMagicDamage(UpdateHeroInfo()) + GetFlatMagicDamage(UpdateHeroInfo()) * GetPercentMagicDamage(UpdateHeroInfo())
@@ -425,7 +436,7 @@ function getDmg(Spell, Enemy)
 
 		local Enemy_SpellBlock = GetSpellBlock(Enemy)
 
-		local Void_Staff_Id = 3135
+		local Void_Staff_Id = 3135 -- Void Staff Item
 		if GetItemByID(Void_Staff_Id) > 0 then
 			Enemy_SpellBlock = Enemy_SpellBlock * (1 - 35/100)
 		end
@@ -442,7 +453,8 @@ function getDmg(Spell, Enemy)
 	end
 
 	if Spell == E then
-		local DamageSpellETable = {0, 60, 105, 150, 195, 240}
+		if GetSpellLevel(UpdateHeroInfo(),E) == 0 then return 0 end
+		local DamageSpellETable = {60, 105, 150, 195, 240}
 		local Percent_AP = 0.5
 
 		local AP = GetFlatMagicDamage(UpdateHeroInfo()) + GetFlatMagicDamage(UpdateHeroInfo()) * GetPercentMagicDamage(UpdateHeroInfo())
@@ -451,7 +463,7 @@ function getDmg(Spell, Enemy)
 
 		local Enemy_SpellBlock = GetSpellBlock(Enemy)
 
-		local Void_Staff_Id = 3135
+		local Void_Staff_Id = 3135 -- Void Staff Item
 		if GetItemByID(Void_Staff_Id) > 0 then
 			Enemy_SpellBlock = Enemy_SpellBlock * (1 - 35/100)
 		end
@@ -468,7 +480,8 @@ function getDmg(Spell, Enemy)
 	end
 
 	if Spell == R then
-		local DamageSpellRTable = {0, 100, 140, 180}
+		if GetSpellLevel(UpdateHeroInfo(),R) == 0 then return 0 end
+		local DamageSpellRTable = {100, 140, 180}
 		local Percent_AP = 0.25
 
 		local AP = GetFlatMagicDamage(UpdateHeroInfo()) + GetFlatMagicDamage(UpdateHeroInfo()) * GetPercentMagicDamage(UpdateHeroInfo())
@@ -481,7 +494,7 @@ function getDmg(Spell, Enemy)
 
 		local Enemy_SpellBlock = GetSpellBlock(Enemy)
 
-		local Void_Staff_Id = 3135
+		local Void_Staff_Id = 3135 -- Void Staff Item
 		if GetItemByID(Void_Staff_Id) > 0 then
 			Enemy_SpellBlock = Enemy_SpellBlock * (1 - 35/100)
 		end
@@ -530,5 +543,3 @@ function Harass(Target)
 		CastW(Target)
 	end
 end
-
-
