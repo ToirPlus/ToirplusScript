@@ -196,7 +196,7 @@ function AutoW()
 					--__PrintDebug(GetName_Casting(spell))
 					if WALL_SPELLS[GetName_Casting(spell)] then
 						CastSpellToPredictionPos(enemy, W, GetDistance(enemy))
-						__PrintDebug("Cast W")
+						--__PrintDebug("Cast W")
 					end
 				end
 			end
