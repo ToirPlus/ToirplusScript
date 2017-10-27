@@ -33,6 +33,8 @@ local VKeyCode = 86
 local config_AutoUlt = true
 local config_AutoW = true
 
+config_AutoUlt  = AddMenuCustom(1, config_AutoUlt, "Auto Ultil")
+
 local SpellQW = {Range = 425, Speed = 1500, Delay = 0.25, Width = 90}
 local SpellQ3 = {Range = 1000, Speed = 1500, Delay = 0.25, Width = 90}
 
@@ -311,12 +313,12 @@ function AutoUlt()
 end
 
 function ClosestMinion()
-	GetAllObjectAroundAnObject(UpdateHeroInfo(), 1000)
+	GetAllUnitAroundAnObject(UpdateHeroInfo(), 1000)
 
 	local closest_distance = 475
 	local last_minion = 0
 
-	local Enemies = pObject
+	local Enemies = pUnit
 	for i, enemy in pairs(Enemies) do
 		if enemy ~= 0 then
 			if IsMinion(enemy) and IsEnemy(enemy) and not IsDead(enemy) and not IsInFog(enemy) and GetTargetableToTeam(enemy) == 4 then
@@ -365,9 +367,9 @@ function ValidTargetJungle(Target)
 end
 
 function GetMinion()
-	GetAllObjectAroundAnObject(UpdateHeroInfo(), 1000)
+	GetAllUnitAroundAnObject(UpdateHeroInfo(), 1000)
 
-	local Enemies = pObject
+	local Enemies = pUnit
 	for i, minion in pairs(Enemies) do
 		if minion ~= 0 then
 			if IsMinion(minion) and IsEnemy(minion) and not IsDead(minion) and not IsInFog(minion) and GetTargetableToTeam(minion) == 4 then
@@ -423,8 +425,8 @@ function LaneClear()
 end
 
 function UnderTower()
-	GetAllObjectAroundAnObject(UpdateHeroInfo(), 1400)
-	for i, obj in pairs(pObject) do
+	GetAllUnitAroundAnObject(UpdateHeroInfo(), 1400)
+	for i, obj in pairs(pUnit) do
 		if obj ~= 0 then
 			if IsEnemy(obj) and IsTurret(obj) and GetTargetableToTeam(obj) == 4 and GetDistance(obj) < 1400 then
 				return true
