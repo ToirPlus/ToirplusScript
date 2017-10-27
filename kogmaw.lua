@@ -6,17 +6,14 @@ Thanks Dienofail
 
 ]]
 
---[[
-function UpdateHeroInfo()
-	return GetMyChamp()
-end
-]]
+IncludeFile("Vector.lua")
 
-__PrintTextGame("KogMawRework v1.4 loaded")
 
 --__PrintDebug(GetChampName(UpdateHeroInfo()))
 
 if GetChampName(UpdateHeroInfo()) ~= "KogMaw" then return end
+
+__PrintTextGame("KogMawRework v1.4 loaded")
 
 -- Configuration ----------------------------------------------------------------------------------------------
 
@@ -32,7 +29,7 @@ local VKeyCode = 86
 
 local config_Combo_RStacks = 8
 local config_Harass_RStacks = 2
-local config_AutoUlt = true
+local config_AutoUlt = false
 
 local ComboUseMana = 30
 local HarassUseMana = 60
@@ -49,18 +46,30 @@ local QReady, WReady, EReady, RReady = nil, nil, nil, nil
 local RStacks = 0
 local WRangeTable = {130, 150, 170, 190, 210}
 
-local QReady = false
-local WReady = false
-local EReady = false
-local RReady = false
+
+function QReady()
+	return CanCast(Q)
+end
+
+function WReady()
+	return CanCast(W)
+end
+
+function EReady()
+	return CanCast(E)
+end
+
+function RReady()
+	return CanCast(R)
+end
+
+function GetTarget()
+	return GetEnemyChampCanKillFastest(1800)
+end
 
 -- Script function ---------------------------------------------------------------------------------------------
 
 function Check()
-	QReady = CanCast(Q)
-	WReady = CanCast(W)
-	EReady = CanCast(E)
-	RReady = CanCast(R)
 	if GetSpellLevel(UpdateHeroInfo(),R) > 0 then
 		RRange = RRangeTable[GetSpellLevel(UpdateHeroInfo(),R)]
 	end
@@ -97,33 +106,6 @@ function SpellQCollision(Target, Delay, Width, Range, Speed, vp_distance)
 	end
 
 	return true
-
-end
-
-function countminionshitE(Target, Delay, Width, Range, vp_distance)
-
-	local PredPosX = GetPredictionPosX(Target, vp_distance)
-	local PredPosZ = GetPredictionPosZ(Target, vp_distance)
-
-	local x1 = GetPosX(UpdateHeroInfo())
-	local z1 = GetPosZ(UpdateHeroInfo())
-
-	local x2 = GetPosX(Target)
-	local z2 = GetPosZ(Target)
-
-	local nCountMinionCollision = 0
-
-
-	if PredPosX ~= 0 and PredPosZ ~= 0 then
-
-		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, PredPosX, PredPosZ, Width, Range, 10)
-	else
-
-		nCountMinionCollision = CountObjectCollision(0, Target, x1, z1, x2, z2, Width, Range, 10)
-	end
-
-
-	return nCountMinionCollision
 
 end
 
@@ -197,7 +179,7 @@ end
 
 
 function CastQ(Target)
-	if Target ~= 0 and ValidTarget(Target, 1300) and QReady then
+	if Target ~= 0 and ValidTarget(Target, 1300) and QReady() then
 
 		local vp_distance = VPGetLineCastPosition(Target, SpellQ.Delay, SpellQ.Width, SpellQ.Range, SpellQ.Speed)
 
@@ -211,14 +193,14 @@ function CastQ(Target)
 end
 
 function CastW(Target)
-	if Target ~= 0 and ValidTarget(Target, 1300) and WReady and GetDistance(Target) < WRange then
+	if Target ~= 0 and ValidTarget(Target, 1300) and WReady() and GetDistance(Target) < WRange then
 
 		CastSpellTarget(UpdateHeroInfo(), W)
 	end
 end
 
 function CastE(Target)
-	if Target ~= 0 and ValidTargetRange(Target, 1300) and EReady then
+	if Target ~= 0 and ValidTargetRange(Target, 1300) and EReady() then
 
 		local vp_distance = VPGetLineCastPosition(Target, SpellE.Delay, SpellE.Width, SpellE.Range, SpellE.Speed)
 
@@ -230,7 +212,7 @@ function CastE(Target)
 end
 
 function CastR(Target)
-	if Target ~= 0 and RReady and ValidTargetRange(Target, 1800) then
+	if Target ~= 0 and RReady() and ValidTargetRange(Target, 1800) then
 
 		local vp_distance = VPGetCircularCastPosition(Target, SpellR.Delay, SpellR.Width)
 
@@ -242,22 +224,42 @@ function CastR(Target)
 	end
 end
 
-function Combo(Target)
+function Combo()
+	local Target = GetTarget()
 
-	if QReady and Setting_IsComboUseQ() and not IsMyManaLowCombo() then
+	if QReady() and Setting_IsComboUseQ() and not IsMyManaLowCombo() and CanMove() then
 		CastQ(Target)
 	end
 
-	if WReady and Setting_IsComboUseW() then
+	if WReady() and Setting_IsComboUseW() then
 		CastW(Target)
 	end
 
-	if EReady and Setting_IsComboUseE() and not IsMyManaLowCombo() then
+	if EReady() and Setting_IsComboUseE() and not IsMyManaLowCombo() and CanMove() then
 		CastE(Target)
 	end
 
-	if RReady and Setting_IsComboUseR() and not IsMyManaLowCombo() then
+	if RReady() and Setting_IsComboUseR() and not IsMyManaLowCombo() and CanMove() then
 		CastR(Target)
+	end
+end
+
+function Harass()
+	local Target = GetTarget()
+	if QReady() and Setting_IsHarassUseQ() and not IsMyManaLowHarass() and CanMove() then
+		CastQ(Target)
+	end
+
+	if EReady() and Setting_IsHarassUseE() and not IsMyManaLowHarass() and CanMove() then
+		CastE(Target)
+	end
+
+	if RReady() and Setting_IsHarassUseR() and RStacks < config_Harass_RStacks and not IsMyManaLowHarass() and CanMove() then
+		CastR(Target)
+	end
+
+	if WReady() and Setting_IsHarassUseW() then
+		CastW(Target)
 	end
 end
 
@@ -266,17 +268,16 @@ function OnTick()
 
 	Check()
 
-	local target = GetEnemyChampCanKillFastest(1800)
-
 	local nKeyCode = GetKeyCode()
 
 	if nKeyCode == SpaceKeyCode then
 		SetLuaCombo(true)
-		Combo(target)
+		Combo()
 	end
 
 	if nKeyCode == CKeyCode then
-		Harass(target)
+		SetLuaHarass(true)
+		Harass()
 	end
 
 	if nKeyCode == VKeyCode then
@@ -294,12 +295,11 @@ end
 
 
 function AutoUlt()
-
 	SearchAllChamp()
 	local Enemies = pObjChamp
 	for i, enemy in ipairs(Enemies) do
 		if enemy ~= 0 then
-			if RReady and ValidTargetRange(enemy, 1400) and GetDistance(enemy) < 1400 then
+			if RReady() and ValidTargetRange(enemy, 1400) and GetDistance(enemy) < 1400 and CanMove() then
 				local vp_distance = VPGetCircularCastPosition(enemy, SpellR.Delay, SpellR.Width)
 				if vp_distance > 0 and vp_distance < RRange and RStacks < config_Harass_RStacks then
 					CastSpellToPredictionPos(enemy, R, vp_distance)
@@ -311,12 +311,11 @@ function AutoUlt()
 end
 
 function CheckDashes()
-
 	SearchAllChamp()
 	local Enemies = pObjChamp
 	for idx, enemy in ipairs(Enemies) do
 		if enemy ~= 0 then
-			if EReady and ValidTarget(enemy) and GetDistance(enemy) < SpellE.Range then
+			if EReady() and ValidTarget(enemy) and GetDistance(enemy) < SpellE.Range and CanMove() then
 				local vp_distance = VPGetLineCastPosition(enemy, SpellE.Delay, SpellE.Width, SpellE.Range, SpellE.Speed)
 				if vp_distance > 0 and IsDashing(enemy) and vp_distance < SpellE.Range then
 					CastSpellToPredictionPos(enemy, E, vp_distance)
@@ -327,22 +326,20 @@ function CheckDashes()
 end
 
 function KillSteal()
-
 	SearchAllChamp()
 	local Enemies = pObjChamp
 	for i, enemy in pairs(Enemies) do
 		if enemy ~= 0 then
 			if ValidTargetRange(enemy, 1800) and GetDistance(enemy) < 1800 then
-				if QReady and getDmg(Q, enemy) > GetHealthPoint(enemy) then
+				if QReady and getDmg(Q, enemy) > GetHealthPoint(enemy) and CanMove() then
 					CastQ(enemy)
 				end
 
-				if EReady and getDmg(E, enemy) > GetHealthPoint(enemy) then
+				if EReady and getDmg(E, enemy) > GetHealthPoint(enemy) and CanMove() then
 					CastE(enemy)
 				end
 
-				if RReady and getDmg(R, enemy) > GetHealthPoint(enemy) then
-
+				if RReady and getDmg(R, enemy) > GetHealthPoint(enemy) and CanMove() then
 					CastR(enemy)
 				end
 			end
@@ -376,50 +373,93 @@ function Farm()
 	end
 end
 
-function FarmE()
-	if not EReady then
-		return
+function VectorPointProjectionOnLineSegment(v1, v2, v)
+    local cx, cy, ax, ay, bx, by = v.x, (v.z or v.y), v1.x, (v1.z or v1.y), v2.x, (v2.z or v2.y)
+    local rL = ((cx - ax) * (bx - ax) + (cy - ay) * (by - ay)) / ((bx - ax) ^ 2 + (by - ay) ^ 2)
+    local pointLine = { x = ax + rL * (bx - ax), z = ay + rL * (by - ay) }
+    local rS = rL < 0 and 0 or (rL > 1 and 1 or rL)
+    local isOnSegment = rS == rL
+    local pointSegment = isOnSegment and pointLine or { x = ax + rS * (bx - ax), z = ay + rS * (by - ay) }
+    return pointSegment, pointLine, isOnSegment
+end
+
+function Distance(MinionPointSegment3D, pos)
+	return GetDistance2D(MinionPointSegment3D.x,MinionPointSegment3D.z,GetPosX(pos),GetPosZ(pos))
+end
+
+function countminionshitE(obj)
+	local n = 0
+
+	local myHeroPos = { GetPosX(UpdateHeroInfo()), GetPosY(UpdateHeroInfo()), GetPosZ(UpdateHeroInfo()) }
+	local objPos = { GetPosX(obj), GetPosY(obj), GetPosZ(obj) }
+
+	local ExtendedVector = Vector(myHeroPos) + Vector(Vector(objPos) - Vector(myHeroPos)):Normalized()*SpellE.Range
+
+	GetAllUnitAroundAnObject(UpdateHeroInfo(), SpellE.Range)
+	local Enemies = pUnit
+
+	for i, minion in ipairs(Enemies) do
+		if minion ~= 0 then
+			if IsMinion(minion) and IsEnemy(minion) and not IsDead(minion) and not IsInFog(minion) and GetTargetableToTeam(minion) == 4 then
+				local minionPos = {GetPosX(minion), GetPosY(minion), GetPosZ(minion)}
+				local MinionPointSegment, MinionPointLine, MinionIsOnSegment =  VectorPointProjectionOnLineSegment(Vector(myHeroPos), Vector(ExtendedVector), Vector(minionPos))
+				local MinionPointSegment3D = {x=MinionPointSegment.x, y=GetPosY(obj), z=MinionPointSegment.y}
+				if MinionIsOnSegment and Distance(MinionPointSegment3D, obj) < SpellQ.Width then
+					n = n +1
+				end
+			end
+		end
 	end
+	return n
 
-	GetAllObjectAroundAnObject(UpdateHeroInfo(), SpellE.Range)
+end
 
-	local longest_distance = 0
+function GetBestEPositionFarm()
+	GetAllUnitAroundAnObject(UpdateHeroInfo(), SpellE.Range)
+	local Enemies = pUnit
 
-	local last_minion = 0
-
-	local count_minion = 0
-
-	local Enemies = pObject
-	for i, enemy in pairs(Enemies) do
-		if enemy ~= 0 then
-			if IsMinion(enemy) and IsEnemy(enemy) and not IsDead(enemy) and not IsInFog(enemy) and GetTargetableToTeam(enemy) == 4 then
-				count_minion = count_minion + 1
-				local distance = GetDistance(enemy)
-				if distance > longest_distance and distance < SpellE.Range then
-					longest_distance = distance
-					last_minion = enemy
+	local MaxE = 0
+	local MaxEPos
+	for i, minion in pairs(Enemies) do
+		if minion ~= 0 then
+			if IsMinion(minion) and IsEnemy(minion) and not IsDead(minion) and not IsInFog(minion) and GetTargetableToTeam(minion) == 4 then
+				local hitE = countminionshitE(minion)
+				if hitE > MaxE or MaxEPos == nil then
+					MaxEPos = minion
+					MaxE = hitE
 				end
 			end
 		end
 	end
 
-	if longest_distance > 0 and last_minion ~= 0 then
-		local vp_distance = VPGetLineCastPosition(last_minion, SpellE.Delay, SpellE.Width, SpellE.Range, SpellE.Speed)
-
-		if vp_distance > 0 and vp_distance < SpellE.Range and countminionshitE(last_minion, Delay, Width, Range, vp_distance) > 2 then
-
-			CastSpellToPredictionPos(last_minion, E, vp_distance)
-		end
-
+	if MaxEPos then
+		return MaxEPos
+	else
+		return nil
 	end
+end
 
+
+function FarmE()
+	GetAllUnitAroundAnObject(UpdateHeroInfo(), SpellE.Range)
+	local Enemies = pUnit
+
+	if EReady() and  table.getn(Enemies) > 0 then
+		local EPos = GetBestEPositionFarm()
+		if EPos then
+			local distance = GetDistance2D(GetPosX(UpdateHeroInfo()),GetPosZ(UpdateHeroInfo()),GetPosX(EPos),GetPosZ(EPos))
+			if distance > 0 and distance < SpellE.Range and CanMove() then
+				CastSpellToPredictionPos(EPos, E, distance)
+			end
+		end
+	end
 
 end
 
 function FarmW()
 	local jungle_monster = GetJungleMonster(1000)
 
-	if WReady and (CountEnemyMinionAroundObject(UpdateHeroInfo(), 1000) > 2 or jungle_monster ~= 0) then
+	if WReady() and (CountEnemyMinionAroundObject(UpdateHeroInfo(), 1000) > 2 or jungle_monster ~= 0) then
 		CastSpellTarget(UpdateHeroInfo(), W)
 	end
 end
@@ -528,20 +568,14 @@ end
 
 
 
-function Harass(Target)
-	if QReady and Setting_IsHarassUseQ() and not IsMyManaLowHarass() then
-		CastQ(Target)
-	end
 
-	if EReady and Setting_IsHarassUseE() and not IsMyManaLowHarass() then
-		CastE(Target)
-	end
 
-	if RReady and Setting_IsHarassUseR() and RStacks < config_Harass_RStacks and not IsMyManaLowHarass() then
-		CastR(Target)
-	end
 
-	if WReady and Setting_IsHarassUseW() then
-		CastW(Target)
-	end
-end
+
+
+
+
+
+
+
+
