@@ -8,7 +8,7 @@ IncludeFile("kogmaw.lua")
 IncludeFile("xayah.lua")
 IncludeFile("sivir.lua")
 IncludeFile("yasuo.lua")
-
+IncludeFile("PrestigiousVayne.lua")
 
 function sleep(s)						 -- s=second
   local ntime = os.clock() + s
@@ -25,6 +25,7 @@ do
 	--__PrintDebug("========>bIsEndLua: " .. tostring(bIsEndLua))
 	if bIsEndLua == 1 then
 		__PrintDebug("========>bIsEndLua: " .. tostring(bIsEndLua))
+		__PrintTextGame("========>bIsEndLua: " .. tostring(bIsEndLua))
 		break
 	end
 
