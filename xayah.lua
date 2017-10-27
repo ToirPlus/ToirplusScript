@@ -9,12 +9,14 @@ Thanks Celtech team
 IncludeFile("Vector.lua")
 
 --__PrintDebug("Xayah")
-__PrintTextGame("Xayah v1.0 loaded")
+
 
 
 --__PrintDebug(GetChampName(UpdateHeroInfo()))
 
 if GetChampName(UpdateHeroInfo()) ~= "Xayah" then return end
+
+__PrintTextGame("Xayah v1.0 loaded")
 
 local Q = 0
 local W = 1
@@ -65,6 +67,7 @@ function OnTick()
 	end
 
 	if nKeyCode == CKeyCode then
+		SetLuaHarass(true)
 		Harass()
 	end
 
@@ -119,9 +122,8 @@ function Combo()
 	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
-
 			if Setting_IsComboUseW() then
-				if WReady() then
+				if WReady() and CanMove() then
 					CastW(Target)
 				end
 			end
@@ -132,7 +134,7 @@ function Combo()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
 			if Setting_IsComboUseE() then
-				if EReady() then
+				if EReady() and CanMove() then
 					CastE(Target)
 				end
 			end
@@ -144,7 +146,7 @@ function Combo()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
 			if Setting_IsComboUseR() then
-				if RReady() then
+				if RReady() and CanMove() then
 					CastR(Target)
 				end
 			end
@@ -216,9 +218,9 @@ function rootLogic(target, obj)
 end
 
 function feathersHitCount(target)
-    GetAllObjectAroundAnObject(UpdateHeroInfo(), SpellE.Range * 2)
+    GetAllUnitAroundAnObject(UpdateHeroInfo(), SpellE.Range * 2)
     local count = 0
-    local fObjects = pObject
+    local fObjects = pUnit
     for i, object in pairs(fObjects) do
         if object ~= 0 then
             if GetTargetableToTeam(object) ~= 4 and GetObjName(object) == "Feather" and GetChampName(object) == "TestCubeRender" and rootLogic(target, object) then
@@ -230,7 +232,7 @@ function feathersHitCount(target)
 end
 
 function CastE(Target)
-    if EReady() then
+    if EReady() and CanMove() then
         if ValidTarget(Target, SpellE.Range) and feathersHitCount(Target) > 2 then
             CastSpellTarget(UpdateHeroInfo(), E)
         end
@@ -238,7 +240,7 @@ function CastE(Target)
 end
 
 function CastR(Target)
-	if Target ~= 0 and RReady() and ValidTargetRange(Target, SpellR.Range) then
+	if Target ~= 0 and RReady() and CanMove() and ValidTargetRange(Target, SpellR.Range) then
 		local vp_distance = VPGetLineCastPosition(Target, SpellR.Delay, SpellR.Width, SpellR.Range, SpellR.Speed)
 		if vp_distance > 0 and vp_distance < SpellR.Range then
 			CastSpellToPredictionPos(Target, R, vp_distance)
@@ -275,7 +277,7 @@ function Harass()
 	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
-			if WReady() and Setting_IsHarassUseW() and not IsMyManaLowHarass() then
+			if WReady() and CanMove() and Setting_IsHarassUseW() and not IsMyManaLowHarass() then
 				CastW(Target)
 			end
 		end
@@ -284,7 +286,7 @@ function Harass()
 	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
-			if EReady() and Setting_IsHarassUseE() and not IsMyManaLowHarass() then
+			if EReady() and CanMove() and Setting_IsHarassUseE() and not IsMyManaLowHarass() then
 				CastE(Target)
 			end
 		end
@@ -293,7 +295,7 @@ function Harass()
 	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
-			if RReady() and Setting_IsHarassUseR() and not IsMyManaLowHarass() then
+			if RReady() and CanMove() and Setting_IsHarassUseR() and not IsMyManaLowHarass() then
 				CastR(Target)
 			end
 		end
@@ -310,9 +312,9 @@ function ValidTargetJungle(Target)
 end
 
 function GetMinion()
-	GetAllObjectAroundAnObject(UpdateHeroInfo(), SpellE.Range)
+	GetAllUnitAroundAnObject(UpdateHeroInfo(), SpellE.Range)
 
-	local Enemies = pObject
+	local Enemies = pUnit
 	for i, minion in pairs(Enemies) do
 		if minion ~= 0 then
 			if IsMinion(minion) and IsEnemy(minion) and not IsDead(minion) and not IsInFog(minion) and GetTargetableToTeam(minion) == 4 then
@@ -327,7 +329,7 @@ end
 function LaneClear()
 	local jungle = GetJungleMonster(1100)
 	if jungle ~= 0 then
-		if QReady() then
+		if QReady() and not IsMyManaLowLaneClear() then
 			if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellQ.Range then
 				local vp_distance = VPGetLineCastPosition(jungle, SpellQ.Delay, SpellQ.Width, SpellQ.Range, SpellQ.Speed)
 				if vp_distance > 0 and vp_distance < SpellQ.Range then
@@ -338,7 +340,7 @@ function LaneClear()
 
 		jungle = GetJungleMonster(1100)
 		if jungle ~= 0 then
-			if WReady() then
+			if WReady() and CanMove() and not IsMyManaLowLaneClear() then
 				if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellQ.Range then
 					CastSpellTarget(UpdateHeroInfo(), W)
 
@@ -349,7 +351,7 @@ function LaneClear()
 		jungle = GetJungleMonster(1100)
 		if jungle ~= 0 then
 
-			if EReady() then
+			if EReady() and CanMove() and not IsMyManaLowLaneClear() then
 				if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellQ.Range then
 					CastSpellTarget(UpdateHeroInfo(), E)
 				end
@@ -377,17 +379,17 @@ function LaneClear()
 
 		minion = GetMinion()
 		if minion ~= 0 then
-			if WReady() and Setting_IsLaneClearUseW() and not IsMyManaLowLaneClear() and GetDistance(minion) < SpellE.Range then
+			if WReady() and CanMove() and Setting_IsLaneClearUseW() and not IsMyManaLowLaneClear() and GetDistance(minion) < SpellE.Range then
 				CastSpellTarget(UpdateHeroInfo(), W)
 			end
 		end
 
 		minion = GetMinion()
 		if minion ~= 0 then
-			if EReady() and Setting_IsLaneClearUseE() and not IsMyManaLowLaneClear() and GetDistance(minion) < SpellE.Range then
+			if EReady() and CanMove() and Setting_IsLaneClearUseE() and not IsMyManaLowLaneClear() and GetDistance(minion) < SpellE.Range then
 				CastSpellTarget(UpdateHeroInfo(), E)
 			else
-				if EReady() and getDmg(E, minion) > GetHealthPoint(minion) and GetDistance(minion) < SpellE.Range then
+				if EReady() and CanMove() and getDmg(E, minion) > GetHealthPoint(minion) and GetDistance(minion) < SpellE.Range then
 					CastSpellTarget(UpdateHeroInfo(), E)
 				end
 			end
@@ -515,7 +517,7 @@ function KillSteal()
 				end
 			end
 
-			if getDmg(E, enemy) > GetHealthPoint(enemy) and EReady() and GetDistance(enemy) < SpellE.Range then
+			if getDmg(E, enemy) > GetHealthPoint(enemy) and EReady() and CanMove() and GetDistance(enemy) < SpellE.Range then
 				CastE(enemy)
 			end
 
