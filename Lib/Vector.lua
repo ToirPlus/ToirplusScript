@@ -33,8 +33,8 @@
 			:Rotated(phiX, phiY, phiZ) -> creates a new vector, rotates it and returns it
 			:Polar() -> returns polar value
 			:AngleBetween(Vector, Vector) -> returns the angle formed from a vector to both input vectors
-			:Perpendicular() -> creates a new vector that is rotated 90Â° right
-			:Perpendicular2() -> creates a new vector that is rotated 90Â° left
+			:Perpendicular() -> creates a new vector that is rotated 90° right
+			:Perpendicular2() -> creates a new vector that is rotated 90° left
                         :Extend(Vector, Distance) -> extends a vector towards a vector and returns it
                         :RotateAroundPoint(Vector, Angle) -> creates a new vector that is rotated around point
 		Examples:
