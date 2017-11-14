@@ -36,6 +36,8 @@ local config_AutoUlt = false
 local ComboUseMana = 30
 local HarassUseMana = 60
 
+config_AutoUlt  = AddMenuCustom(1, config_AutoUlt, "Auto Ultil")
+
 -- Game Data ---------------------------------------------------------------------------------------------------
 
 local SpellQ = {Speed = 1550, Range = 925, Delay = 0.3667, Width = 60}
