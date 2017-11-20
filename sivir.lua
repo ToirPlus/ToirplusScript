@@ -257,7 +257,7 @@ function Combo()
 	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
-			if Setting_IsComboUseW() then
+			if Setting_IsComboUseW() and CanMove() then
 				if WReady() and GetDistance(Target) < 600 then
 					CastSpellTarget(UpdateHeroInfo(), W)
 				end
@@ -377,7 +377,7 @@ function Farm()
 
 		jungle = GetJungleMonster(1100)
 		if jungle ~= 0 then
-			if WReady() and not IsMyManaLowLaneClear() then
+			if WReady() and not IsMyManaLowLaneClear() and CanMove() then
 				if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellQ.Range then
 					CastSpellTarget(UpdateHeroInfo(), W)
 
