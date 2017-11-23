@@ -11,6 +11,7 @@ function UpdateHeroInfo()
 	return GetMyChamp()
 end
 
+
 local LaneClearUseMana = 60
 
 
@@ -53,7 +54,7 @@ function GetTarget()
 end
 
 function OnLoad()
-	__PrintTextGame("Fizz v1.0 loaded")
+	--__PrintTextGame("Fizz v1.0 loaded")
 end
 
 function OnUpdate()
@@ -63,13 +64,13 @@ function OnDraw()
 end
 
 function OnUpdateBuff(unit, buff, stacks)
-	if GetBuffName(buff) == "FizzSeastonePassive" and unit == GetMyChamp() then
+	if buff.Name == "FizzSeastonePassive" and unit.IsMe then
 		wactive = true
 	end
 end
 
 function OnRemoveBuff(unit, buff)
-	if GetBuffName(buff) == "FizzSeastonePassive" and unit == GetMyChamp() then
+	if buff.Name == "FizzSeastonePassive" and unit.IsMe then
 		wactive = false
 	end
 end
@@ -83,20 +84,20 @@ end
 function OnDeleteObject(unit)
 end
 
+function OnWndMsg(msg, key)
+
+end
 
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Fizz" then return end
 	if IsDead(UpdateHeroInfo()) then return end
 
-	local nKeyCode = GetKeyCode()
-
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
 	end
 
-
-	if nKeyCode == VKeyCode then
+	if GetKeyPress(VKeyCode) == 1 then
 		LaneClear()
 	end
 end
@@ -161,7 +162,7 @@ function VPGetLineCastPosition(Target, Delay, Width, Range, Speed)
 
 	local distance = GetDistance2D(x1,z1,x2,z2)
 
-	TimeMissile = Delay + distance/Speed
+	local TimeMissile = Delay + distance/Speed
 	local real_distance = (TimeMissile * GetMoveSpeed(Target))
 
 	if real_distance == 0 then return distance end

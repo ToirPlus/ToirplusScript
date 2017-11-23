@@ -12,8 +12,6 @@ function UpdateHeroInfo()
 	return GetMyChamp()
 end
 
-
-
 local Q = 0
 local W = 1
 local E = 2
@@ -53,7 +51,7 @@ function GetTarget()
 end
 
 function OnLoad()
-	__PrintTextGame("Xayah v1.0 loaded")
+	--__PrintTextGame("Xayah v1.0 loaded")
 end
 
 function OnUpdate()
@@ -77,23 +75,26 @@ end
 function OnDeleteObject(unit)
 end
 
+function OnWndMsg(msg, key)
+
+end
+
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Xayah" then return end
 	if IsDead(UpdateHeroInfo()) then return end
 
-	local nKeyCode = GetKeyCode()
-
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
 	end
 
-	if nKeyCode == CKeyCode then
+	if GetKeyPress(CKeyCode) == 1 then
 		SetLuaHarass(true)
 		Harass()
 	end
 
-	if nKeyCode == VKeyCode then
+	if GetKeyPress(VKeyCode) == 1 then
+		SetLuaLaneClear(true)
 		LaneClear()
 	end
 

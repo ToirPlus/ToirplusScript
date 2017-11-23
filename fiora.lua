@@ -6,12 +6,14 @@ Thanks Celtech team
 
 ]]
 
-local SpellQ = {Speed = 1700, Range = 400, Delay = 0.25, Width = 50}
+
 
 function UpdateHeroInfo()
 	return GetMyChamp()
 end
 
+
+local SpellQ = {Speed = 1700, Range = 400, Delay = 0.25, Width = 50}
 
 local Q = 0
 local W = 1
@@ -21,8 +23,10 @@ local R = 3
 local config_AutoUlt_10_Percent = true
 local config_AutoW = true
 
-config_AutoUlt_10_Percent  = AddMenuCustom(1, config_AutoUlt_10_Percent, "Auto Ultil When 10%HP")
-config_AutoW  = AddMenuCustom(2, config_AutoW, "Auto W")
+if GetChampName(UpdateHeroInfo()) == "Fiora" then
+	config_AutoUlt_10_Percent  = AddMenuCustom(1, config_AutoUlt_10_Percent, "Auto Ultil When 10%HP")
+	config_AutoW  = AddMenuCustom(2, config_AutoW, "Auto W")
+end
 
 
 local SpaceKeyCode = 32
@@ -96,27 +100,15 @@ function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Fiora" then return end
 	if IsDead(UpdateHeroInfo()) then return end
 
-
-	local nKeyCode = GetKeyCode()
-
-	if nKeyCode == VKeyCode then
-		LaneClear()
-	end
-
-
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
-
-
 	end
 
-
-	if nKeyCode == CKeyCode then
-	--	SetLuaHarass(true)
-	--	Harass()
+	if GetKeyPress(VKeyCode) == 1 then
+		SetLuaLaneClear(true)
+		LaneClear()
 	end
-
 end
 
 function Combo()
@@ -273,7 +265,7 @@ function LaneClear()
 end
 
 function OnLoad()
-	__PrintTextGame("Fiora v1.0 loaded")
+	--__PrintTextGame("Fiora v1.0 loaded")
 end
 
 function OnUpdate()
@@ -296,4 +288,8 @@ function OnCreateObject(unit)
 end
 
 function OnDeleteObject(unit)
+end
+
+function OnWndMsg(msg, key)
+
 end

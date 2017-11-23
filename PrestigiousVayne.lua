@@ -391,12 +391,10 @@ function OnTick()
 
 
 	if IsTyping() then return end --Wont Orbwalk while chatting
-	local nKeyCode = GetKeyCode()
-	--sleep(0.01)
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
-	elseif nKeyCode == CKeyCode then
+	elseif GetKeyPress(CKeyCode) == 1 then
 		SetLuaHarass(true)
 		Harass()
 	end
@@ -407,7 +405,7 @@ function OnTick()
 end
 
 function OnLoad()
-	__PrintTextGame("Prestigious Vayne Loaded, Good Luck!")
+	--__PrintTextGame("Prestigious Vayne Loaded, Good Luck!")
 end
 
 function OnUpdate()
@@ -429,6 +427,10 @@ function OnCreateObject(unit)
 end
 
 function OnDeleteObject(unit)
+end
+
+function OnWndMsg(msg, key)
+
 end
 -------------------------------------</Main Script>-------------------------------------
 

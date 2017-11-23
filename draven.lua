@@ -5,6 +5,10 @@ Reference link https://github.com/Dienofail/BoL/blob/master/common/SidasAutoCarr
 
 ]]
 
+function UpdateHeroInfo()
+	return GetMyChamp()
+end
+
 
 local SpaceKeyCode = 32
 local CKeyCode = 67
@@ -18,7 +22,9 @@ local R = 3
 
 local config_Auto_caughtAxe = true
 
-config_Auto_caughtAxe = AddMenuCustom(1, config_Auto_caughtAxe, "Auto Caught Axe")
+if GetChampName(UpdateHeroInfo()) == "Draven" then
+	config_Auto_caughtAxe = AddMenuCustom(1, config_Auto_caughtAxe, "Auto Caught Axe")
+end
 
 local LaneClearUseMana = 60
 local HarassUseMana = 60
@@ -26,9 +32,7 @@ local HarassUseMana = 60
 local SpellE = {Delay = 0.251, Width = 130, Range = 1100, Speed = 1400 }
 local SpellR = {Delay = 0.500, Width = 160, Range = 2500, Speed = 2000 }
 
-function UpdateHeroInfo()
-	return GetMyChamp()
-end
+
 
 function QReady()
 	return CanCast(Q)
@@ -84,12 +88,16 @@ local time2 = 0
 
 local delay = 0
 
+function OnWndMsg(msg, key)
+
+end
+
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Draven" then return end
 	if IsDead(UpdateHeroInfo()) then return end
-	local nKeyCode = GetKeyCode()
 
-	if nKeyCode == VKeyCode then
+	if GetKeyPress(VKeyCode) == 1 then
+		SetLuaLaneClear(true)
 		LaneClear()
 	end
 
@@ -99,9 +107,7 @@ function OnTick()
 		SetLuaMoveOnly(false)
 	end
 
-
-
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
 	end
@@ -122,7 +128,7 @@ function OnTick()
 end
 
 function OnLoad()
-	__PrintTextGame("Draven v1.0 loaded")
+	--__PrintTextGame("Draven v1.0 loaded")
 end
 
 function OnUpdate()
@@ -142,14 +148,14 @@ function OnProcessSpell(unit, spell)
 end
 
 function OnCreateObject(unit)
-	local name = GetObjName(unit)
+	local name = GetObjName(unit.Addr)
 	if name == "Draven_Base_Q_reticle" then
 		Axe = unit
 	end
 end
 
 function OnDeleteObject(unit)
-	local name = GetObjName(unit)
+	local name = GetObjName(unit.Addr)
 	if name == "Draven_Base_Q_reticle" then
 		Axe = 0
 	end
@@ -165,16 +171,13 @@ function LaneClear()
 		Auto_caughtAxe()
 	end
 
-
 end
-
-
 
 function Auto_caughtAxe()
 	if Axe ~= 0 then
 
-		local x= GetPosX(Axe)
-		local z= GetPosZ(Axe)
+		local x= GetPosX(Axe.Addr)
+		local z= GetPosZ(Axe.Addr)
 
 
 		if CanMove() and CheckDistance(x,z) < 300 and CheckDistance(x,z) > 90 then
@@ -257,14 +260,14 @@ function CastQ(Target)
 end
 
 function CastW(Target)
-	if Target ~= 0 and ValidTargetRange(Target, 1200) and WReady() and GetBuffCount(UpdateHeroInfo(), "dravenfurybuff") == 0 then
+	if Target ~= 0 and ValidTargetRange(Target, 1200) and WReady() and GetBuffStack(UpdateHeroInfo(), "dravenfurybuff") == 0 then
 		CastSpellTarget(UpdateHeroInfo(), W)
 	end
 end
 
 
 function CastE(Target)
-	if Target ~= 0 and ValidTargetRange(Target, SpellE.Range) and EReady() then
+	if Target ~= 0 and ValidTargetRange(Target, 800) and EReady() then
 
 		local vp_distance = VPGetLineCastPosition(Target, SpellE.Delay, SpellE.Width, SpellE.Range, SpellE.Speed)
 		--__PrintTextGame("Cast E")

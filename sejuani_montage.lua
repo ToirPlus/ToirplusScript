@@ -6,18 +6,23 @@ Thanks Celtech team
 
 ]]
 
-
---IncludeFile("Lib\\Vector.lua")
-
 function UpdateHeroInfo()
 	return GetMyChamp()
 end
 
-local LaneClearUseMana = 40
+
+
+--IncludeFile("Lib\\Vector.lua")
+
+
+
+local LaneClearUseMana = 20
 
 local config_R_InTurret = false
 
-config_R_InTurret  = AddMenuCustom(1, config_R_InTurret, "R In Turret")
+if GetChampName(UpdateHeroInfo()) == "Sejuani" then
+	config_R_InTurret  = AddMenuCustom(1, config_R_InTurret, "R In Turret")
+end
 
 local Q = 0
 local W = 1
@@ -57,7 +62,7 @@ function GetTarget()
 end
 
 function OnLoad()
-	__PrintTextGame("Sejuani v1.0 loaded")
+	--__PrintTextGame("Sejuani v1.0 loaded")
 end
 
 function OnUpdate()
@@ -80,20 +85,22 @@ end
 
 function OnDeleteObject(unit)
 end
+function OnWndMsg(msg, key)
+
+end
 
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Sejuani" then return end
 	if IsDead(UpdateHeroInfo()) then return end
 
-	local nKeyCode = GetKeyCode()
-
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
 	end
 
 
-	if nKeyCode == VKeyCode then
+	if GetKeyPress(VKeyCode) == 1 then
+		SetLuaLaneClear(true)
 		JungClear()
 	end
 
@@ -107,7 +114,7 @@ function AutoE()
 	if EReady() then
 	    SearchAllChamp()
 		for i, enemy in ipairs(pObjChamp) do
-			if enemy ~= 0 and ValidTarget(enemy) and GetDistance(enemy) <= Ranges.E and CanMove() then
+			if enemy ~= 0 and ValidTarget(enemy) and GetDistance(enemy) <= Ranges.E and CanMove() and EReady() then
 				CastE(enemy)
 			end
 		end
@@ -120,7 +127,7 @@ function KillSteal()
 	for i, Target in pairs(Enemies) do
 		if Target ~= 0 then
 			if ValidTarget(Target) then
-				if EReady() and getDmg(E, Target) > GetHealthPoint(Target) and CanMove() then
+				if getDmg(E, Target) > GetHealthPoint(Target) and CanMove() and EReady() then
 					CastE(Target)
 				end
 
@@ -131,7 +138,7 @@ function KillSteal()
 				if RReady() and getDmg(R, Target) > GetHealthPoint(Target) and CanMove() then
 					local vp_distance = VPGetLineCastPosition(Target, Delays.R, Widths.R, Ranges.R, Speeds.R)
 					if vp_distance > 0 and vp_distance < Ranges.R then
-						CastSpellToPredictionPos(Target, R, vp_distance)
+						--CastSpellToPredictionPos(Target, R, vp_distance)
 					end
 				end
 
@@ -204,10 +211,6 @@ function getDmg(Spell, Enemy)
 
 		local AP = GetFlatMagicDamage(UpdateHeroInfo()) + GetFlatMagicDamage(UpdateHeroInfo()) * GetPercentMagicDamage(UpdateHeroInfo())
 
-		local BonusAD = GetFlatPhysicalDamage(UpdateHeroInfo())
-
-		local Percent_BonusAD = 0.65
-
 		local DamageSpellR = DamageSpellRTable[GetSpellLevel(UpdateHeroInfo(),R)]
 
 		local Enemy_SpellBlock = GetSpellBlock(Enemy)
@@ -218,14 +221,6 @@ function getDmg(Spell, Enemy)
 		end
 
 		Enemy_SpellBlock = Enemy_SpellBlock - GetMagicPenetration(UpdateHeroInfo())
-
-		if Enemy_SpellBlock >= 0 then
-			Damage = (DamageSpellR + Percent_BonusAD * BonusAD + Percent_AP * AP) * (100/(100 + Enemy_SpellBlock))
-		else
-			Damage = (DamageSpellR + Percent_BonusAD * BonusAD + Percent_AP * AP) * (2 - 100/(100 - Enemy_SpellBlock))
-		end
-
-		local PercentHP = 100 * GetHealthPoint(UpdateHeroInfo())/GetHealthPointMax(UpdateHeroInfo())
 
 		if Enemy_SpellBlock >= 0 then
 			Damage = (DamageSpellR + Percent_AP * AP) * (100/(100 + Enemy_SpellBlock))
@@ -267,7 +262,8 @@ function JungClear()
 			end
 		end
 
-		if QReady() and CanMove() then
+		jungle = GetJungleMonster(1000)
+		if jungle ~= 0 and QReady() and CanMove() then
 			if ValidTargetJungle(jungle) and GetDistance(jungle) < Ranges.Q and Setting_IsLaneClearUseQ() and not IsMyManaLowLaneClear() then
 				local vp_distance = VPGetLineCastPosition(jungle, Delays.Q, Widths.Q, Ranges.Q, Speeds.Q)
 				if vp_distance > 0 and vp_distance < Ranges.Q then
@@ -276,7 +272,8 @@ function JungClear()
 			end
 		end
 
-		if EReady() and CanMove() then
+		jungle = GetJungleMonster(1000)
+		if jungle ~= 0 and CanMove() and EReady() then
 			if ValidTargetJungle(jungle) and Setting_IsLaneClearUseE() and not IsMyManaLowLaneClear() then
 				CastSpellTarget(jungle, E)
 			end
@@ -293,7 +290,7 @@ function Combo()
 		CastW(Target)
 	end
 
-	if Target ~= 0 and  GetDistance(Target) >= 350 and WReady() and CanMove() and Setting_IsComboUseQ() then
+	if Target ~= 0 and  GetDistance(Target) >= 350 and CanMove() and Setting_IsComboUseQ() then
 		CastQ(Target)
 	end
 
@@ -301,7 +298,7 @@ function Combo()
 		CastE(Target)
 	end
 
-	if Target ~= 0 and (CountEnemyHeroInRange(Widths.R, Target) > 0 or GetDistance(Target) > Ranges.Q) and CanMove() and Setting_IsComboUseR() then
+	if Target ~= 0 and CountEnemyHeroInRange(Widths.R, Target) > 0 and CanMove() and Setting_IsComboUseR() then
 		CastR(Target)
 	end
 
@@ -322,7 +319,7 @@ end
 
 function CastR(Target)
     if RReady() and ValidTarget(Target) then
-	    if (not UnderTurret(Target) or config_R_InTurret) then
+	    if not UnderTurret(Target) or config_R_InTurret then
 			local vp_distance = VPGetLineCastPosition(Target, Delays.R, Widths.R, Ranges.R, Speeds.R)
 			if vp_distance > 0 and vp_distance < Ranges.R then
 				CastSpellToPredictionPos(Target, R, vp_distance)

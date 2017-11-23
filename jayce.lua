@@ -5,13 +5,15 @@ Reference link https://github.com/Dienofail/BoL/blob/master/Jayce.lua
 
 ]]
 
-IncludeFile("Lib\\Vector.lua")
+
 
 
 function UpdateHeroInfo()
 	return GetMyChamp()
 end
 
+
+IncludeFile("Lib\\Vector.lua")
 
 local SpaceKeyCode = 32
 local CKeyCode = 67
@@ -80,6 +82,10 @@ function ValidTargetRange(Target, Range)
 	return false
 end
 
+function OnWndMsg(msg, key)
+
+end
+
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Jayce" then return end
 	if IsDead(UpdateHeroInfo()) then return end
@@ -88,20 +94,19 @@ function OnTick()
 
 	KillSteal()
 
-	local nKeyCode = GetKeyCode()
-
-	if nKeyCode == VKeyCode then
+	if GetKeyPress(VKeyCode) == 1 then
+		SetLuaLaneClear(true)
 		LaneClear()
 	end
 
 
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
 	end
 
 
-	if nKeyCode == CKeyCode then
+	if GetKeyPress(CKeyCode) == 1 then
 		SetLuaHarass(true)
 		Harass()
 	end
@@ -207,7 +212,7 @@ end
 
 
 function CheckWBuffStatus()
-    if GetBuffCount(UpdateHeroInfo(), "JayceHyperCharge") ~= 0 and Setting_IsComboUseW() then
+    if GetBuffStack(UpdateHeroInfo(), "JayceHyperCharge") ~= 0 and Setting_IsComboUseW() then
         return true
     else
         return false
@@ -294,7 +299,7 @@ end
 
 
 function OnLoad()
-	__PrintTextGame("Jayce v1.0 loaded")
+	--__PrintTextGame("Jayce v1.0 loaded")
 end
 
 function OnUpdate()

@@ -29,8 +29,10 @@ local VKeyCode = 86
 local config_AutoUlt = true
 local config_AutoW = true
 
-config_AutoUlt  = AddMenuCustom(1, config_AutoUlt, "Auto Ultil")
-config_AutoW  = AddMenuCustom(2, config_AutoW, "Auto W")
+if GetChampName(UpdateHeroInfo()) == "Yasuo" then
+	config_AutoUlt  = AddMenuCustom(1, config_AutoUlt, "Auto Ultil")
+	config_AutoW  = AddMenuCustom(2, config_AutoW, "Auto W")
+end
 
 local SpellQW = {Range = 425, Speed = 1500, Delay = 0.25, Width = 90}
 local SpellQ3 = {Range = 1000, Speed = 1500, Delay = 0.25, Width = 90}
@@ -159,7 +161,7 @@ function GetTarget()
 end
 
 function OnLoad()
-	__PrintTextGame("Yasuo v1.0 loaded")
+	--__PrintTextGame("Yasuo v1.0 loaded")
 end
 
 
@@ -177,6 +179,7 @@ function OnRemoveBuff(unit, buff)
 end
 
 function OnProcessSpell(unit, spell)
+	if GetChampName(UpdateHeroInfo()) ~= "Yasuo" then return end
 	if WReady() and ValidTargetRange(unit, 1500) and GetDistance(unit) >= 475 and config_AutoW then
 		if spell ~= 0 then
 			if WALL_SPELLS[GetName_Casting(spell)] then
@@ -192,20 +195,22 @@ end
 function OnDeleteObject(unit)
 end
 
+function OnWndMsg(msg, key)
+
+end
+
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Yasuo" then return end
 	if IsDead(UpdateHeroInfo()) then return end
 
-	--AutoW()
 
-	local nKeyCode = GetKeyCode()
-
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
 	end
 
-	if nKeyCode == VKeyCode then
+	if GetKeyPress(VKeyCode) == 1 then
+		SetLuaLaneClear(true)
 		LaneClear()
 	end
 
@@ -219,26 +224,6 @@ function OnTick()
 
 end
 
---[[
-function AutoW()
-	SearchAllChamp()
-	local Enemies = pObjChamp
-	for i, enemy in ipairs(Enemies) do
-		if enemy ~= 0 then
-			if WReady() and ValidTargetRange(enemy, 1500) and GetDistance(enemy) >= 475 and config_AutoW then
-				local spell = GetSpellCasting(enemy)
-				if spell ~= 0 then
-					--__PrintDebug(GetName_Casting(spell))
-					if WALL_SPELLS[GetName_Casting(spell)] then
-						CastSpellToPredictionPos(enemy, W, GetDistance(enemy))
-						--__PrintDebug("Cast W")
-					end
-				end
-			end
-		end
-	end
-end
-]]
 
 function VPGetLineCastPosition(Target, Delay, Width, Range, Speed)
 	local x1 = GetPosX(UpdateHeroInfo())

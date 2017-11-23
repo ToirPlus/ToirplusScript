@@ -6,16 +6,12 @@ Thanks Dienofail
 
 ]]
 
-IncludeFile("Lib\\Vector.lua")
-
-
---__PrintDebug(GetChampName(UpdateHeroInfo()))
 function UpdateHeroInfo()
 	return GetMyChamp()
 end
 
 
-
+IncludeFile("Lib\\Vector.lua")
 
 -- Configuration ----------------------------------------------------------------------------------------------
 
@@ -33,10 +29,12 @@ local config_Combo_RStacks = 8
 local config_Harass_RStacks = 2
 local config_AutoUlt = false
 
+if GetChampName(UpdateHeroInfo()) == "KogMaw" then
+	config_AutoUlt  = AddMenuCustom(1, config_AutoUlt, "Auto Ultil")
+end
+
 local ComboUseMana = 30
 local HarassUseMana = 60
-
-config_AutoUlt  = AddMenuCustom(1, config_AutoUlt, "Auto Ultil")
 
 -- Game Data ---------------------------------------------------------------------------------------------------
 
@@ -267,27 +265,27 @@ function Harass()
 	end
 end
 
+function OnWndMsg(msg, key)
+
+end
 
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "KogMaw" then return end
 	--__PrintTextGame("KogMaw: OnTick() --------------")
 	Check()
 
-	local nKeyCode = GetKeyCode()
-
-	--__PrintTextGame("nKeyCode: OnTick(): ".. tostring(nKeyCode))
-
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
 	end
 
-	if nKeyCode == CKeyCode then
+	if GetKeyPress(CKeyCode) == 1 then
 		SetLuaHarass(true)
 		Harass()
 	end
 
-	if nKeyCode == VKeyCode then
+	if GetKeyPress(VKeyCode) == 1 then
+		SetLuaLaneClear(true)
 		Farm()
 	end
 
@@ -575,7 +573,7 @@ end
 
 -------------------------- have to ---------------------------------------------
 function OnLoad()
-	__PrintTextGame("KogMawRework v1.4 loaded")
+	--__PrintTextGame("KogMawRework v1.4 loaded")
 end
 
 function OnUpdate()
@@ -585,7 +583,7 @@ function OnDraw()
 end
 
 function OnUpdateBuff(unit, buff, stacks)
-	if GetBuffName(buff) == "kogmawlivingartillerycost" and unit == GetMyChamp() then
+	if buff.Name == "kogmawlivingartillerycost" and unit.IsMe then
 		RStacks = stacks
 	end
 end
