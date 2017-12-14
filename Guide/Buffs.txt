@@ -1,0 +1,55 @@
+int   GetAllBuffNameActive(int pObject)
+	  - return array Buff Name:
+		pBuffName[1], pBuffName[2], pBuffName[3] ... pBuffName[60]
+		
+string GetBuffName(int pBuff)
+int    GetBuffByName(int pObject, string szBuffName)
+	  - return  : value pBuff
+	  - example : GetBuffByName(pObjectMyChamp, "garenpassive")
+	  
+int   GetBuffType     (int pObject, string szBuffName)	
+int   CountBuffByType (int pObject, int nType)  
+
+int   GetBuffTimeBegin(int pObject, string szBuffName)
+int   GetBuffTimeEnd  (int pObject, string szBuffName)
+
+int   GetBuffStack(int pObject, string szBuffName)
+	  - example: "kalistaexpungemarker" buff (buff-E)
+	  
+int   GetBuffCount(int pObject, string szBuffName)
+	  - example: "TwitchDeadlyVenom"
+	  
+- Buff Type:
+
+Internal_Buff				= 0
+Aura_Buff					= 1
+CombatEnchancer_Buff		= 2
+CombatDehancer_Buff			= 3
+SpellShield_Buff			= 4
+Stun_Buff					= 5
+Invisibility_Buff			= 6
+Silence_Buff				= 7
+Taunt_Buff					= 8
+Polymorph_Buff				= 9
+Slow_Buff					= 10
+Snare_Buff					= 11
+Damage_Buff					= 12
+Heal_Buff					= 13
+Haste_Buff					= 14
+SpellImmunity_Buff			= 15
+PhysicalImmunity_Buff		= 16
+Invulnerability_Buff		= 17
+Sleep_Buff					= 18
+NearSight_Buff				= 19
+Frenzy_Buff					= 20
+Fear_Buff					= 21
+Charm_Buff					= 22
+Poison_Buff					= 23
+Suppression_Buff			= 24
+Blind_Buff					= 25
+Counter_Buff				= 26
+Shred_Buff					= 27
+Flee_Buff					= 28
+Knockup_Buff				= 29
+Knockback_Buff				= 30
+Disarm_Buff					= 31

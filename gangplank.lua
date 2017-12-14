@@ -97,6 +97,14 @@ function OnWndMsg(msg, key)
 
 end
 
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
+
+end
+
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Gangplank" then return end
 

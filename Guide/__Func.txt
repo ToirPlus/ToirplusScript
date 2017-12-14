@@ -1,0 +1,190 @@
+---[Spell]---------------------------------------------------------------------------------------------------------------------------------
+BasicAttack(pEnemy)
+CanCast(nIndex)	  
+CastSpellTarget(pObject, nIndex)
+CastSpellToPos(x, z, nIndex)
+CastSpellToPos_2(x1, z1, x2, z2, nIndex)    					-- Use to cast spell : E-Viktor, W-Taliyah.
+CastSpellToPredictionPos(pObject, nIndex, nDistantPrediction)  	-- Use to cast spell to prediction position.
+ReleaseSpellToPos(x, z, nIndex) 								-- Use to Release spell : Q-Xerath, Q-Varus to a position
+ReleaseSpellToPredictionPos(pObject, nIndex, nDistantPrediction)-- Use to Release spell : Q-Xerath, Q-Varus to prediction position
+ReleaseSpellToPredictionPos_2(pObject, nIndex, nDistantPrediction) -- Use to Release spell : R-Velkoz to prediction position	  
+CastSpellTargetByName(pObject, SpellName) 						-- Use to cast Item-Spell, D-F-Spell (target): SummonerDot, SummonerHeal, SummonerSmite, ItemSwordOfFeastAndFamine, ZhonyasHourglass ..
+GetSpellIndexByName(SpellName) 
+GetSpellNameByIndex(pObject, nIndex)	  
+GetSpellLevel(pObject, nIndex)
+GetCDSpell(pObject, nIndex)	
+GetCDExpiresSpell(pObject, nIndex) 
+
+GetAmmoSpell(pObject, nIndex)
+GetToggleSpell(pObject, nIndex)
+
+GetWindupBA(pObject)
+GetCDBA(pObject)
+GetCDExpiresBA(pObject)
+GetAADamageHitEnemy(pObj_Enemy)
+
+---[SearchObject]---------------------------------------------------------------------------------------------------------------------------------
+SearchAllChamp() 								-- return table "pObjChamp": pObjChamp[1], pObjChamp[2], pObjChamp[3] ... pObjChamp[10]
+GetAllObjectAroundAnObject(pObject, fRange) 	-- return table "pObject"  : pObject[1], pObject[2], pObject[3] ... pObject[500]
+GetAllUnitAroundAnObject(pObject, fRange)		-- return table "pUnit"  : pUnit[1], pUnit[2], pUnit[3] ... pUnit[300]
+GetEnemyChampCanKillFastest(fRange) 			-- return EnemyChamp can kill fastest by AD-damage around Range=fRange
+GetEnemyChampCanKillFastest_AP(fRange)    		-- return EnemyChamp can kill fastest by AP-damage around Range=fRange
+
+GetEnemyChampNearest(fRange) 					-- return EnemyChamp nearest around Range=fRange
+GetEnemyChampMinHP(fRange) 						-- return EnemyChamp MinHP around Range=fRange
+GetEnemyChampCCAroundObject(pObject, fRange) 	-- return EnemyChamp CC around pObject with Range=fRange
+CountEnemyChampAroundObject(pObject, fRange) 	-- return count EnemyChamp around pObject with Range=fRange
+CountAllyChampAroundObject(pObject, fRange) 	-- return count AllyChamp around pObject with Range=fRange
+CountEnemyMinionAroundObject(pObject, fRange)  	-- return count EnemyMinion around pObject with Range=fRange
+CountEnemyTurretAroundObject(pObject, fRange) 	-- return count EnemyTurret around pObject with Range=fRange
+GetEnemyMinionAroundObject(pObject, fRange)
+
+CountObjectCollision(nMode, pEnemyObj, x1, z1, x2, z2, fWidth, fRange, fRadius)
+	  - nMode = 0  --> ObjectCollistion = enemy minion
+	  - nMode = 1  --> ObjectCollistion = enemy minion or enemy Champ
+	  - nMode = 2  --> ObjectCollistion = enemy Champ
+	  
+GetJungleMonster(fRange)
+
+---[Draw]---------------------------------------------------------------------------------------------------------------------------------
+AddMenuCustom(nLine, bValueDefault, szMenuText) -- nLine = 1->34
+Lua_ARGB(alpha, r, g, b)
+DrawCircleGame(x, y, z, fRadius, nColor)
+DrawLineGame(x1, y1, z1, x2, y2, z2, fRadius)
+
+local a,b =  GetHealthBarPos(pObj)
+local a,b =  WorldToMiniMap(x, y, z)
+local a,b =  WorldToScreen(x, y, z)
+
+DrawLineD3DX(x1, y1, x2, y2, width, int nColor)
+DrawBorderBoxD3DX(x, y, w, h, fThickness, nColor)
+FilledRectD3DX(x, y, w, h, nColor)
+DrawTextD3DX(x, y, szText, nColor, nFontHeight)		-- 1:small, 2:normal, 3:big
+---[Attribute]---------------------------------------------------------------------------------------------------------------------------------
+GetMyChamp()								-- return : pObject my Champion.
+
+GetId(pObject)
+GetIndex(pObject)							-- return NetworkId
+GetTeamId(pObject)
+GetType(pObject)							-- 0=champ, 1=minion, 2=turret, 3=jungle, 4= Inhibitor, 5=Nexus, 6=Missile, -1= other
+GetObjName(pObject)
+GetChampName(pObject)						-- charName
+local x, y, z = GetPos(pObject)
+
+IsInvulnerable(pObject)
+IsInFog(pObject)
+IsDead(pObject)
+IsVisibleOnScreen(pObject)
+IsRecall(pObject)
+IsCasting(pObject)
+IsEnemy(pObject)
+IsAlly(pObject)
+IsChampion(pObject)
+IsMinion(pObject)
+IsTurret(pObject)
+IsJungleMonster(pObject)
+IsNexus(pObject)
+IsBarrack(pObject)
+
+---[Move]---------------------------------------------------------------------------------------------------------------------------------
+MoveToPos(x, z)
+local x,y,z = GetDestPos(pObject)
+local x,y,z = GetPredPos(pObject, nDistant)
+BlockMove()
+UnBlockMove()
+
+---[Item]---------------------------------------------------------------------------------------------------------------------------------
+GetItemByID(nID)							-- return pItem
+GetItemID(nSlot)
+BuyItem(nID)
+
+---[Buff]---------------------------------------------------------------------------------------------------------------------------------
+GetAllBuffNameActive(pObject) 				-- return table "pBuffName": pBuffName[1], pBuffName[2], pBuffName[3] ... pBuffName[60]
+GetBuffName(pBuff)
+GetBuffByName(pObject, szBuffName) 			-- return  : value pBuff	  
+GetBuffType(pObject, szBuffName)	
+CountBuffByType (pObject, nType)  
+GetBuffTimeBegin(pObject, szBuffName)
+GetBuffTimeEnd  (pObject, szBuffName)
+GetBuffStack(pObject, szBuffName)
+GetBuffCount(pObject, szBuffName)
+--- BuffType: Internal_Buff = 0, Aura_Buff = 1, CombatEnchancer_Buff = 2, CombatDehancer_Buff = 3, SpellShield_Buff = 4, Stun_Buff = 5, Invisibility_Buff = 6, Silence_Buff = 7
+--- Taunt_Buff = 8, Polymorph_Buff = 9, Slow_Buff = 10, Snare_Buff = 11, Damage_Buff = 12, Heal_Buff = 13, Haste_Buff = 14, SpellImmunity_Buff = 15, PhysicalImmunity_Buff = 16
+--- Invulnerability_Buff = 17, Sleep_Buff = 18, NearSight_Buff = 19, Frenzy_Buff = 20, Fear_Buff = 21, Charm_Buff = 22, Poison_Buff = 23, Suppression_Buff = 24, Blind_Buff = 25
+--- Counter_Buff = 26, Shred_Buff = 27, Flee_Buff = 28, Knockup_Buff = 29, Knockback_Buff = 30, Disarm_Buff = 31
+
+---[SpellCasting]---------------------------------------------------------------------------------------------------------------------------------
+GetSpellCasting(pObject)
+GetName_Casting(pSpellCasting)
+GetOwnerID_Casting(pSpellCasting)
+GetTargetID_Casting(pSpellCasting)
+local x,y,z = GetSrcPos_Cast(pSpellCasting)
+local x,y,z = GetDestPos_Cast(pSpellCasting)
+local x,y,z = GetCursorPos_Cast(pSpellCasting)
+GetDelay_Casting(int pSpellCasting)
+GetTime_Casting(int pSpellCasting)
+
+---[Utils]---------------------------------------------------------------------------------------------------------------------------------
++ IncludeFile(string szFileName)
++ GetScriptPath()
++ __PrintDebug(string szText)
++ __PrintTextGame(string szText)
+
++ GetDistance2D(float fPosX1, float fPosZ1, float fPosX2, float fPosZ2)
+
++ SetEvade(bool)
++ GetEvade()
++ SetPrintErrorLog(bool)
+		
++ GetKeyPress(nCode)
++ GetKeyCode()
++ IsEndLua()
++ SetLuaCombo(bool bIsLuaCombo)
++ SetLuaHarass(bool bIsLuaHarass)
++ SetLuaLaneClear(bool bIsLuaLaneClear)
++ SetLuaBasicAttackOnly(bool bIsLuaBaOnly)
++ SetLuaMoveOnly(bool nIsLuaMoveOnly)
++ IsDodging()	-- nIsDodging from core
++ IsTyping()
++ IsWall(float fPosX, float fPosY, float fPosZ)
+
++ local x,y = GetCursorPos()  -- 2D
++ local x,y,z = GetMousePos()
+
++ GetTimeGame()
++ GetTickCount()
++ GetLatency()
+
++ LevelUpSpell(nIndex)
++ CanLevelUpSpell()
+
++ Setting_IsComboUseQ()
++ Setting_IsComboUseW()
++ Setting_IsComboUseE()
++ Setting_IsComboUseR()
+
++ Setting_IsHarassUseQ()
++ Setting_IsHarassUseW()
++ Setting_IsHarassUseE()
++ Setting_IsHarassUseR()
+
++ Setting_IsLaneClearUseQ()
++ Setting_IsLaneClearUseW()
++ Setting_IsLaneClearUseE()
++ Setting_IsLaneClearUseR()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

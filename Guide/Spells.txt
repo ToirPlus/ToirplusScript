@@ -1,0 +1,55 @@
+	Q = 0
+	W = 1
+	E = 2
+	R = 3
+	
+bool  CanCast(int nSpellIndex)
+	  - example : CanCast(Q), CanCast(W) ...
+	  
+void  CastSpellTarget(int pObject, int nSpellIndex)
+	  - Use to cast target-type only.
+	  - int pObject 	= pMyChamp, pEnemy, pMinion ..
+	  - int nSpellIndex = 0,1,2,3(Q,W,E,R) ..
+	  
+------------------------
+void  CastSpellToPos(float fPosX, float fPosZ, int nSpellIndex)
+	  - Use to cast spell to a position.
+	  
+void  CastSpellToPos_2(float fStartPosX, float fStartPosZ, float fEndPosX, float fEndPosZ, int nSpellIndex)
+	  - Use to cast spell : E-Viktor, W-Taliyah.
+	  
+void  CastSpellToPredictionPos(int pObject, int nSpellIndex, float nDistantPrediction)
+	  - Use to cast spell to prediction position.
+------------------------	  
+void  ReleaseSpellToPos(float fPosX, float fPosZ, int nSpellIndex)
+	  - Use to Release spell : Q-Xerath, Q-Varus to a position
+	  
+void  ReleaseSpellToPredictionPos(int pObject, int nSpellIndex, float nDistantPrediction)
+	  - Use to Release spell : Q-Xerath, Q-Varus to prediction position
+	  
+void  ReleaseSpellToPredictionPos_2(int pObject, int nSpellIndex, float nDistantPrediction)
+	  - Use to Release spell : R-Velkoz to prediction position
+
+------------------------	  
+void  CastSpellTargetByName(int pObject, string SpellName)
+	  - Use to cast Item-Spell, D-F-Spell (target): SummonerDot, SummonerHeal, SummonerSmite, ItemSwordOfFeastAndFamine, ZhonyasHourglass ..
+
+int   GetSpellIndexByName(string SpellName)
+	  - return nSpellIndex	 
+	  
+string GetSpellNameByIndex(int pObject, int nSpellIndex)
+	  - return SpellName Q,W,E,R ... of pObject
+	  
+int	  GetSpellLevel(int pObject, int nSpellIndex)
+int	  GetCDSpell(int pObject, int nSpellIndex)	
+int	  GetCDExpiresSpell(int pObject, int nSpellIndex) 
+
+GetAmmoSpell(pObject, nIndex)
+GetToggleSpell(pObject, nIndex)
+------------------------
+void  BasicAttack(int pObject)
+float GetWindupBA(int pObject)
+float GetCDBA(int pObject)
+float GetCDExpiresBA(int pObject)
+float GetAADamageHitEnemy(int pObj_Enemy)
+

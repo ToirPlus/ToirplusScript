@@ -1,0 +1,31 @@
+- table Hero, Minion        : + obj.SpawnTime
+- table Minion,Turret,Jungle: + minion.CharName
+							  + minion.PathCount   		
+					          + minion.GetPath(nIndex)   	-- return x,y,z
+							  
+- OnEvent                   : + unit.CharName		
+- table spell	            : + spell.AnimationTime
+
+- addFunc : + local a,b =  WorldToMiniMap(x, y, z)
+			+ local a,b =  GetHealthBarPos(pObj)
+			
+			+ SetEvade(bool)
+			+ GetEvade()
+			+ SetPrintErrorLog(bool)	
+			
+			+ GetAmmoSpell(pObject, nIndex)
+			+ GetToggleSpell(pObject, nIndex)
+			+ CanLevelUpSpell()
+			
+- editFunc: DrawTextD3DX(x, y, szText, nColor, nFontHeight)		-- 1:small, 2:normal, 3:big		
+			UpSpellLevel(nIndex) -> LevelUpSpell(nIndex)
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				

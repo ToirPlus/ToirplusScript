@@ -15,6 +15,7 @@ function OnTick()
 	if time2 - time1 > delay and delay > 0 then
 		delay = 0
 		SetLuaMoveOnly(false)
+		UnBlockMove()
 	end
 end
 
@@ -26,6 +27,14 @@ function OnUpdate()
 end
 
 function OnDraw()
+end
+
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
+
 end
 
 function OnUpdateBuff(unit, buff, stacks)
@@ -117,7 +126,7 @@ function IsOnThreshQ(StartQPos, EndQPos)
 
 
 	local pointSegmentVector = Vector(pointSegment.x, myHeroVector.y, pointSegment.z)
-
+	--__PrintTextGame("isOnSegment: " .. tostring(isOnSegment) .. "," .. tostring(myHeroVector:DistanceTo(pointSegmentVector)))
     if isOnSegment or myHeroVector:DistanceTo(pointSegmentVector) <= 70 + GetOverrideCollisionRadius(UpdateHeroInfo()) then
         return true
     end
@@ -126,10 +135,10 @@ end
 
 
 function OnProcessSpell(unit, spell)
-	if spell.Addr ~= 0 and GetChampName(unit.Addr) == "Thresh" and not unit.IsMe then
+	if unit and GetChampName(unit.Addr) == "Thresh" and not unit.IsMe then
 
 		if spell.Name == "ThreshQ" then
-
+			--__PrintTextGame("ThreshQ")
 			local StartQPos = {GetPos(unit.Addr)}
 			local EndQPos = {GetDestPos_Cast(spell.Addr)}
 
@@ -140,11 +149,12 @@ function OnProcessSpell(unit, spell)
 
 			local myHeroVector = Vector(myHeroPos)
 
-			if GetDistance(unit) < 1100 then
-				local x, z = 0, 0
-				local x1, z1, x2, z2 = FindDodgePos(myHeroVector, startQVector, 70 + GetOverrideCollisionRadius(UpdateHeroInfo()) + 20)
+			if GetDistance(unit.Addr) < 1100 then
 
 				if IsOnThreshQ(StartQPos, EndQPos) then
+
+					local x, z = 0, 0
+					local x1, z1, x2, z2 = FindDodgePos(myHeroVector, startQVector, 70 + GetOverrideCollisionRadius(UpdateHeroInfo()) + 20)
 
 					if GetDistance2Pos(x1,z1, endQVector.x, endQVector.z) > GetDistance2Pos(x2,z2, endQVector.x, endQVector.z) then
 						x, z = x1, z1
@@ -152,7 +162,10 @@ function OnProcessSpell(unit, spell)
 						x, z = x2, z2
 					end
 
+					--__PrintTextGame("Pos: " .. tostring(x) .. "," .. tostring(z))
+
 					if x > 0 and z > 0 then
+						BlockMove()
 						SetLuaMoveOnly(true)
 						MoveToPos(x, z)
 						delay = GetDistancePos(x,z) / GetMoveSpeed(UpdateHeroInfo())

@@ -74,6 +74,14 @@ end
 function OnDraw()
 end
 
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
+
+end
+
 function OnUpdateBuff(unit, buff, stacks)
 end
 
@@ -88,7 +96,7 @@ function OnWndMsg(msg, key)
 end
 
 function OnCreateObject(unit)
-	if unit.Addr ~= 0 then
+	if unit and unit.Addr ~= 0 then
       for _,name in pairs(objTrackList) do
         if GetObjName(unit.Addr) == name then
           objHolder[unit.Addr] = unit.Addr
@@ -99,7 +107,7 @@ function OnCreateObject(unit)
 end
 
 function OnDeleteObject(unit)
-	if unit.Addr ~= 0 then
+	if unit and unit.Addr ~= 0 then
       for _,name in pairs(objTrackList) do
         if GetObjName(unit.Addr) == name then
           objHolder[unit.Addr] = nil

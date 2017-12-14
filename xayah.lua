@@ -46,8 +46,38 @@ function RReady()
 	return CanCast(R)
 end
 
-function GetTarget()
-	return GetEnemyChampCanKillFastest(1100)
+local priorityTable = {
+    p5 = {"Alistar", "Amumu", "Blitzcrank", "Braum", "ChoGath", "DrMundo", "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu","Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona","Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"},
+    p4 = {"Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax","LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain","Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"},
+    p3 = {"Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin","Kayle", "KhaZix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo","Zilean"},
+    p2 = {"Ahri", "Anivia", "Annie",  "Brand",  "Cassiopeia", "Karma", "Karthus", "Katarina", "Kennen", "Sejuani",  "Lux", "Malzahar", "MasterYi", "Orianna", "Syndra", "Talon",  "TwistedFate", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed", "Ziggs", "Zoe" },
+    p1 = {"Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "KogMaw", "Lucian", "MissFortune", "Quinn", "Sivir", "Teemo", "Tristana", "Twitch", "Varus", "Vayne", "Xayah"},
+}
+
+function GetTarget(range)
+	SearchAllChamp()
+	local Enemies = pObjChamp
+	for i, enemy in pairs(Enemies) do
+        if enemy ~= 0 and ValidTargetRange(enemy,range) then
+			if priorityTable.p1[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p2[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p3[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p4[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p5[GetChampName(enemy)] then
+				return enemy
+			end
+		end
+	end
+
+	return GetEnemyChampCanKillFastest(range)
 end
 
 function OnLoad()
@@ -76,6 +106,14 @@ function OnDeleteObject(unit)
 end
 
 function OnWndMsg(msg, key)
+
+end
+
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
 
 end
 
@@ -130,7 +168,7 @@ end
 
 function Combo()
 
-	local Target = GetTarget()
+	local Target = GetTarget(1100)
 
 	if Target ~= 0 then
 		if ValidTarget(Target) then
@@ -142,7 +180,6 @@ function Combo()
 		end
 	end
 
-	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
 			if Setting_IsComboUseW() then
@@ -153,7 +190,6 @@ function Combo()
 		end
 	end
 
-	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
 			if Setting_IsComboUseE() then
@@ -163,8 +199,6 @@ function Combo()
 			end
 		end
 	end
-
-	Target = GetTarget()
 
 	if Target ~= 0 then
 		if ValidTarget(Target) then
@@ -204,8 +238,11 @@ function CastQ(Target)
 end
 
 function CastW(Target)
-	if Target ~= 0 and WReady() and ValidTarget(Target, SpellW.Range) then
+	if Target ~= 0 and WReady() and ValidTarget(Target, SpellW.Range) and not CanAttack() and CanMove() then
 		CastSpellTarget(UpdateHeroInfo(), W)
+		SetLuaBasicAttackOnly(true)
+		BasicAttack(Target)
+		SetLuaBasicAttackOnly(false)
 	end
 end
 
@@ -288,7 +325,7 @@ function IsMyManaLowLaneClear()
 end
 
 function Harass()
-	local Target = GetTarget()
+	local Target = GetTarget(1100)
 	if Target ~= 0 then
 		if ValidTarget(Target) then
 			if QReady() and Setting_IsHarassUseQ() and not IsMyManaLowHarass() then
@@ -297,16 +334,17 @@ function Harass()
 		end
 	end
 
-	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
-			if WReady() and CanMove() and Setting_IsHarassUseW() and not IsMyManaLowHarass() then
+			if WReady() and CanMove() and Setting_IsHarassUseW() and not IsMyManaLowHarass() and not CanAttack() and CanMove() then
 				CastW(Target)
+				SetLuaBasicAttackOnly(true)
+				BasicAttack(Target)
+				SetLuaBasicAttackOnly(false)
 			end
 		end
 	end
 
-	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
 			if EReady() and CanMove() and Setting_IsHarassUseE() and not IsMyManaLowHarass() then
@@ -315,7 +353,6 @@ function Harass()
 		end
 	end
 
-	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
 			if RReady() and CanMove() and Setting_IsHarassUseR() and not IsMyManaLowHarass() then
@@ -336,7 +373,6 @@ end
 
 function GetMinion()
 	GetAllUnitAroundAnObject(UpdateHeroInfo(), SpellE.Range)
-
 	local Enemies = pUnit
 	for i, minion in pairs(Enemies) do
 		if minion ~= 0 then
@@ -345,7 +381,6 @@ function GetMinion()
 			end
 		end
 	end
-
 	return 0
 end
 
@@ -364,9 +399,11 @@ function LaneClear()
 		jungle = GetJungleMonster(1100)
 		if jungle ~= 0 then
 			if WReady() and CanMove() and not IsMyManaLowLaneClear() then
-				if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellQ.Range then
+				if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellW.Range and not CanAttack() and CanMove() then
 					CastSpellTarget(UpdateHeroInfo(), W)
-
+					SetLuaBasicAttackOnly(true)
+					BasicAttack(jungle)
+					SetLuaBasicAttackOnly(false)
 				end
 			end
 		end
@@ -375,7 +412,7 @@ function LaneClear()
 		if jungle ~= 0 then
 
 			if EReady() and CanMove() and not IsMyManaLowLaneClear() then
-				if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellQ.Range then
+				if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellE.Range then
 					CastSpellTarget(UpdateHeroInfo(), E)
 				end
 			end
@@ -402,8 +439,11 @@ function LaneClear()
 
 		minion = GetMinion()
 		if minion ~= 0 then
-			if WReady() and CanMove() and Setting_IsLaneClearUseW() and not IsMyManaLowLaneClear() and GetDistance(minion) < SpellE.Range then
+			if WReady() and CanMove() and Setting_IsLaneClearUseW() and not IsMyManaLowLaneClear() and GetDistance(minion) < SpellW.Range and not CanAttack() and CanMove() then
 				CastSpellTarget(UpdateHeroInfo(), W)
+				SetLuaBasicAttackOnly(true)
+				BasicAttack(minion)
+				SetLuaBasicAttackOnly(false)
 			end
 		end
 

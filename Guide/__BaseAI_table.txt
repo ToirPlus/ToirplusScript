@@ -1,0 +1,391 @@
+
+---------------------------------------------------------------------------------------------------------------------------
++ table my Hero object : 
+		- myHero = GetMyHero()
+		- Fields :  myHero.Addr			    -- pointer of myHero
+					myHero.Id
+					myHero.NetworkId
+					myHero.TeamId
+					myHero.Type				-- 0=champ, 1=minion, 2=turret, 3=jungle, 4= Inhibitor, 5=Nexus, 6=Missile, -1= other
+					myHero.Name
+					myHero.CharName
+					myHero.Level
+					myHero.EnemyId
+					myHero.CollisionRadius
+					myHero.x
+					myHero.y
+					myHero.z
+					myHero.minBBox_x
+					myHero.minBBox_y
+					myHero.minBBox_z
+					myHero.maxBBox_x
+					myHero.maxBBox_y
+					myHero.maxBBox_z
+					myHero.HitBox			--return Distance from curPos to minBBoxPos
+					myHero.SpawnTime
+					myHero.HP
+					myHero.MaxHP
+					myHero.MP
+					myHero.MaxMP
+					myHero.SpecialPoint
+					myHero.Shield
+					myHero.MagicShield
+					myHero.RengarShield
+					myHero.ArmorPen
+					myHero.MagicPen
+					myHero.BaseDmg
+					myHero.BonusDmg
+					myHero.TotalDmg
+					myHero.MagicDmg
+					myHero.MagicDmgPercent
+					myHero.Armor
+					myHero.BonusArmor
+					myHero.MagicArmor
+					myHero.BonusMagicArmor
+					myHero.AttackSpeed
+					myHero.CritChance
+					myHero.MoveSpeed
+					myHero.AARange
+					myHero.Gold
+					myHero.CanSelect
+					myHero.IsDead
+					myHero.IsInvulnerable
+					myHero.IsVisible
+					myHero.IsVisibleOnScreen
+					myHero.IsCast
+					myHero.IsRecall
+					myHero.IsMove
+					myHero.IsDash
+					myHero.IsValid
+					myHero.IsMelee
+					myHero.IsRanged
+					myHero.IsMe
+					myHero.LevelSpell(_Q)
+					myHero.LevelSpell(_W)
+					myHero.LevelSpell(_E)
+					myHero.LevelSpell(_R)
+					myHero.CanCast(_Q)
+					myHero.CanCast(_W)
+					myHero.CanCast(_E)
+					myHero.CanCast(_R)
+					myHero.StackSpell(_Q)
+					myHero.StackSpell(_W)
+					myHero.StackSpell(_E)
+					myHero.StackSpell(_R)
+					myHero.Windup
+					myHero.CDBA
+					myHero.CDBAExpires
+					myHero.HasBuff("szName")
+					myHero.HasBuffType(nBuffType)
+					myHero.HasItem(nID)
+					myHero.DashSpeed
+					myHero.PathCount   		
+					myHero.GetPath(nIndex)   	-- return x,y,z
+					myHero.DashGravity   		-- int
+					myHero.DestPos_x
+					myHero.DestPos_y
+					myHero.DestPos_z
+					myHero.CalcDamage(unit, dmgRaw)
+					myHero.CalcMagicDamage(unit, dmgRaw)
+					
+---------------------------------------------------------------------------------------------------------------------------
++ table AIHero object :
+		- enemyHero = GetAIHero(pObjChamp)
+		- Fields :  enemyHero.Addr			    -- pointer of enemyHero
+					enemyHero.Id
+					enemyHero.NetworkId
+					enemyHero.TeamId
+					enemyHero.Type				-- 0=champ, 1=minion, 2=turret, 3=jungle, 4= Inhibitor, 5=Nexus, 6=Missile, -1= other
+					enemyHero.Name
+					enemyHero.CharName
+					enemyHero.Level
+					enemyHero.EnemyId
+					enemyHero.CollisionRadius
+					enemyHero.x
+					enemyHero.y
+					enemyHero.z
+					enemyHero.minBBox_x
+					enemyHero.minBBox_y
+					enemyHero.minBBox_z
+					enemyHero.maxBBox_x
+					enemyHero.maxBBox_y
+					enemyHero.maxBBox_z
+					enemyHero.HitBox			--return Distance from curPos to minBBoxPos
+					enemyHero.SpawnTime
+					enemyHero.HP
+					enemyHero.MaxHP
+					enemyHero.MP
+					enemyHero.MaxMP
+					enemyHero.SpecialPoint
+					enemyHero.Shield
+					enemyHero.MagicShield
+					enemyHero.RengarShield
+					enemyHero.ArmorPen
+					enemyHero.MagicPen
+					enemyHero.BaseDmg
+					enemyHero.BonusDmg
+					enemyHero.TotalDmg
+					enemyHero.MagicDmg
+					enemyHero.MagicDmgPercent
+					enemyHero.Armor
+					enemyHero.BonusArmor
+					enemyHero.MagicArmor
+					enemyHero.BonusMagicArmor
+					enemyHero.AttackSpeed
+					enemyHero.CritChance
+					enemyHero.MoveSpeed
+					enemyHero.AARange
+					enemyHero.Gold
+					enemyHero.CanSelect
+					enemyHero.IsDead
+					enemyHero.IsInvulnerable
+					enemyHero.IsVisible
+					enemyHero.IsVisibleOnScreen
+					enemyHero.IsCast
+					enemyHero.IsRecall
+					enemyHero.IsMove
+					enemyHero.IsDash
+					enemyHero.IsValid
+					enemyHero.IsMelee
+					enemyHero.IsRanged
+					enemyHero.IsMe
+					enemyHero.IsEnemy
+					enemyHero.LevelSpell(_Q)
+					enemyHero.LevelSpell(_W)
+					enemyHero.LevelSpell(_E)
+					enemyHero.LevelSpell(_R)
+					enemyHero.Windup
+					enemyHero.CDBA
+					enemyHero.CDBAExpires
+					enemyHero.HasBuff("szName")
+					enemyHero.HasBuffType(nBuffType)
+					enemyHero.DashSpeed
+					enemyHero.PathCount   		
+					enemyHero.GetPath(nIndex)   	-- return x,y,z
+					enemyHero.DashGravity   		-- int
+					enemyHero.DestPos_x
+					enemyHero.DestPos_y
+					enemyHero.DestPos_z
+					enemyHero.Distance				-- distant to myHero	
+
+---------------------------------------------------------------------------------------------------------------------------
++ table Minion, Turret, Jungle object :
+		- minion = GetUnit(pUnit), turret = GetUnit(pUnit), jungle = GetUnit(pUnit)
+		- Fields :  minion.Addr			    -- pointer of minion
+					minion.Id
+					minion.NetworkId
+					minion.TeamId
+					minion.Type				-- 0=champ, 1=minion, 2=turret, 3=jungle, 4= Inhibitor, 5=Nexus, 6=Missile, -1= other
+					minion.Name
+					minion.CharName
+					minion.EnemyId
+					minion.CollisionRadius
+					minion.x
+					minion.y
+					minion.z
+					minion.HitBox			--return Distance from curPos to minBBoxPos
+					minion.SpawnTime
+					minion.HP
+					minion.MaxHP
+					minion.TotalDmg
+					minion.MagicDmg
+					minion.Armor
+					minion.MagicArmor
+					minion.MoveSpeed
+					minion.CanSelect
+					minion.IsDead
+					minion.IsVisible
+					minion.IsVisibleOnScreen
+					minion.IsMove
+					minion.IsValid
+					minion.IsMelee
+					minion.IsRanged
+					minion.IsEnemy
+					minion.Windup
+					minion.CDBA
+					minion.CDBAExpires
+					minion.HasBuff("szName")
+					minion.PathCount   		
+					minion.GetPath(nIndex)   	-- return x,y,z
+					minion.DestPos_x
+					minion.DestPos_y
+					minion.DestPos_z
+					minion.Distance			-- distant to myHero					
+							
+---------------------------------------------------------------------------------------------------------------------------								
++ table Missile object :
+		- missile = GetMissile(pObject)
+		- Fields :  missile.Addr			    -- pointer of missile
+					missile.Id
+					missile.NetworkId
+					missile.TeamId
+					missile.Type				-- 0=champ, 1=minion, 2=turret, 3=jungle, 4= Inhibitor, 5=Nexus, 6=Missile, -1= other
+					missile.Name
+					missile.OwnerName
+					missile.OwnerCharName		
+					missile.Range
+					missile.Range_2				
+					missile.Radius				
+					missile.MissileSpeed			
+					missile.Width				
+					missile.OwnerId	
+					missile.TargetId				
+					missile.x
+					missile.y
+					missile.z
+					missile.SrcPos_x			
+					missile.SrcPos_y
+					missile.SrcPos_z
+					missile.DestPos_x
+					missile.DestPos_y
+					missile.DestPos_z
+					missile.CursorPos_x
+					missile.CursorPos_y
+					missile.CursorPos_z
+
+---------------------------------------------------------------------------------------------------------------------------
++ table NEXUS, INHIBITOR object :
+		- barrack = GetBarrack(pUnit)
+		- Fields :  barrack.Addr			    -- pointer of barrack
+					barrack.Id
+					barrack.NetworkId
+					barrack.TeamId
+					barrack.Type				-- 0=champ, 1=minion, 2=turret, 3=jungle, 4= Inhibitor, 5=Nexus, 6=Missile, -1= other
+					barrack.Name
+					barrack.SpawnTime
+					barrack.CollisionRadius
+					barrack.x
+					barrack.y
+					barrack.z
+					barrack.HitBox			--return Distance from curPos to minBBoxPos
+					barrack.HP
+					barrack.MaxHP
+					barrack.Armor
+					barrack.MagicArmor
+					barrack.MoveSpeed
+					barrack.CanSelect
+					barrack.IsDead
+					barrack.IsVisible
+					barrack.IsVisibleOnScreen
+					barrack.IsMove
+					barrack.IsValid
+					barrack.Distance			-- distant to myHero					
+								
+---------------------------------------------------------------------------------------------------------------------------		
++ table Buffs :	
+		- tb_buff = GetBuff(pBuff)
+		- Fields :  + tb_buff.Addr					-- pointer of buff
+					+ tb_buff.IsValid
+					+ tb_buff.Type
+					+ tb_buff.Name
+					+ tb_buff.Stacks				
+					+ tb_buff.Count				-- use for "TwitchDeadlyVenom" buff ..
+					+ tb_buff.BeginT
+					+ tb_buff.EndT
+					
+---------------------------------------------------------------------------------------------------------------------------
++ table Spells casting :	
+		- tb_spell = GetSpell(pSpellCasting)
+		- Fields :  + tb_spell.Addr					-- pointer of spell casting
+					+ tb_spell.Slot
+					+ tb_spell.Name
+					+ tb_spell.Range				
+					+ tb_spell.Range_2				
+					+ tb_spell.Radius				
+					+ tb_spell.MissileSpeed			
+					+ tb_spell.Width
+					+ tb_spell.OwnerId
+					+ tb_spell.TargetId
+					+ tb_spell.SourcePos_x				
+					+ tb_spell.SourcePos_y				
+					+ tb_spell.SourcePos_z
+					+ tb_spell.DestPos_x
+					+ tb_spell.DestPos_y
+					+ tb_spell.DestPos_z
+					+ tb_spell.CursorPos_x
+					+ tb_spell.CursorPos_y
+					+ tb_spell.CursorPos_z
+					+ tb_spell.AnimationTime
+					+ tb_spell.Delay
+					+ tb_spell.TimeCast
+					
+---------------------------------------------------------------------------------------------------------------------------
++ table Item :	
+		- tb_item = GetItem(iCount)					-- iCount = 0->8
+		- Fields :  + tb_item.Addr					-- pointer of pItem
+					+ tb_item.Count
+					+ tb_item.Id
+								
+---------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------
+- OnEvent : 	+ buff.Addr
+				+ buff.IsValid
+				+ buff.Type
+				+ buff.Name
+				+ buff.Stacks
+				+ buff.Count
+				+ buff.BeginT
+				+ buff.EndT
+				--------------------
+				+ unit.Addr
+				+ unit.Id
+				+ unit.NetworkId
+				+ unit.TeamId
+				+ unit.Type
+				+ unit.Name
+				+ unit.CharName
+				+ unit.OwnerName			-- if unit = missile
+				+ unit.OwnerCharName		-- if unit = missile
+				+ unit.Range				-- if unit = missile
+				+ unit.Range_2				-- if unit = missile
+				+ unit.Radius				-- if unit = missile
+				+ unit.MissileSpeed			-- if unit = missile
+				+ unit.Width				-- if unit = missile
+				+ unit.OwnerId				-- if unit = missile
+				+ unit.TargetId				-- if unit = missile
+				+ unit.x
+				+ unit.y
+				+ unit.z
+				+ unit.IsValid
+				+ unit.IsMe
+				--------------------
+				+ spell.Addr
+				+ spell.Slot
+				+ spell.Name
+				+ spell.Range				
+				+ spell.Range_2				
+				+ spell.Radius				
+				+ spell.MissileSpeed			
+				+ spell.Width				
+				+ spell.OwnerId
+				+ spell.TargetId
+				+ spell.SourcePos_x
+				+ spell.SourcePos_y
+				+ spell.SourcePos_z
+				+ spell.DestPos_x
+				+ spell.DestPos_y
+				+ spell.DestPos_z
+				+ spell.CursorPos_x
+				+ spell.CursorPos_y
+				+ spell.CursorPos_z
+				+ spell.AnimationTime
+				+ spell.Delay
+				+ spell.TimeCast							
+								
+								
+								
+								
+								
+								
+								
+								
+																
+								
+								
+								
+								
+								
+								
+								
+								
+								

@@ -1,0 +1,27 @@
+bool AddMenuCustom(int nLine, bool bValueDefault, string szMenuText)
+	- nLine = 1->34
+	example :
+		local bAntiGapCloser  = true
+		while(true)
+		do
+
+			bIsEndLua = IsEndLua()
+			if bIsEndLua == 1 then
+				break
+			end
+			
+			bAntiGapCloser  = AddMenuCustom(1, bAntiGapCloser, "Anti Gap Closer")
+		end
+		
+int  Lua_ARGB(alpha, r, g, b)
+
+void DrawCircleGame(x, y, z, fRadius, nColor)
+void DrawLineGame(x1, y1, z1, x2, y2, z2, fRadius)
+
+local a,b =  GetHealthBarPos(pObj)
+local a,b =  WorldToMiniMap(x, y, z)
+local a,b =  WorldToScreen(x, y, z)
+
+void DrawLineD3DX(x1, y1, x2, y2, width, int nColor)
+void DrawBorderBoxD3DX(x, y, w, h, fThickness, nColor)
+void DrawTextD3DX(x, y, szText, nColor, nFontHeight)		-- 1:small, 2:normal, 3:big

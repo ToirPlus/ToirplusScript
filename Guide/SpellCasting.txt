@@ -1,0 +1,28 @@
+int   	GetSpellCasting(int pObject)
+string  GetName_Casting(int pSpellCasting)
+
+int		GetOwnerID_Casting(int pSpellCasting)
+int		GetTargetID_Casting(int pSpellCasting)
+
+local x,y,z = GetSrcPos_Cast(pSpellCasting)
+float	GetSrcPosX_Casting(int pSpellCasting)
+float	GetSrcPosY_Casting(int pSpellCasting)
+float	GetSrcPosZ_Casting(int pSpellCasting)
+
+local x,y,z = GetDestPos_Cast(pSpellCasting)
+float	GetDestPosX_Casting(int pSpellCasting)
+float	GetDestPosY_Casting(int pSpellCasting)
+float	GetDestPosZ_Casting(int pSpellCasting)
+
+local x,y,z = GetCursorPos_Cast(pSpellCasting)
+float	GetCursorPosX_Casting(int pSpellCasting)
+float	GetCursorPosY_Casting(int pSpellCasting)
+float	GetCursorPosZ_Casting(int pSpellCasting)
+
+float	GetDelay_Casting(int pSpellCasting)
+float	GetTime_Casting(int pSpellCasting)
+
+
+
+
+

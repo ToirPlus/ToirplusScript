@@ -1,0 +1,16 @@
+void	MoveToPos(float fPosX, float fPosZ)
+bool	IsMoving(int pObject)
+bool	IsDashing(pObject)
+		
+local x,y,z = GetDestPos(pObject)
+float	GetMoveDestPointPosX(int pObject)
+float	GetMoveDestPointPosY(int pObject)
+float	GetMoveDestPointPosZ(int pObject)
+
+local x,y,z = GetPredPos(pObject, nDistant)
+float	GetPredictionPosX(int pObject, float nDistant)
+float	GetPredictionPosY(int pObject, float nDistant)
+float	GetPredictionPosZ(int pObject, float nDistant)
+
+void  	BlockMove()
+void  	UnBlockMove()

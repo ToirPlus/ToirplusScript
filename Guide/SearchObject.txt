@@ -1,0 +1,79 @@
+int	    SearchAllChamp()
+		- return array pObjChamp:
+		pObjChamp[1], pObjChamp[2], pObjChamp[3] ... pObjChamp[10]
+		
+int	    GetAllObjectAroundAnObject(int pObject, float fRange)
+		- return array pObject:							-- include : pObjChamp, pObjMinion, pObjTurret ....
+		pObject[1], pObject[2], pObject[3] ... pObject[500]
+		
+table 	GetAllUnitAroundAnObject(pObject, fRange)
+		-- return table "pUnit"  : pUnit[1], pUnit[2], pUnit[3] ... pUnit[300]
+		
+int		GetEnemyChampCanKillFastest(float fRange)
+		- return EnemyChamp can kill fastest by AD-damage around Range=fRange
+		
+int		GetEnemyChampCanKillFastest_AP(float fRange)
+		- return EnemyChamp can kill fastest by AP-damage around Range=fRange
+
+int		GetEnemyChampNearest(float fRange)
+		- return EnemyChamp nearest around Range=fRange
+		
+int		GetEnemyChampMinHP(float fRange)
+		- return EnemyChamp MinHP around Range=fRange
+		
+int		GetEnemyChampCCAroundObject(int pObject, float fRange)
+		- return EnemyChamp CC around pObject with Range=fRange
+		
+int		CountEnemyChampAroundObject(int pObject, float fRange)
+		- return count EnemyChamp around pObject with Range=fRange
+		
+int		CountAllyChampAroundObject(int pObject, float fRange)
+		- return count AllyChamp around pObject with Range=fRange
+		
+int		CountEnemyMinionAroundObject(int pObject, float fRange)
+	    - return count EnemyMinion around pObject with Range=fRange
+		
+int		CountEnemyTurretAroundObject(int pObject, float fRange)
+		- return count EnemyTurret around pObject with Range=fRange
+
+int GetEnemyMinionAroundObject(int pObject, float fRange)
+
+int CountObjectCollision(int nMode, int pEnemyObj, float fStartPosX, float fStartPosZ, float fEndPosX, float fEndPosZ, float fWidth, float fRange, float fRadius)
+	  - nMode = 0  --> ObjectCollistion = enemy minion
+	  - nMode = 1  --> ObjectCollistion = enemy minion or enemy Champ
+	  - nMode = 2  --> ObjectCollistion = enemy Champ
+	  - example:
+		
+		myHero = GetMyChamp()
+		nCountMinionCollision = 0
+		local fRange_BrandQ = 1000
+		local fWidth_BrandQ = 55
+		local fMissileSpeed_BrandQ = 1500
+		
+		pEnemy = GetEnemyChampCanKillFastest(myHero, fRange_BrandQ)  
+        if pEnemy ~= 0 then 
+			pBuff = GetBuffByName(pEnemy, "BrandAblaze")
+			if pBuff ~= 0 then
+				x1 = GetPosX(myHero)
+				z1 = GetPosZ(myHero)
+				x2 = GetPosX(pEnemy)
+				z2 = GetPosZ(pEnemy)
+				fDistant = GetDistance2D(x1, z1, x2, z2)
+				fTimeMissile = 0.25 + fDistant/fMissileSpeed_BrandQ
+				fPredDist = fTimeMissile*GetMoveSpeed(pEnemy)
+				if fDistant < 350 then fPredDist = 100 end
+				
+				PredPosX = GetPredictionPosX(pEnemy, fPredDist)
+				PredPosZ = GetPredictionPosZ(pEnemy, fPredDist)
+				if PredPosX ~= 0 and PredPosZ ~= 0 then
+					nCountMinionCollision = CountObjectCollision(0, pEnemy, x1, z1, PredPosX, PredPosZ, fWidth_BrandQ, fRange_BrandQ, 10)
+				else
+					nCountMinionCollision = CountObjectCollision(0, pEnemy, x1, z1, x2, z2, fWidth_BrandQ, fRange_BrandQ, 10)
+				end
+				
+				if nCountMinionCollision == 0 then
+					CastSpellToPredictionPos(pEnemy, 0, fPredDist)
+				end
+			end
+		end
+- int GetJungleMonster(float fRange)

@@ -81,7 +81,7 @@ function OnCreateObject(unit)
 	end
 end
 
-function OnDeleteObject(unit)	
+function OnDeleteObject(unit)
 	if unit then
 		for i, cb in pairs(Callbacks["DeleteObject"]) do
 			cb(unit)

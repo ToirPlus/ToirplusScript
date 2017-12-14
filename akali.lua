@@ -6,9 +6,7 @@ Thanks
 
 ]]
 
-
-
-
+local myHero = GetMyHero()
 
 function UpdateHeroInfo()
 	return GetMyChamp()
@@ -41,8 +39,48 @@ function RReady()
 	return CanCast(_R)
 end
 
-function GetTarget()
-	return GetEnemyChampCanKillFastest(900)
+
+
+local priorityTable = {
+    p5 = {"Alistar", "Amumu", "Blitzcrank", "Braum", "ChoGath", "DrMundo", "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu","Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona","Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"},
+    p4 = {"Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax","LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain","Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"},
+    p3 = {"Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin","Kayle", "KhaZix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo","Zilean"},
+    p2 = {"Ahri", "Anivia", "Annie",  "Brand",  "Cassiopeia", "Karma", "Karthus", "Katarina", "Kennen", "Sejuani",  "Lux", "Malzahar", "MasterYi", "Orianna", "Syndra", "Talon",  "TwistedFate", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed", "Ziggs", "Zoe" },
+    p1 = {"Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "KogMaw", "Lucian", "MissFortune", "Quinn", "Sivir", "Teemo", "Tristana", "Twitch", "Varus", "Vayne", "Xayah"},
+}
+
+function GetTarget(range)
+	SearchAllChamp()
+	local Enemies = pObjChamp
+	for i, enemy in pairs(Enemies) do
+        if enemy ~= 0 and ValidTargetRange(enemy,range) then
+			if priorityTable.p1[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p2[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p3[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p4[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p5[GetChampName(enemy)] then
+				return enemy
+			end
+		end
+	end
+
+	return GetEnemyChampCanKillFastest(range)
+end
+
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
+
 end
 
 function OnLoad()
@@ -76,6 +114,7 @@ function OnWndMsg(msg, key)
 end
 
 function OnTick()
+	myHero = GetMyHero()
 	if GetChampName(GetMyChamp()) ~= "Akali" then return end
 	if IsDead(UpdateHeroInfo()) then return end
 
@@ -86,6 +125,10 @@ function OnTick()
 		Combo()
 	end
 
+	if GetKeyPress(CKeyCode) == 1 then
+		SetLuaHarass(true)
+		Harass()
+	end
 
 	if GetKeyPress(VKeyCode) == 1 then
 		SetLuaLaneClear(true)
@@ -120,20 +163,45 @@ function GetMinion()
 end
 
 function Laneclear()
-	local minion = GetMinion()
-	if minion ~= 0 then
-		if QReady() and CanMove() and Setting_IsLaneClearUseQ() then
-			CastSpellTarget(minion, _Q)
+	LastHitMinionUseQ()
+	FarmE()
+end
+
+function LastHitMinionUseQ()
+	GetAllUnitAroundAnObject(myHero.Addr, 1000)
+
+	local Enemies = pUnit
+	for i, minion in pairs(Enemies) do
+		if minion ~= 0 and GetType(minion) == 1 then
+			local unit = GetUnit(minion)
+			if unit.IsEnemy and not unit.IsDead and unit.IsVisible and unit.CanSelect and getDmg(_Q, unit) > unit.HP then
+				if QReady() and Setting_IsLaneClearUseQ() and CanMove() and GetDistance(minion) <  Q.Range then
+					CastSpellTarget(minion, _Q)
+				end
+			end
 		end
 	end
+end
 
-	minion = GetMinion()
-	if minion ~= 0 then
-		if QReady() and CanMove() and Setting_IsLaneClearUseQ() then
-			CastSpellTarget(minion, _E)
+function FarmE()
+	if EReady() and  CountMinionsAround(E.Range) > 2 and Setting_IsLaneClearUseQ() and CanMove() then
+		CastSpellTarget(myHero.Addr, _E)
+	end
+end
+
+function CountMinionsAround(range)
+	GetAllUnitAroundAnObject(myHero.Addr, range)
+	local n = 0
+	local Enemies = pUnit
+	for i, minion in pairs(Enemies) do
+		if minion ~= 0 and GetType(minion) == 1 then
+			local unit = GetUnit(minion)
+			if unit.IsEnemy and not unit.IsDead and unit.IsVisible and unit.CanSelect then
+				n = n + 1
+			end
 		end
 	end
-
+	return n
 end
 
 function Jungleclear()
@@ -149,9 +217,11 @@ function Jungleclear()
 end
 
 function Combo()
-	local target = GetTarget()
+	local target = GetTarget(1000)
 
-	if target ~= 0 and RReady() and CanMove() and Setting_IsComboUseR() then
+	local enemy = GetAIHero(target)
+
+	if target ~= 0 and RReady() and CanMove() and Setting_IsComboUseR() and (getDmg(_R, enemy) > enemy.HP or EnemiesAround(enemy.Addr, R.Range) < 3) then
 		CastR(target)
     end
 
@@ -163,8 +233,14 @@ function Combo()
 		CastE(target)
     end
 
+end
 
+function Harass()
+	local target = GetTarget(1000)
 
+	if target ~= 0 and QReady() and CanMove() and Setting_IsComboUseQ() then
+		CastQ(target)
+	end
 end
 
 function CastR(Target)
@@ -219,4 +295,63 @@ function ValidTargetRange(Target, Range)
 		return true
 	end
 	return false
+end
+
+function getDmg(Spell, Enemy)
+	local Damage = 0
+
+	if Spell == _Q then
+		if myHero.LevelSpell(_Q) == 0 then return 0 end
+		local DamageSpellRTable = { 35, 55, 75, 95, 115 }
+		local Percent_AP = 0.4
+
+		local AP = myHero.MagicDmg + myHero.MagicDmg * myHero.MagicDmgPercent
+
+		local DamageSpellR = DamageSpellRTable[myHero.LevelSpell(_Q)]
+
+		local Enemy_SpellBlock = Enemy.MagicArmor
+
+		local Void_Staff_Id = 3135 -- Void Staff Item
+		if GetItemByID(Void_Staff_Id) > 0 then
+			Enemy_SpellBlock = Enemy_SpellBlock * (1 - 35/100)
+		end
+
+		Enemy_SpellBlock = Enemy_SpellBlock - myHero.MagicPen
+
+		if Enemy_SpellBlock >= 0 then
+			Damage = (DamageSpellR + Percent_AP * AP) * (100/(100 + Enemy_SpellBlock))
+		else
+			Damage = (DamageSpellR + Percent_AP * AP) * (2 - 100/(100 - Enemy_SpellBlock))
+		end
+
+		return Damage
+	end
+
+	if Spell == _R then
+		if myHero.LevelSpell(_R) == 0 then return 0 end
+		local DamageSpellRTable = { 50, 105, 150 }
+		local Percent_AP = 0.35
+
+		local AP = myHero.MagicDmg + myHero.MagicDmg * myHero.MagicDmgPercent
+
+		local DamageSpellR = DamageSpellRTable[myHero.LevelSpell(_R)]
+
+		local Enemy_SpellBlock = Enemy.MagicArmor
+
+		local Void_Staff_Id = 3135 -- Void Staff Item
+		if GetItemByID(Void_Staff_Id) > 0 then
+			Enemy_SpellBlock = Enemy_SpellBlock * (1 - 35/100)
+		end
+
+		Enemy_SpellBlock = Enemy_SpellBlock - myHero.MagicPen
+
+		if Enemy_SpellBlock >= 0 then
+			Damage = (DamageSpellR + Percent_AP * AP) * (100/(100 + Enemy_SpellBlock))
+		else
+			Damage = (DamageSpellR + Percent_AP * AP) * (2 - 100/(100 - Enemy_SpellBlock))
+		end
+
+		return Damage
+	end
+
 end

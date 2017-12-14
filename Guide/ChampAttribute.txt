@@ -1,0 +1,71 @@
+int GetMyChamp()
+	- return : pObject my Champion.
+	- example: pObjectMyChamp = GetMyChamp()
+	
+int GetId(pObject)
+int GetIndex(int pObject)
+int GetTeamId(int pObject)
+int GetHQType(int pObject)
+int GetType(int pObject)
+string GetObjName(int pObject)
+string GetChampName(int pObject)
+
+local x, y, z = GetPos(pObject)
+float GetPosX(int pObject)
+float GetPosY(int pObject)
+float GetPosZ(int pObject)
+
+float GetManaPoint(int pObject)
+float GetManaPointMax(int pObject)
+float GetHealthPoint(int pObject)
+float GetHealthPointMax(int pObject)
+float GetSpecialPoint(int pObject)
+
+float GetHealthShield(int pObject)
+float GetRengarShield(int pObject)
+float GetMagicShield(int pObject)
+
+float GetMagicPenetration(int pObject)
+float GetArmorPenetration(int pObject)
+
+float GetFlatPhysicalDamage(int pObject)
+float GetBaseAttackDamage(int pObject)
+float GetFlatMagicDamage(int pObject)
+float GetPercentMagicDamage(int pObject)
+
+float GetAttackSpeed(int pObject)
+float GetCritChance(int pObject)
+
+float GetArmor(int pObject)
+float GetBonusArmor(int pObject)
+float GetSpellBlock(int pObject)
+float GetBonusSpellBlock(int pObject)
+
+float GetMoveSpeed(int pObject)
+float GetAttackRange(int pObject)
+float GetGold(int pObject)
+
+int GetEnemyID(int pObject)
+int GetLevel(int pObject)
+
+float GetOverrideCollisionRadius(int pObject)
+int GetTargetable(int pObject)
+int GetTargetableToTeam(int pObject)
+
+bool IsInvulnerable(int pObject)
+bool IsInFog(int pObject)
+bool IsDead(int pObject)
+bool IsVisibleOnScreen(int pObject)
+bool IsRecall(int pObject)
+bool IsCasting(int pObject)
+
+bool IsEnemy(int pObject)
+bool IsAlly(int pObject)
+bool IsChampion(int pObject)
+---------------------------------
+bool IsMinion(int pObject)
+bool IsTurret(int pObject)
+bool IsJungleMonster(int pObject)
+bool IsNexus(int pObject)
+bool IsBarrack(int pObject)
+

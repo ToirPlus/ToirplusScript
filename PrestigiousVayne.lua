@@ -7,7 +7,7 @@ local myHero = function() return GetMyChamp() end
 
 
 local myHeroPos = Vector({GetPosX(myHero()), GetPosY(myHero()), GetPosZ(myHero())})
-local mousePos = Vector({GetCursorPosX(myHero()), GetCursorPosY(myHero()), GetCursorPosZ(myHero())})
+local mousePos = Vector({GetMousePos()})
 local _enemies = function() return GetEnemies() end
 local _heroes = function() return GetHeroes() end
 
@@ -321,8 +321,8 @@ local function Combo()
 	--end
 
 	if Setting_IsComboUseR() and EnemiesAround(myHero(), 800) >= 2 and CanCast(R) then
-
-    	CastSpellToPos(GetCursorPosX(),GetCursorPosZ(),R)
+		local mousePos = Vector({GetMousePos()})
+    	CastSpellToPos(mousePos.x,mousePos.z,R)
     end
 
     if Setting_IsComboUseQ() and CanCast(Q) then
@@ -380,7 +380,7 @@ function OnTick()
 
 	if IsDead(myHero()) then return end
 	myHeroPos = Vector({GetPosX(myHero()), GetPosY(myHero()), GetPosZ(myHero())})
-	mousePos = Vector({GetCursorPosX(myHero()), GetCursorPosY(myHero()), GetCursorPosZ(myHero())})
+	mousePos = Vector({GetMousePos()})
 	UpdateBuff()
 
 	StayInvisible()
@@ -394,7 +394,8 @@ function OnTick()
 	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
-	elseif GetKeyPress(CKeyCode) == 1 then
+	end
+	if GetKeyPress(CKeyCode) == 1 then
 		SetLuaHarass(true)
 		Harass()
 	end
@@ -430,6 +431,14 @@ function OnDeleteObject(unit)
 end
 
 function OnWndMsg(msg, key)
+
+end
+
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
 
 end
 -------------------------------------</Main Script>-------------------------------------

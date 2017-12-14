@@ -45,14 +45,51 @@ function RReady()
 	return CanCast(R)
 end
 
-function GetTarget()
-	return GetEnemyChampCanKillFastest(1000)
+local priorityTable = {
+    p5 = {"Alistar", "Amumu", "Blitzcrank", "Braum", "ChoGath", "DrMundo", "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu","Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona","Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"},
+    p4 = {"Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax","LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain","Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"},
+    p3 = {"Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin","Kayle", "KhaZix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo","Zilean"},
+    p2 = {"Ahri", "Anivia", "Annie",  "Brand",  "Cassiopeia", "Karma", "Karthus", "Katarina", "Kennen", "Sejuani",  "Lux", "Malzahar", "MasterYi", "Orianna", "Syndra", "Talon",  "TwistedFate", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed", "Ziggs", "Zoe" },
+    p1 = {"Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "KogMaw", "Lucian", "MissFortune", "Quinn", "Sivir", "Teemo", "Tristana", "Twitch", "Varus", "Vayne", "Xayah"},
+}
+
+function GetTarget(range)
+	SearchAllChamp()
+	local Enemies = pObjChamp
+	for i, enemy in pairs(Enemies) do
+        if enemy ~= 0 and ValidTargetRange(enemy,range) then
+			if priorityTable.p1[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p2[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p3[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p4[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p5[GetChampName(enemy)] then
+				return enemy
+			end
+		end
+	end
+
+	return GetEnemyChampCanKillFastest(range)
 end
 
 function OnLoad()
 	--__PrintTextGame("Olaf v1.0 loaded")
 end
 
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
+
+end
 
 function OnUpdate()
 end
@@ -99,7 +136,7 @@ function OnTick()
 end
 
 function Combo()
-	local Target = GetTarget()
+	local Target = GetTarget(1000)
 
 	if Target ~= 0 then
 		if ValidTarget(Target) then
@@ -134,8 +171,11 @@ function Combo()
 end
 
 function CastW(Target)
-	if Target ~= 0 and ValidTargetRange(Target, Ranges.W) then
+	if Target ~= 0 and ValidTargetRange(Target, Ranges.W) and not CanAttack() and CanMove() then
 		CastSpellTarget(UpdateHeroInfo(), W)
+		SetLuaBasicAttackOnly(true)
+		BasicAttack(Target)
+		SetLuaBasicAttackOnly(false)
 	end
 end
 
@@ -179,8 +219,11 @@ function LaneClear()
 		jungle = GetJungleMonster(1000)
 		if jungle ~= 0 then
 			if WReady() and CanMove() and not IsMyManaLowLaneClear() then
-				if ValidTargetJungle(jungle) and GetDistance(jungle) < Ranges.W then
+				if ValidTargetJungle(jungle) and GetDistance(jungle) < Ranges.W and not CanAttack() then
 					CastSpellTarget(UpdateHeroInfo(), W)
+					SetLuaBasicAttackOnly(true)
+					BasicAttack(jungle)
+					SetLuaBasicAttackOnly(false)
 				end
 			end
 		end
@@ -209,9 +252,12 @@ function LaneClear()
 
 		minion = GetMinion()
 		if minion ~= 0 then
-			if WReady() and not IsMyManaLowLaneClear() then
+			if WReady() and not IsMyManaLowLaneClear() and not CanAttack() and CanMove() then
 				if GetDistance(minion) < Ranges.W then
 					CastSpellTarget(UpdateHeroInfo(), W)
+					SetLuaBasicAttackOnly(true)
+					BasicAttack(minion)
+					SetLuaBasicAttackOnly(false)
 				end
 			end
 		end

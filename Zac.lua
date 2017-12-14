@@ -125,6 +125,14 @@ end
 function OnDraw()
 end
 
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
+
+end
+
 function OnUpdateBuff(unit, buff, stacks)
 	if buff.Name == "ZacE" and unit.IsMe then
 		eCharge = true

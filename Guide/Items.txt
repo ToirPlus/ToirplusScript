@@ -1,0 +1,3 @@
+int   GetItemByID(int nID)
+int   GetItemID(int nSlotItem)
+void  BuyItem(int nID)

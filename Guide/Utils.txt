@@ -1,0 +1,49 @@
+void 	IncludeFile(string szFileName)
+string  GetScriptPath()
+void 	__PrintDebug(string szText)
+void 	__PrintTextGame(string szText)
+
+float 	GetDistance2D(float fPosX1, float fPosZ1, float fPosX2, float fPosZ2)
+
+void 	SetEvade(bool)
+bool 	GetEvade()
+void 	SetPrintErrorLog(bool)
+		
+int		GetKeyPress(nCode)
+int   	GetKeyCode()
+bool  	IsEndLua()
+void  	SetLuaCombo(bool bIsLuaCombo)
+void  	SetLuaHarass(bool bIsLuaHarass)
+void  	SetLuaLaneClear(bool bIsLuaLaneClear)
+void	SetLuaBasicAttackOnly(bool bIsLuaBaOnly)
+void	SetLuaMoveOnly(bool nIsLuaMoveOnly)
+void	IsDodging()
+bool	IsTyping()
+bool	IsWall(float fPosX, float fPosY, float fPosZ)
+
+local x,y   = GetCursorPos()  -- 2D
+local x,y,z = GetMousePos()
+float  	GetMousePosX()
+float  	GetMousePosY()
+float  	GetMouserPosZ()
+
+float  	GetTimeGame()
+float  	GetTickCount()
+int     GetLatency()
+
+void  	LevelUpSpell(nIndex)
+
+bool 	Setting_IsComboUseQ()
+bool 	Setting_IsComboUseW()
+bool 	Setting_IsComboUseE()
+bool 	Setting_IsComboUseR()
+
+bool 	Setting_IsHarassUseQ()
+bool 	Setting_IsHarassUseW()
+bool 	Setting_IsHarassUseE()
+bool 	Setting_IsHarassUseR()
+
+bool 	Setting_IsLaneClearUseQ()
+bool 	Setting_IsLaneClearUseW()
+bool 	Setting_IsLaneClearUseE()
+bool 	Setting_IsLaneClearUseR()

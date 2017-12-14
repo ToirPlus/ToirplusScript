@@ -1,608 +1,476 @@
 --[[
 
-Reference link https://github.com/Cloudhax23/GoS/blob/master/Common/Yasuo.lua
-
-Thanks Celtech team
+Reference link https://github.com/nebelwolfi/BoL/blob/master/SPlugins/Yasuo.lua
 
 ]]
 
-function UpdateHeroInfo()
-	return GetMyChamp()
-end
+IncludeFile("Lib\\AllClass.lua")
+IncludeFile("Lib\\VPrediction.lua")
+IncludeFile("Lib\\DamageLib.lua")
 
+SetPrintErrorLog(false)
 
+myHero = GetMyHero()
+player = myHero
 
-local Q = 0
-local W = 1
-local E = 2
-local R = 3
+local VP = VPrediction()
+local passiveTracker = false
+local passiveName = "yasuoq3w"
 
-local _Q = 0
-local _W = 1
-local _E = 2
-local _R = 3
+data = {
+      [_Q] = { range = 500, speed = math.huge, delay = 0.125, width = 55, type = "linear", dmgAD = function(AP, level, Level, TotalDmg, source, target) return 20*level+TotalDmg-10 end},
+      [_W] = { range = 350},
+      [_E] = { range = 475, dmgAP = function(AP, level, Level, TotalDmg, source, target) return 50+20*level+AP end},
+      [_R] = { range = 1200, dmgAD = function(AP, level, Level, TotalDmg, source, target) return 100+100*level+1.5*TotalDmg end},
+      [-2] = { range = 1200, speed = 1200, delay = 0.125, width = 65, type = "linear" }
+    }
+
+local priorityTable = {
+    p5 = {"Alistar", "Amumu", "Blitzcrank", "Braum", "ChoGath", "DrMundo", "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu","Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona","Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra", "Rakan", "Ornn"},
+    p4 = {"Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax","LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain","Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"},
+    p3 = {"Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin","Kayle", "KhaZix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo","Zilean"},
+    p2 = {"Ahri", "Anivia", "Annie",  "Brand",  "Cassiopeia", "Karma", "Karthus", "Katarina", "Kennen", "Sejuani",  "Lux", "Malzahar", "MasterYi", "Orianna", "Syndra", "Talon",  "TwistedFate", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed", "Ziggs" },
+    p1 = {"Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "KogMaw", "Lucian", "MissFortune", "Quinn", "Sivir", "Teemo", "Tristana", "Twitch", "Varus", "Vayne", "Xayah", "Zoe"},
+}
+
+local EnemyMinions = minionManager(MINION_ENEMY, 1200, myHero, MINION_SORT_MAXHEALTH_DEC)
+local JungleMinions = minionManager(MINION_JUNGLE, 1200, myHero, MINION_SORT_MAXHEALTH_DEC)
 
 local SpaceKeyCode = 32
 local CKeyCode = 67
 local VKeyCode = 86
 
-local config_AutoUlt = true
 local config_AutoW = true
-
-if GetChampName(UpdateHeroInfo()) == "Yasuo" then
-	config_AutoUlt  = AddMenuCustom(1, config_AutoUlt, "Auto Ultil")
-	config_AutoW  = AddMenuCustom(2, config_AutoW, "Auto W")
+local config_Flee = true
+if myHero.CharName == "Yasuo" then
+  config_AutoW  = AddMenuCustom(1, config_AutoW, "Auto W")
+  config_Flee  = AddMenuCustom(2, config_Flee, "Flee by C hot key")
 end
 
-local SpellQW = {Range = 425, Speed = 1500, Delay = 0.25, Width = 90}
-local SpellQ3 = {Range = 1000, Speed = 1500, Delay = 0.25, Width = 90}
+AddTickCallback(function() Tick() end)
+AddUpdateBuffCallback(function(unit, buff, stacks) UpdateBuff(unit, buff, stacks) end)
+AddRemoveBuffCallback(function(unit, buff) RemoveBuff(unit, buff) end)
+AddProcessSpellCallback(function(unit, spell) ProcessSpell(unit, spell) end) 
 
-WALL_SPELLS = { -- Yea boiz and grillz its all right here.......
-    ["FizzMarinerDoom"]                      = {Spellname ="FizzMarinerDoom",Name = "Fizz", Spellslot =_R},
-    ["AatroxE"]                      = {Spellname ="AatroxE",Name= "Aatrox", Spellslot =_E},
-    ["AhriOrbofDeception"]                      = {Spellname ="AhriOrbofDeception",Name = "Ahri", Spellslot =_Q},
-    ["AhriFoxFire"]                      = {Spellname ="AhriFoxFire",Name = "Ahri", Spellslot =_W},
-    ["AhriSeduce"]                      = {Spellname ="AhriSeduce",Name = "Ahri", Spellslot =_E},
-    ["AhriTumble"]                      = {Spellname ="AhriTumble",Name = "Ahri", Spellslot =_R},
-    ["FlashFrost"]                      = {Spellname ="FlashFrost",Name = "Anivia", Spellslot =_Q},
-    ["Anivia2"]                      = {Spellname ="Frostbite",Name = "Anivia", Spellslot =_E},
-    ["Disintegrate"]                      = {Spellname ="Disintegrate",Name = "Annie", Spellslot =_Q},
-    ["Volley"]                      = {Spellname ="Volley",Name ="Ashe", Spellslot =_W},
-    ["EnchantedCrystalArrow"]                      = {Spellname ="EnchantedCrystalArrow",Name ="Ashe", Spellslot =_R},
-    ["BandageToss"]                      = {Spellname ="BandageToss",Name ="Amumu",Spellslot =_Q},
-    ["RocketGrabMissile"]                      = {Spellname ="RocketGrabMissile",Name ="Blitzcrank",Spellslot =_Q},
-    ["BrandBlaze"]                      = {Spellname ="BrandBlaze",Name ="Brand", Spellslot =_Q},
-    ["BrandWildfire"]                      = {Spellname ="BrandWildfire",Name ="Brand", Spellslot =_R},
-    ["BraumQ"]                      = {Spellname ="BraumQ",Name ="Braum",Spellslot =_Q},
-    ["BraumRWapper"]                      = {Spellname ="BraumRWapper",Name ="Braum",Spellslot =_R},
-    ["CaitlynPiltoverPeacemaker"]                      = {Spellname ="CaitlynPiltoverPeacemaker",Name ="Caitlyn",Spellslot =_Q},
-    ["CaitlynEntrapment"]                      = {Spellname ="CaitlynEntrapment",Name ="Caitlyn",Spellslot =_E},
-    ["CaitlynAceintheHole"]                      = {Spellname ="CaitlynAceintheHole",Name ="Caitlyn",Spellslot =_R},
-    ["CassiopeiaMiasma"]                      = {Spellname ="CassiopeiaMiasma",Name ="Cassiopiea",Spellslot =_W},
-    ["CassiopeiaTwinFang"]                      = {Spellname ="CassiopeiaTwinFang",Name ="Cassiopiea",Spellslot =_E},
-    ["PhosphorusBomb"]                      = {Spellname ="PhosphorusBomb",Name ="Corki",Spellslot =_Q},
-    ["MissileBarrage"]                      = {Spellname ="MissileBarrage",Name ="Corki",Spellslot =_R},
-    ["DianaArc"]                      = {Spellname ="DianaArc",Name ="Diana",Spellslot =_Q},
-    ["InfectedCleaverMissileCast"]                      = {Spellname ="InfectedCleaverMissileCast",Name ="DrMundo",Spellslot =_Q},
-    ["dravenspinning"]                      = {Spellname ="dravenspinning",Name ="Draven",Spellslot =_Q},
-    ["DravenDoubleShot"]                      = {Spellname ="DravenDoubleShot",Name ="Draven",Spellslot =_E},
-    ["DravenRCast"]                      = {Spellname ="DravenRCast",Name ="Draven",Spellslot =_R},
-    ["EliseHumanQ"]                      = {Spellname ="EliseHumanQ",Name ="Elise",Spellslot =_Q},
-    ["EliseHumanE"]                      = {Spellname ="EliseHumanE",Name ="Elise",Spellslot =_E},
-    ["EvelynnQ"]                      = {Spellname ="EvelynnQ",Name ="Evelynn",Spellslot =_Q},
-    ["EzrealMysticShot"]                      = {Spellname ="EzrealMysticShot",Name ="Ezreal",Spellslot =_Q,},
-    ["EzrealEssenceFlux"]                      = {Spellname ="EzrealEssenceFlux",Name ="Ezreal",Spellslot =_W},
-    ["EzrealArcaneShift"]                      = {Spellname ="EzrealArcaneShift",Name ="Ezreal",Spellslot =_R},
-    ["GalioRighteousGust"]                      = {Spellname ="GalioRighteousGust",Name ="Galio",Spellslot =_E},
-    ["GalioResoluteSmite"]                      = {Spellname ="GalioResoluteSmite",Name ="Galio",Spellslot =_Q},
-    ["Parley"]                      = {Spellname ="Parley",Name ="Gangplank",Spellslot =_Q},
-    ["GnarQ"]                      = {Spellname ="GnarQ",Name ="Gnar",Spellslot =_Q},
-    ["GravesClusterShot"]                      = {Spellname ="GravesClusterShot",Name ="Graves",Spellslot =_Q},
-    ["GravesChargeShot"]                      = {Spellname ="GravesChargeShot",Name ="Graves",Spellslot =_R},
-    ["HeimerdingerW"]                      = {Spellname ="HeimerdingerW",Name ="Heimerdinger",Spellslot =_W},
-    ["IreliaTranscendentBlades"]                      = {Spellname ="IreliaTranscendentBlades",Name ="Irelia",Spellslot =_R},
-    ["HowlingGale"]                      = {Spellname ="HowlingGale",Name ="Janna",Spellslot =_Q},
-    ["JayceToTheSkies"]                      = {Spellname ="JayceToTheSkies" or "jayceshockblast",Name ="Jayce",Spellslot =_Q},
-    ["jayceshockblast"]                      = {Spellname ="JayceToTheSkies" or "jayceshockblast",Name ="Jayce",Spellslot =_Q},
-    ["JinxW"]                      = {Spellname ="JinxW",Name ="Jinx",Spellslot =_W},
-    ["JinxR"]                      = {Spellname ="JinxR",Name ="Jinx",Spellslot =_R},
-    ["KalistaMysticShot"]                      = {Spellname ="KalistaMysticShot",Name ="Kalista",Spellslot =_Q},
-    ["KarmaQ"]                      = {Spellname ="KarmaQ",Name ="Karma",Spellslot =_Q},
-    ["NullLance"]                      = {Spellname ="NullLance",Name ="Kassidan",Spellslot =_Q},
-    ["KatarinaR"]                      = {Spellname ="KatarinaR",Name ="Katarina",Spellslot =_R},
-    ["LeblancChaosOrb"]                      = {Spellname ="LeblancChaosOrb",Name ="Leblanc",Spellslot =_Q},
-    ["LeblancSoulShackle"]                      = {Spellname ="LeblancSoulShackle" or "LeblancSoulShackleM",Name ="Leblanc",Spellslot =_E},
-    ["LeblancSoulShackleM"]                      = {Spellname ="LeblancSoulShackle" or "LeblancSoulShackleM",Name ="Leblanc",Spellslot =_E},
-    ["BlindMonkQOne"]                      = {Spellname ="BlindMonkQOne",Name ="Leesin",Spellslot =_Q},
-    ["LeonaZenithBladeMissle"]                      = {Spellname ="LeonaZenithBladeMissle",Name ="Leona",Spellslot =_E},
-    ["LissandraE"]                      = {Spellname ="LissandraE",Name ="Lissandra",Spellslot =_E},
-    ["LucianR"]                      = {Spellname ="LucianR",Name ="Lucian",Spellslot =_R},
-    ["LuxLightBinding"]                      = {Spellname ="LuxLightBinding",Name ="Lux",Spellslot =_Q},
-    ["LuxLightStrikeKugel"]                      = {Spellname ="LuxLightStrikeKugel",Name ="Lux",Spellslot =_E},
-    ["MissFortuneBulletTime"]                      = {Spellname ="MissFortuneBulletTime",Name ="Missfortune",Spellslot =_R},
-    ["DarkBindingMissile"]                      = {Spellname ="DarkBindingMissile",Name ="Morgana",Spellslot =_Q},
-    ["NamiR"]                      = {Spellname ="NamiR",Name ="Nami",Spellslot =_R},
-    ["JavelinToss"]                      = {Spellname ="JavelinToss",Name ="Nidalee",Spellslot =_Q},
-    ["NocturneDuskbringer"]                      = {Spellname ="NocturneDuskbringer",Name ="Nocturne",Spellslot =_Q},
-    ["Pantheon_Throw"]                      = {Spellname ="Pantheon_Throw",Name ="Pantheon",Spellslot =_Q},
-    ["QuinnQ"]                      = {Spellname ="QuinnQ",Name ="Quinn",Spellslot =_Q},
-    ["RengarE"]                      = {Spellname ="RengarE",Name ="Rengar",Spellslot =_E},
-    ["rivenizunablade"]                      = {Spellname ="rivenizunablade",Name ="Riven",Spellslot =_R},
-    ["Overload"]                      = {Spellname ="Overload",Name ="Ryze",Spellslot =_Q},
-    ["SpellFlux"]                      = {Spellname ="SpellFlux",Name ="Ryze",Spellslot =_E},
-    ["SejuaniGlacialPrisonStart"]                      = {Spellname ="SejuaniGlacialPrisonStart",Name ="Sejuani",Spellslot =_R},
-    ["SivirQ"]                      = {Spellname ="SivirQ",Name ="Sivir",Spellslot =_Q},
-    ["SivirE"]                      = {Spellname ="SivirE",Name ="Sivir",Spellslot =_E},
-    ["SkarnerFractureMissileSpell"]                      = {Spellname ="SkarnerFractureMissileSpell",Name ="Skarner",Spellslot =_E},
-    ["SonaCrescendo"]                      = {Spellname ="SonaCrescendo",Name ="Sona",Spellslot =_R},
-    ["SwainDecrepify"]                      = {Spellname ="SwainDecrepify",Name ="Swain",Spellslot =_Q},
-    ["SwainMetamorphism"]                      = {Spellname ="SwainMetamorphism",Name ="Swain",Spellslot =_R},
-    ["SyndraE"]                      = {Spellname ="SyndraE",Name ="Syndra",Spellslot =_E},
-    ["SyndraR"]                      = {Spellname ="SyndraR",Name ="Syndra",Spellslot =_R},
-    ["TalonRake"]                      = {Spellname ="TalonRake",Name ="Talon",Spellslot =_W},
-    ["TalonShadowAssault"]                      = {Spellname ="TalonShadowAssault",Name ="Talon",Spellslot =_R},
-    ["BlindingDart"]                      = {Spellname ="BlindingDart",Name ="Teemo",Spellslot =_Q},
-    ["Thresh"]                      = {Spellname ="ThreshQ",Name ="Thresh",Spellslot =_Q},
-    ["BusterShot"]                      = {Spellname ="BusterShot",Name ="Tristana",Spellslot =_R},
-    ["VarusQ"]                      = {Spellname ="VarusQ",Name ="Varus",Spellslot =_Q},
-    ["VarusR"]                      = {Spellname ="VarusR",Name ="Varus",Spellslot =_R},
-    ["VayneCondemm"]                      = {Spellname ="VayneCondemm",Name ="Vayne",Spellslot =_E},
-    ["VeigarPrimordialBurst"]                      = {Spellname ="VeigarPrimordialBurst",Name ="Veigar",Spellslot =_R},
-    ["WildCards"]                      = {Spellname ="WildCards",Name ="Twistedfate",Spellslot =_Q},
-    ["VelkozQ"]                      = {Spellname ="VelkozQ",Name ="Velkoz",Spellslot =_Q},
-    ["VelkozW"]                      = {Spellname ="VelkozW",Name ="Velkoz",Spellslot =_W},
-    ["ViktorDeathRay"]                      = {Spellname ="ViktorDeathRay",Name ="Viktor",Spellslot =_E},
-    ["XerathArcanoPulseChargeUp"]                      = {Spellname ="XerathArcanoPulseChargeUp",Name ="Xerath",Spellslot =_Q},
-    ["ZedShuriken"]                      = {Spellname ="ZedShuriken",Name ="Zed",Spellslot =_Q},
-    ["ZiggsR"]                      = {Spellname ="ZiggsR",Name ="Ziggs",Spellslot =_R},
-    ["ZiggsQ"]                      = {Spellname ="ZiggsQ",Name ="Ziggs",Spellslot =_Q},
-    ["ZyraGraspingRoots"]                      = {Spellname ="ZyraGraspingRoots",Name ="Zyra",Spellslot =_E}
-
-}
-
-function QReady()
-	return CanCast(Q)
-end
-
-function WReady()
-	return CanCast(W)
-end
-
-function EReady()
-	return CanCast(E)
-end
-
-function RReady()
-	return CanCast(R)
-end
-
-function GetTarget()
-	return GetEnemyChampCanKillFastest(1000)
-end
-
-function OnLoad()
-	--__PrintTextGame("Yasuo v1.0 loaded")
-end
-
-
-function OnUpdate()
-end
-
-function OnDraw()
-end
-
-function OnUpdateBuff(unit, buff, stacks)
-	--__PrintTextGame(GetBuffName(buff))
-end
-
-function OnRemoveBuff(unit, buff)
-end
-
-function OnProcessSpell(unit, spell)
-	if GetChampName(UpdateHeroInfo()) ~= "Yasuo" then return end
-	if WReady() and ValidTargetRange(unit, 1500) and GetDistance(unit) >= 475 and config_AutoW then
-		if spell ~= 0 then
-			if WALL_SPELLS[GetName_Casting(spell)] then
-				CastSpellToPredictionPos(unit, W, GetDistance(unit))
-			end
-		end
-	end
-end
-
-function OnCreateObject(unit)
-end
-
-function OnDeleteObject(unit)
-end
-
-function OnWndMsg(msg, key)
-
-end
-
-function OnTick()
-	if GetChampName(UpdateHeroInfo()) ~= "Yasuo" then return end
-	if IsDead(UpdateHeroInfo()) then return end
-
-
-	if GetKeyPress(SpaceKeyCode) == 1 then
-		SetLuaCombo(true)
-		Combo()
-	end
-
-	if GetKeyPress(VKeyCode) == 1 then
-		SetLuaLaneClear(true)
-		LaneClear()
-	end
-
-	KillSteal()
-
-	if config_AutoUlt then
-		AutoUlt()
-	end
-
-	--YasuoDash2minion()
-
-end
-
-
-function VPGetLineCastPosition(Target, Delay, Width, Range, Speed)
-	local x1 = GetPosX(UpdateHeroInfo())
-	local z1 = GetPosZ(UpdateHeroInfo())
-
-	local x2 = GetPosX(Target)
-	local z2 = GetPosZ(Target)
-
-	local distance = GetDistance2D(x1,z1,x2,z2)
-
-	TimeMissile = Delay + distance/Speed
-	local real_distance = (TimeMissile * GetMoveSpeed(Target))
-
-	if real_distance == 0 then return distance end
-	return real_distance
-
-end
-
-function ValidTarget(Target)
-	if Target ~= 0 then
-		if not IsDead(Target) and not IsInFog(Target) and GetTargetableToTeam(Target) == 4 and IsEnemy(Target) then
-			return true
-		end
-	end
-	return false
-end
-
-function GetDistance(Target)
-	local x1 = GetPosX(UpdateHeroInfo())
-	local z1 = GetPosZ(UpdateHeroInfo())
-
-	local x2 = GetPosX(Target)
-	local z2 = GetPosZ(Target)
-
-	return GetDistance2D(x1,z1,x2,z2)
+function GetCustomTarget()
+  local enemy = GetTarget(1500)
+  if enemy then return enemy end
 end
 
 function ValidTargetRange(Target, Range)
-	if ValidTarget(Target) and GetDistance(Target) < Range then
-		return true
-	end
-	return false
+  local enemy = GetAIHero(Target)
+  if ValidTarget(enemy) and GetDistance(enemy) < Range then
+    return true
+  end
+  return false
 end
 
-function Combo()
+function GetTarget(range)
+  SearchAllChamp()
+  local Enemies = pObjChamp
+  for i, enemy in pairs(Enemies) do
+    if enemy ~= 0 and ValidTargetRange(enemy,range) then
+      if priorityTable.p1[GetChampName(enemy)] then
+        return GetAIHero(enemy)
+      end
+      if priorityTable.p2[GetChampName(enemy)] then
+        return GetAIHero(enemy)
+      end
+      if priorityTable.p3[GetChampName(enemy)] then
+        return GetAIHero(enemy)
+      end
+      if priorityTable.p4[GetChampName(enemy)] then
+        return GetAIHero(enemy)
+      end
+      if priorityTable.p5[GetChampName(enemy)] then
+        return GetAIHero(enemy)
+      end
+    end
+  end
 
-	local Target = GetTarget()
-
-	if Target ~= 0 then
-		if ValidTarget(Target) then
-			if Setting_IsComboUseQ() then
-				if QReady() then
-					CastQ(Target)
-				end
-			end
-		end
-	end
-
-
-	Target = GetTarget()
-	if Target ~= 0 then
-		if ValidTarget(Target) then
-			if Setting_IsComboUseE() then
-				if EReady() then
-					CastE(Target)
-				end
-			end
-		end
-	end
-
-
+  local target = GetEnemyChampCanKillFastest(range)
+  if target ~= 0 then
+    return GetAIHero(target)
+  end
+  return nil
 end
 
-function CastQ(Target)
-	if Target ~= 0 and ValidTargetRange(Target, SpellQW.Range) and QReady() and GetBuffCount(UpdateHeroInfo(), "YasuoQ3W") == 0 and CanMove() then
-		local vp_distance = VPGetLineCastPosition(Target, SpellQW.Delay, SpellQW.Width, SpellQW.Range, SpellQW.Speed)
-		if vp_distance > 0 and vp_distance < SpellQW.Range then
-			CastSpellToPredictionPos(Target, Q, vp_distance)
-		end
-	end
+function GetStacks(o)
+  if o.HasBuff("YasuoDashWrapper") then
+    return 1
+  end
+  return 0
+end
 
-	if Target ~= 0 and ValidTargetRange(Target, SpellQ3.Range) and GetBuffCount(UpdateHeroInfo(), "YasuoQ3W") > 0 and CanMove() then
-		local vp_distance = VPGetLineCastPosition(Target, SpellQ3.Delay, SpellQ3.Width, SpellQ3.Range, SpellQ3.Speed)
-		if vp_distance > 0 and vp_distance < SpellQ3.Range then
-			CastSpellToPredictionPos(Target, Q, vp_distance)
-		end
-	end
+function Move(x)
+  if CanCast(_E) then
+    local minion = nil
+    EnemyMinions:update()
+    for _,k in pairs(EnemyMinions.objects) do
+      local kPos = myHero+(Vector(k)-myHero):normalized()*data[2].range
+      if not minion and k and GetStacks(k) == 0 and GetDistanceSqr(k) < data[2].range*data[2].range and GetDistanceSqr(kPos,x) < GetDistanceSqr(myHero,x) then minion = k end
+      if minion and k and GetStacks(k) == 0 and GetDistanceSqr(k) < data[2].range*data[2].range then
+        local mPos = myHero+(Vector(minion)-myHero):normalized()*data[2].range
+        if GetDistanceSqr(mPos,x) < GetDistanceSqr(kPos,x) and GetDistanceSqr(mPos,x) < GetDistanceSqr(myHero,x) then
+          minion = k
+        end
+      end
+    end
+    if minion then
+      CastE(minion)
+      return true
+    end
+    return false
+  end
 end
 
 function CastE(Target)
-	if Target ~= 0 and EReady() and ValidTargetRange(Target, 475) and CanMove() then
-		CastSpellTarget(Target, E)
-	end
+  if GetDistance(Target) < data[2].range then
+    CastSpellTarget(Target.Addr, _E)
+  end
 end
 
-function AutoUlt()
-	SearchAllChamp()
-	local Enemies = pObjChamp
-	for i, enemy in ipairs(Enemies) do
-		if enemy ~= 0 then
-			if RReady() and ValidTargetRange(enemy, 1200) and GetDistance(enemy) < 1200 and CanMove() then
-				CastSpellTarget(UpdateHeroInfo(),R)
-			end
-		end
-	end
+function CastQ(Target)
+  if GetDistance(Target) < data[0].range then
+    CastSpellToPos(Target.x, Target.z, _Q)
+  end
+end
+  
+function Combo()
+  local Target = GetCustomTarget()  
+  if Target ~= nil and ValidTarget(Target) then
+    if GetDistance(Target) > myHero.AARange and Setting_IsComboUseE() then
+      if Move(Target) then
+        if CanCast(_Q) and Setting_IsComboUseQ() then
+          DelayAction(function() CastQ(Target) end, 0.125)
+        end
+      elseif GetDistance(Target) < data[2].range and GetDistance(Target) > data[2].range/2 and GetStacks(Target) == 0 then
+        CastE(Target)
+        if CanCast(_Q) and Setting_IsComboUseQ() then
+          DelayAction(function() CastQ(Target) end, 0.125)
+        end
+      end
+    end    
+    
+    if CanCast(_R) and Setting_IsComboUseR() and Target.y > myHero.y+5 or Target.y < myHero.y-5 then
+      if CanCast(_Q) and GetDistance(Target) < 500 then
+        SetLuaBasicAttackOnly(true)
+        BasicAttack(Target.Addr)
+        SetLuaBasicAttackOnly(false)
+      else
+        CastSpellTarget(Target.Addr,_R)
+      end
+    end
+    
+    if CanCast(_E) and Setting_IsComboUseE() and passiveTracker and GetDistance(Target) < data[2].range then
+      CastE(Target)
+    end
+    
+    if CanCast(_Q) and Setting_IsComboUseQ() then
+      if passiveTracker and GetDistance(Target) < 1200 then
+        local CastPosition, HitChance, Position = VP:GetLineCastPosition(Target, data[-2].delay, data[-2].width, data[-2].range, data[-2].speed, myHero, false)
+        if HitChance >= 2 and GetDistance(CastPosition) <= data[-2].range then
+          CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
+        end
+      elseif GetDistance(Target) < 500 then
+        if CanMove() then
+          CastQ(Target)
+        end
+      end
+    end
+  end  
+end
+ 
+function UpdateBuff(unit,buff,stacks)
+  if unit and unit.IsMe and buff.Name:lower() == passiveName then
+    passiveTracker = true
+  end
 end
 
-function ClosestMinion()
-	GetAllUnitAroundAnObject(UpdateHeroInfo(), 1000)
-
-	local closest_distance = 475
-	local last_minion = 0
-
-	local Enemies = pUnit
-	for i, enemy in pairs(Enemies) do
-		if enemy ~= 0 then
-			if IsMinion(enemy) and IsEnemy(enemy) and not IsDead(enemy) and not IsInFog(enemy) and GetTargetableToTeam(enemy) == 4 then
-				local distance = GetDistance(enemy)
-				if distance > 0 and distance < closest_distance and distance < 1000 and GetBuffCount(UpdateHeroInfo(), "YasuoDashWrapper") == 0 then
-					closest_distance = distance
-					last_minion = enemy
-				end
-			end
-		end
-	end
-	return last_minion
+function RemoveBuff(unit,buff)
+  if unit and unit.IsMe and buff.Name:lower() == passiveName then
+    passiveTracker = false
+  end
 end
 
---[[
-function YasuoDash2minion()
-	GetAllObjectAroundAnObject(UpdateHeroInfo(), 1000)
+function GetDmgADAttackMe(unit)
+  unit = GetAIHero(unit.Addr)
+  local myArmor = myHero.Armor
+  local Damage = 0
+    
+  local Dominik_ID = 3036--Lord Dominik's Regards
+  local Mortal_Reminder_ID = 3033--Mortal Reminder
 
-	local Enemies = pObject
-	for i, enemy in pairs(Enemies) do
-		if enemy ~= 0 then
-			if IsMinion(enemy) and IsEnemy(enemy) and not IsDead(enemy) and not IsInFog(enemy) and GetTargetableToTeam(enemy) == 4 then
-				if GetDistance(enemy) < 375 then
-					if GetBuffCount(enemy, "YasuoDashWrapper") > 0 and EReady() and not GetDistance(enemy) < 475 then
-						local Q = ClosestMinion()
-						if GetDistance(Q) < 375 then
-							if EReady() then
-								CastSpellTarget(Q, E)
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-end
-]]
+  if unit.HasItem(Dominik_ID) > 0 or unit.HasItem(Mortal_Reminder_ID) > 0 then
+    myArmor = myArmor - myArmor.BonusArmor * 45/100
+  end 
 
-function ValidTargetJungle(Target)
-	if Target ~= 0 then
-		if not IsDead(Target) and not IsInFog(Target) and GetTargetableToTeam(Target) == 4 and IsJungleMonster(Target) then
-			return true
-		end
-	end
-	return false
+  local ArmorPenetration = 60 * unit.ArmorPen / 100 + (1 - 60/100) * unit.ArmorPen * myHero.Level / 18
+  myArmor = myArmor - ArmorPenetration
+  if myArmor >= 0 then
+    Damage = unit.TotalDmg * (100/(100 + myArmor))
+  else
+    Damage = unit.TotalDmg * (2 - 100/(100 - myArmor))
+  end
+  
+  return Damage
 end
 
-function GetMinion()
-	GetAllUnitAroundAnObject(UpdateHeroInfo(), 1000)
-
-	local Enemies = pUnit
-	for i, minion in pairs(Enemies) do
-		if minion ~= 0 then
-			if IsMinion(minion) and IsEnemy(minion) and not IsDead(minion) and not IsInFog(minion) and GetTargetableToTeam(minion) == 4 then
-				return minion
-			end
-		end
-	end
-
-	return 0
+function ProcessSpell(unit, spell)
+  if config_AutoW and unit and unit.TeamId ~= myHero.TeamId and myHero.CharName == "Yasuo" and unit.Type == myHero.Type and GetDistance(unit) < 1500 then
+    spell.target = GetTargetFromTargetId(spell.TargetId)
+    spell.endPos = {x=spell.DestPos_x, y=spell.DestPos_y, z=spell.DestPos_z}
+    local spell_slot_name = ""
+    if spell.Slot == _Q then spell_slot_name = "Q" end
+    if spell.Slot == _W then spell_slot_name = "W" end
+    if spell.Slot == _E then spell_slot_name = "E" end
+    if spell.Slot == _R then spell_slot_name = "R" end
+    if myHero == spell.target and spell.Name:lower():find("attack") and (unit.AARange >= 450 or unit.IsRanged) and GetDmgADAttackMe(unit)/myHero.MaxHP > 0.1337 then
+      local wPos = myHero + (Vector(unit) - myHero):normalized() * data[1].range 
+      CastSpellToPos(wPos.x, wPos.z, _W)
+    elseif spell.endPos and not spell.target and not _G.evade then
+      local makeUpPos = unit + (Vector(spell.endPos)-unit):normalized()*GetDistance(unit)
+      if GetDistance(makeUpPos) < myHero.CollisionRadius*3 or GetDistance(spell.endPos) < myHero.CollisionRadius*3 then
+        local wPos = myHero + (Vector(unit) - myHero):normalized() * data[1].range 
+        CastSpellToPos(wPos.x, wPos.z, _W)
+      end
+    end
+  end
 end
 
-function LaneClear()
-	local jungle = GetJungleMonster(1000)
-	if jungle ~= 0 then
-
-		if QReady() and CanMove() then
-			if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellQW.Range then
-				local vp_distance = VPGetLineCastPosition(jungle, SpellQW.Delay, SpellQW.Width, SpellQW.Range, SpellQW.Speed)
-				if vp_distance > 0 and vp_distance < SpellQW.Range then
-					CastSpellToPredictionPos(jungle, Q, vp_distance)
-				end
-			end
-		end
-
-		jungle = GetJungleMonster(1000)
-		if jungle ~= 0 then
-			if EReady() and CanMove() then
-				if ValidTargetJungle(jungle) and GetDistance(jungle) < 475 and GetBuffCount(jungle, "YasuoDashWrapper") == 0 then
-					CastSpellTarget(jungle, E)
-				end
-			end
-		end
-
-	else
-		local minion = GetMinion()
-		if minion ~= 0 then
-			if EReady() and CanMove() and Setting_IsLaneClearUseE() and GetDistance(minion) < 475 and not UnderTower() then
-				CastSpellTarget(minion, E)
-			end
-		end
-
-		minion = GetMinion()
-		if minion ~= 0 then
-			if QReady() and CanMove() and Setting_IsLaneClearUseQ() and GetDistance(minion) < SpellQW.Range and GetBuffCount(minion, "YasuoDashWrapper") == 0 then
-				local vp_distance = VPGetLineCastPosition(minion, SpellQW.Delay, SpellQW.Width, SpellQW.Range, SpellQW.Speed)
-				if vp_distance > 0 and vp_distance < SpellQW.Range then
-					CastSpellToPredictionPos(minion, Q, vp_distance)
-				end
-			end
-
-			if GetBuffCount(UpdateHeroInfo(), "YasuoQ3W") > 0 then
-				local vp_distance = VPGetLineCastPosition(minion, SpellQ3.Delay, SpellQ3.Width, SpellQ3.Range, SpellQ3.Speed)
-				if vp_distance > 0 and vp_distance < SpellQ3.Range and CanMove() then
-					CastSpellToPredictionPos(minion, Q, vp_distance)
-				end
-			end
-		end
-	end
-
+function GetLowestMinion(range)
+  local closest_distance = range
+  local closest_minion = nil
+  for _,minion in pairs(EnemyMinions.objects) do
+    if GetDistanceSqr(minion) < range*range and GetStacks(minion) == 0 and ValidTarget(minion) then
+      if GetDistance(minion) < closest_distance then
+        closest_distance = GetDistance(minion)
+        closest_minion = minion
+      end
+    end
+  end  
+  if closest_minion then return closest_minion end
 end
 
-function UnderTower()
-	GetAllUnitAroundAnObject(UpdateHeroInfo(), 1400)
-	for i, obj in pairs(pUnit) do
-		if obj ~= 0 then
-			if IsEnemy(obj) and IsTurret(obj) and GetTargetableToTeam(obj) == 4 and GetDistance(obj) < 1400 then
-				return true
-			end
-		end
-	end
-
-	return false
+function NearTower()
+  GetAllUnitAroundAnObject(myHero.Addr, 1400)
+  for i, obj in pairs(pUnit) do
+    if obj ~= 0 then
+      local tower = GetUnit(obj)
+      if tower and ValidTarget(tower) and tower.Type == 2 and GetDistance(tower) < 915 + 475 then
+        return true
+      end
+    end
+  end
+  return false
 end
 
-
-function KillSteal()
-	SearchAllChamp()
-	local Enemies = pObjChamp
-	for i, Target in pairs(Enemies) do
-		if Target ~= 0 then
-			if ValidTarget(Target) then
-				--__PrintDebug("Q1")
-				if ValidTargetRange(Target, SpellQW.Range) and QReady() and GetBuffCount(UpdateHeroInfo(), "YasuoQ3W") == 0 and getDmg(Q, Target) > GetHealthPoint(Target) then
-					local vp_distance = VPGetLineCastPosition(Target, SpellQW.Delay, SpellQW.Width, SpellQW.Range, SpellQW.Speed)
-					if vp_distance > 0 and vp_distance < SpellQW.Range and CanMove() then
-						CastSpellToPredictionPos(Target, Q, vp_distance)
-					end
-				end
-				--__PrintDebug("Q2")
-				if ValidTargetRange(Target, SpellQ3.Range) and GetBuffCount(UpdateHeroInfo(), "YasuoQ3W") > 0 and getDmg(Q, Target) > GetHealthPoint(Target) then
-					local vp_distance = VPGetLineCastPosition(Target, SpellQ3.Delay, SpellQ3.Width, SpellQ3.Range, SpellQ3.Speed)
-					if vp_distance > 0 and vp_distance < SpellQ3.Range and CanMove() then
-						CastSpellToPredictionPos(Target, Q, vp_distance)
-					end
-				end
-				--__PrintDebug("E")
-				if ValidTargetRange(Target, 425) and EReady() and GetBuffCount(Target, "YasuoDashWrapper") == 0 and getDmg(E, Target) > GetHealthPoint(Target) and CanMove() then
-					CastSpellTarget(Target, E)
-				end
-				--__PrintDebug("R")
-				if ValidTargetRange(Target, 1200) and RReady() and getDmg(R, Target) > GetHealthPoint(Target) and CanMove() then
-					CastSpellTarget(UpdateHeroInfo(),R)
-				end
-
-			end
-		end
-	end
+function LastHit()
+  local minion = GetLowestMinion(data[2].range)  
+  if minion and GetStacks(minion) == 0 and minion.HP < GetDamage("E", minion) and CanCast(_E) and not UnderTurret(minion) and not NearTower() then
+    CastE(minion)
+  end
+  if minion and GetStacks(minion) == 0 and minion.HP < GetDamage("Q", minion)+GetDamage("E", minion) and CanCast(_Q) and CanCast(_E) and not UnderTurret(minion) and not NearTower() then
+    CastE(minion)
+    DelayAction(function() CastQ(minion) end, 0.125)
+  end      
+  LastHitQ3()
 end
 
+function LastHitQ3()
+  --Harass
+  if passiveTracker then
+    local Target = GetCustomTarget()  
+    if Target ~= nil and ValidTarget(Target) and CanCast(_Q) then
+      local CastPosition, HitChance, Position = VP:GetLineCastPosition(Target, data[-2].delay, data[-2].width, data[-2].range, data[-2].speed, myHero, false)
+      if HitChance >= 2 and GetDistance(CastPosition) <= data[-2].range then
+        CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
+        return
+      end
+    end
+    --Last hit Q3
+    for _,minion in pairs(EnemyMinions.objects) do
+      if minion and ValidTarget(minion) and GetDistance(minion) < 1200 and minion.HP < GetDamage("Q", minion) and CanCast(_Q) then
+        local CastPosition, HitChance, Position = VP:GetLineCastPosition(minion, data[-2].delay, data[-2].width, data[-2].range, data[-2].speed, myHero, false)
+        if HitChance >= 2 and GetDistance(CastPosition) <= data[-2].range then
+          CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
+        end
+      end
+    end
+  end  
+end
+
+function GetJungle()
+  for _, jungle in pairs(JungleMinions.objects) do
+    if ValidTarget(jungle) then
+      return jungle
+    end
+  end
+end
+
+function JungClear()
+  local JungleMob = GetJungle()
+  if JungleMob ~= nil then
+      if Setting_IsLaneClearUseQ() and CanCast(_Q) and GetDistance(JungleMob) < data[0].range and CanMove() then
+          CastSpellToPos(JungleMob.x, JungleMob.z, _Q)
+      end
+      if Setting_IsLaneClearUseE() and CanCast(_E) and GetDistance(JungleMob) < data[2].range and CanMove() then
+          CastSpellTarget(JungleMob.Addr, _E)         
+      end
+      
+      if passiveTracker and CanCast(_Q) then
+        local CastPosition, HitChance, Position = VP:GetLineCastPosition(JungleMob, data[-2].delay, data[-2].width, data[-2].range, data[-2].speed, myHero, false)
+        if HitChance >= 2 and GetDistance(CastPosition) <= data[-2].range then
+          CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
+        end
+      end
+    end
+end
+
+function Farm()
+  for _,minion in pairs(EnemyMinions.objects) do
+    if minion and ValidTarget(minion) and not passiveTracker and GetDistance(minion) < 500 and minion.HP > GetDamage("Q", minion) and CanCast(_Q) then
+      CastQ(minion)
+    end
+  end
+end
+
+function Tick()
+  myHero = GetMyHero()
+  player = myHero
+  if myHero.CharName ~= "Yasuo" then return end
+  
+  if IsTyping() then return end
+  if myHero.IsDead then return end  
+  if _G.evade then return end
+  
+  if config_Flee and GetKeyPress(CKeyCode) == 1 then
+    local mousePos = Vector(GetMousePos())
+    MoveToPos(mousePos.x,mousePos.z)
+    Move(mousePos)
+  end
+  
+  if passiveTracker then
+    data[0].range = 1200
+  else
+    data[0].range = 500
+  end
+    
+  if GetKeyPress(SpaceKeyCode) == 1 then
+    SetLuaCombo(true)
+    Combo()
+  end
+  
+  if GetKeyPress(VKeyCode) == 1 then
+    SetLuaLaneClear(true)
+    EnemyMinions:update()
+    JungleMinions:update()
+    Farm()
+    LastHit()
+    JungClear()
+  end
+
+  Killsteal()
+end
+
+function Killsteal()
+    for k,enemy in pairs(GetEnemyHeroes()) do
+      if ValidTarget(enemy) and enemy ~= nil and not enemy.IsDead then
+        if enemy.y > myHero.y+25 and GetDmg(_R,enemy) > enemy.HP and GetDistance(enemy) < data[3].range then
+          CastSpellTarget(enemy.Addr,_R)
+        elseif GetDmg(_Q,enemy) > enemy.HP and GetDistance(enemy) < data[0].range then
+          CastQ(enemy)
+        elseif passiveTracker and GetDmg(_Q,enemy) > enemy.HP and GetDistance(enemy) < 1200 then
+          local CastPosition, HitChance, Position = VP:GetLineCastPosition(enemy, data[-2].delay, data[-2].width, data[-2].range, data[-2].speed, myHero, false)
+          if HitChance >= 2 and GetDistance(CastPosition) <= data[-2].range then
+            CastSpellToPos(CastPosition.x, CastPosition.z, _Q)            
+          end
+        elseif GetDmg(_E,enemy) > enemy.HP and GetDistance(enemy) < data[2].range then
+          CastE(enemy)
+        elseif GetDmg(_Q,enemy)+GetDmg(_E,enemy) > enemy.HP and GetDistance(enemy) < data[2].range then
+          CastE(enemy)
+          DelayAction(function() CastQ(enemy) end, 0.25)
+        end
+      end
+    end
+  end
+  
 function getDmg(Spell, Enemy)
-	local Damage = 0
+  local Damage = 0
 
-	if Spell == Q then
-		if GetSpellLevel(UpdateHeroInfo(),Q) == 0 then return 0 end
+  if Spell == _Q then
+    if myHero.LevelSpell(_Q) == 0 then return 0 end    
+    local Percent_AD = 1
+    local Damage_AD = myHero.TotalDmg
+    local DamageSpellQTable = {20, 40, 60, 80, 100}
+    local DamageSpellQ = DamageSpellQTable[myHero.LevelSpell(_Q)]
+    local Enemy_Armor = Enemy.Armor
+    local Dominik_ID = 3036--Lord Dominik's Regards
+    local Mortal_Reminder_ID = 3033--Mortal Reminder
+    if GetItemByID(Dominik_ID) > 0 or GetItemByID(Mortal_Reminder_ID) > 0 then
+      Enemy_Armor = Enemy_Armor - Enemy.BonusArmor * 45/100
+    end
 
-		local DamageSpellQTable = {20, 40, 60, 80, 100}
+    local ArmorPenetration = 60 * myHero.ArmorPen / 100 + (1 - 60/100) * myHero.ArmorPen * Enemy.Level / 18
+    Enemy_Armor = Enemy_Armor - ArmorPenetration
+    if Enemy_Armor >= 0 then
+      Damage = (DamageSpellQ + Percent_AD * Damage_AD) * (100/(100 + Enemy_Armor))
+    else
+      Damage = (DamageSpellQ + Percent_AD * Damage_AD) * (2 - 100/(100 - Enemy_Armor))
+    end
+    return Damage
+  end
 
-		local Percent_AD = 1
+  if Spell == _E then
+    if myHero.LevelSpell(_E) == 0 then return 0 end
+    
+    local Percent_Bonus_AD = 0.2
+    local Damage_Bonus_AD = myHero.BaseDmg
 
-		local Damage_AD = GetFlatPhysicalDamage(UpdateHeroInfo()) + GetBaseAttackDamage(UpdateHeroInfo())
+    local Percent_AP = 0.6
+    local Damage_AP = myHero.MagicDmg + myHero.MagicDmg * myHero.MagicDmgPercent
 
-		local DamageSpellQ = DamageSpellQTable[GetSpellLevel(UpdateHeroInfo(),Q)]
+    local DamageSpellETable = {60, 70, 80, 90, 100}
+    local DamageSpellE = DamageSpellETable[myHero.LevelSpell(_E)]
 
-		local Enemy_Armor = GetArmor(Enemy)
+    local Enemy_Armor = Enemy.Armor    
+    local Dominik_ID = 3036--Lord Dominik's Regards
+    local Mortal_Reminder_ID = 3033--Mortal Reminder
+    if GetItemByID(Dominik_ID) > 0 or GetItemByID(Mortal_Reminder_ID) > 0 then
+      Enemy_Armor = Enemy_Armor - Enemy.BonusArmor * 45/100
+    end
+    local ArmorPenetration = 60 * myHero.ArmorPen / 100 + (1 - 60/100) * myHero.ArmorPen * Enemy.Level / 18
+    Enemy_Armor = Enemy_Armor - ArmorPenetration
+    if Enemy_Armor >= 0 then
+      Damage = (DamageSpellE + Percent_Bonus_AD * Damage_Bonus_AD + Percent_AP * Damage_AP) * (100/(100 + Enemy_Armor))
+    else
+      Damage = (DamageSpellE + Percent_Bonus_AD * Damage_Bonus_AD + Percent_AP * Damage_AP) * (2 - 100/(100 - Enemy_Armor))
+    end
+    return Damage
+  end
 
-		local Dominik_ID = 3036--Lord Dominik's Regards
-		local Mortal_Reminder_ID = 3033--Mortal Reminder
+  if Spell == _R then
+    if myHero.LevelSpell(_R) == 0 then return 0 end
+    local Percent_Bonus_AD = 1.5
+    local Damage_Bonus_AD = myHero.BaseDmg
 
-		if GetItemByID(Dominik_ID) > 0 or GetItemByID(Mortal_Reminder_ID) > 0 then
-			Enemy_Armor = Enemy_Armor - GetBonusArmor(Enemy) * 45/100
-		end
+    local DamageSpellRTable = {200, 300, 400}
+    local DamageSpellR = DamageSpellRTable[myHero.LevelSpell(_R)]
 
-		local ArmorPenetration = 60 * GetArmorPenetration(UpdateHeroInfo()) / 100 + (1 - 60/100) * GetArmorPenetration(UpdateHeroInfo()) * GetLevel(Enemy) / 18
-
-		Enemy_Armor = Enemy_Armor - ArmorPenetration
-
-		if Enemy_Armor >= 0 then
-			Damage = (DamageSpellQ + Percent_AD * Damage_AD) * (100/(100 + Enemy_Armor))
-		else
-			Damage = (DamageSpellQ + Percent_AD * Damage_AD) * (2 - 100/(100 - Enemy_Armor))
-		end
-
-
-		return Damage
-	end
-
-	if Spell == E then
-		if GetSpellLevel(UpdateHeroInfo(),E) == 0 then return 0 end
-
-		local DamageSpellETable = {60, 70, 80, 90, 100}
-
-		local Percent_Bonus_AD = 0.2
-
-		local Damage_Bonus_AD = GetFlatPhysicalDamage(UpdateHeroInfo())
-
-		local Percent_AP = 0.6
-
-		local Damage_AP = GetFlatMagicDamage(UpdateHeroInfo()) + GetFlatMagicDamage(UpdateHeroInfo()) * GetPercentMagicDamage(UpdateHeroInfo())
-
-		local DamageSpellE = DamageSpellETable[GetSpellLevel(UpdateHeroInfo(),E)]
-
-		local Enemy_Armor = GetArmor(Enemy)
-
-		local Dominik_ID = 3036--Lord Dominik's Regards
-		local Mortal_Reminder_ID = 3033--Mortal Reminder
-
-		if GetItemByID(Dominik_ID) > 0 or GetItemByID(Mortal_Reminder_ID) > 0 then
-			Enemy_Armor = Enemy_Armor - GetBonusArmor(Enemy) * 45/100
-		end
-
-		local ArmorPenetration = 60 * GetArmorPenetration(UpdateHeroInfo()) / 100 + (1 - 60/100) * GetArmorPenetration(UpdateHeroInfo()) * GetLevel(Enemy) / 18
-
-		Enemy_Armor = Enemy_Armor - ArmorPenetration
-
-		if Enemy_Armor >= 0 then
-			Damage = (DamageSpellE + Percent_Bonus_AD * Damage_Bonus_AD + Percent_AP * Damage_AP) * (100/(100 + Enemy_Armor))
-		else
-			Damage = (DamageSpellE + Percent_Bonus_AD * Damage_Bonus_AD + Percent_AP * Damage_AP) * (2 - 100/(100 - Enemy_Armor))
-		end
-
-		return Damage
-	end
-
-	if Spell == R then
-		if GetSpellLevel(UpdateHeroInfo(),R) == 0 then return 0 end
-
-		local DamageSpellRTable = {200, 300, 400}
-
-		local Percent_Bonus_AD = 1.5
-
-		local Damage_Bonus_AD = GetFlatPhysicalDamage(UpdateHeroInfo())
-
-		local DamageSpellR = DamageSpellRTable[GetSpellLevel(UpdateHeroInfo(),R)]
-
-		local Enemy_Armor = GetArmor(Enemy)
-
-		local Dominik_ID = 3036--Lord Dominik's Regards
-		local Mortal_Reminder_ID = 3033--Mortal Reminder
-
-		if GetItemByID(Dominik_ID) > 0 or GetItemByID(Mortal_Reminder_ID) > 0 then
-			Enemy_Armor = Enemy_Armor - GetBonusArmor(Enemy) * 45/100
-		end
-
-		local ArmorPenetration = 60 * GetArmorPenetration(UpdateHeroInfo()) / 100 + (1 - 60/100) * GetArmorPenetration(UpdateHeroInfo()) * GetLevel(Enemy) / 18
-
-		Enemy_Armor = Enemy_Armor - ArmorPenetration
-
-		if Enemy_Armor >= 0 then
-			Damage = (DamageSpellR + Percent_Bonus_AD * Damage_Bonus_AD) * (100/(100 + Enemy_Armor))
-		else
-			Damage = (DamageSpellR + Percent_Bonus_AD * Damage_Bonus_AD) * (2 - 100/(100 - Enemy_Armor))
-		end
-
-		return Damage
-	end
-
+    local Enemy_Armor = Enemy.Armor
+    local Dominik_ID = 3036--Lord Dominik's Regards
+    local Mortal_Reminder_ID = 3033--Mortal Reminder
+    if GetItemByID(Dominik_ID) > 0 or GetItemByID(Mortal_Reminder_ID) > 0 then
+      Enemy_Armor = Enemy_Armor - Enemy.BonusArmor * 45/100
+    end
+    
+    local ArmorPenetration = 60 * myHero.ArmorPen / 100 + (1 - 60/100) * myHero.ArmorPen * Enemy.Level / 18
+    Enemy_Armor = Enemy_Armor - ArmorPenetration
+    if Enemy_Armor >= 0 then
+      Damage = (DamageSpellR + Percent_Bonus_AD * Damage_Bonus_AD) * (100/(100 + Enemy_Armor))
+    else
+      Damage = (DamageSpellR + Percent_Bonus_AD * Damage_Bonus_AD) * (2 - 100/(100 - Enemy_Armor))
+    end
+    return Damage
+  end
 end

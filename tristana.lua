@@ -19,7 +19,7 @@ local LaneClearUseMana = 40
 
 if myHero.CharName == "Tristana" then
 	config_AutoW  = AddMenuCustom(1, config_AutoW, "Auto W")
-	config_AutoR  = AddMenuCustom(2, config_AutoW, "Auto R When Dasing")
+	config_AutoR  = AddMenuCustom(2, config_AutoR, "Auto R When Dasing")
 end
 
 Q = {Slot = _Q, DamageName = "Q", Range = 0,   Width = 0,   Delay = 0 ,   Collision = false, Aoe = false}
@@ -53,7 +53,9 @@ function OnDraw()
 end
 
 function OnUpdateBuff(unit, buff, stacks)
-
+	--if buff.Name == "Burning" then
+	--__PrintTextGame(buff.Name)
+	--end
 end
 
 function OnRemoveBuff(unit, buff)
@@ -73,12 +75,21 @@ function OnWndMsg(msg, key)
 
 end
 
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
+
+end
+
 function OnTick()
 	myHero = GetMyHero() -- refresh myHero infomation
 
 	if myHero.CharName ~= "Tristana" then return end
 	if myHero.IsDead then return end
 
+	if IsTyping() then return end
 
 	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
@@ -128,7 +139,7 @@ function LaneClear()
 		if minion then
 			if EReady() and CanMove() and Setting_IsLaneClearUseE() and not IsMyManaLowLaneClear() then
 				if GetDistance(myHero.Addr, minion.Addr) < E.Range then
-					CastSpellTarget(minion.Addr, _E)
+					--CastSpellTarget(minion.Addr, _E)
 				end
 			end
 		end
@@ -171,12 +182,50 @@ function GetMinion()
 	return nil
 end
 
+local priorityTable = {
+    p5 = {"Alistar", "Amumu", "Blitzcrank", "Braum", "ChoGath", "DrMundo", "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu","Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona","Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"},
+    p4 = {"Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax","LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain","Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"},
+    p3 = {"Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin","Kayle", "KhaZix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo","Zilean"},
+    p2 = {"Ahri", "Anivia", "Annie",  "Brand",  "Cassiopeia", "Karma", "Karthus", "Katarina", "Kennen", "Sejuani",  "Lux", "Malzahar", "MasterYi", "Orianna", "Syndra", "Talon",  "TwistedFate", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed", "Ziggs", "Zoe" },
+    p1 = {"Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "KogMaw", "Lucian", "MissFortune", "Quinn", "Sivir", "Teemo", "Tristana", "Twitch", "Varus", "Vayne", "Xayah"},
+}
+
 function GetTarget(range)
+	SearchAllChamp()
+	local Enemies = pObjChamp
+	for i, enemy in pairs(Enemies) do
+        if enemy ~= 0 and ValidTargetRange(enemy,range) then
+			if priorityTable.p1[GetChampName(enemy)] then
+				return GetAIHero(enemy)
+			end
+			if priorityTable.p2[GetChampName(enemy)] then
+				return GetAIHero(enemy)
+			end
+			if priorityTable.p3[GetChampName(enemy)] then
+				return GetAIHero(enemy)
+			end
+			if priorityTable.p4[GetChampName(enemy)] then
+				return GetAIHero(enemy)
+			end
+			if priorityTable.p5[GetChampName(enemy)] then
+				return GetAIHero(enemy)
+			end
+		end
+	end
+
 	local target = GetEnemyChampCanKillFastest(range)
 	if target ~= 0 then
 		return GetAIHero(target)
 	end
 	return nil
+end
+
+function ValidTargetRange(Target, Range)
+	local enemy = GetAIHero(Target)
+	if ValidTarget(enemy) and GetDistance(myHero.Addr,enemy.Addr) < Range then
+		return true
+	end
+	return false
 end
 
 function CheckDashes()
@@ -185,7 +234,7 @@ function CheckDashes()
 	for idx, enemy in ipairs(Enemies) do
 		if enemy ~= 0 then
 			local enemyHero = GetAIHero(enemy)
-			if RReady() and ValidTarget(enemyHero) and enemyHero.Distance < R.Range and CanMove() and enemyHero.IsDash then
+			if RReady() and ValidTarget(enemyHero) and enemyHero.Distance < 260 and CanMove() and IsDashing(enemy) then
 				CastSpellTarget(enemyHero.Addr, _R)
 			end
 		end
@@ -195,8 +244,11 @@ end
 function Combo()
 	local target = GetTarget(1300)
 
-	if target and QReady() and Setting_IsComboUseQ() then
+	if target and QReady() and Setting_IsComboUseQ() and GetDistance(myHero.Addr, target.Addr) < myHero.AARange + myHero.CollisionRadius and not CanAttack() and CanMove() then
 		CastQ(target)
+		SetLuaBasicAttackOnly(true)
+		BasicAttack(target.Addr)
+		SetLuaBasicAttackOnly(false)
     end
 
 	if target and WReady() and CanMove() and Setting_IsComboUseW() then
@@ -210,7 +262,7 @@ function Combo()
 end
 
 function CastQ(target)
-	if target.Distance < E.Range and ValidTarget(target) then
+	if ValidTarget(target) then
 		CastSpellTarget(myHero.Addr, _Q)
 	end
 end

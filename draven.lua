@@ -50,8 +50,38 @@ function RReady()
 	return CanCast(R)
 end
 
-function GetTarget()
-	return GetEnemyChampCanKillFastest(1200)
+local priorityTable = {
+    p5 = {"Alistar", "Amumu", "Blitzcrank", "Braum", "ChoGath", "DrMundo", "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu","Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona","Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"},
+    p4 = {"Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax","LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain","Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"},
+    p3 = {"Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin","Kayle", "KhaZix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo","Zilean"},
+    p2 = {"Ahri", "Anivia", "Annie",  "Brand",  "Cassiopeia", "Karma", "Karthus", "Katarina", "Kennen", "Sejuani",  "Lux", "Malzahar", "MasterYi", "Orianna", "Syndra", "Talon",  "TwistedFate", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed", "Ziggs", "Zoe" },
+    p1 = {"Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "KogMaw", "Lucian", "MissFortune", "Quinn", "Sivir", "Teemo", "Tristana", "Twitch", "Varus", "Vayne", "Xayah"},
+}
+
+function GetTarget(range)
+	SearchAllChamp()
+	local Enemies = pObjChamp
+	for i, enemy in pairs(Enemies) do
+        if enemy ~= 0 and ValidTargetRange(enemy,range) then
+			if priorityTable.p1[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p2[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p3[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p4[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p5[GetChampName(enemy)] then
+				return enemy
+			end
+		end
+	end
+
+	return GetEnemyChampCanKillFastest(range)
 end
 
 function ValidTarget(Target)
@@ -95,21 +125,24 @@ end
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Draven" then return end
 	if IsDead(UpdateHeroInfo()) then return end
+	if IsTyping() then return end
 
 	if GetKeyPress(VKeyCode) == 1 then
 		SetLuaLaneClear(true)
 		LaneClear()
 	end
 
-	time2 = GetTimeGame()
-	if time2 - time1 > delay and delay > 0 then
-		delay = 0
-		SetLuaMoveOnly(false)
-	end
 
 	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
+	end
+
+	time2 = GetTimeGame()
+	if time2 - time1 > delay and delay > 0 and config_Auto_caughtAxe then
+		delay = 0
+		SetLuaMoveOnly(false)
+		UnBlockMove()
 	end
 
 	--[[
@@ -124,6 +157,14 @@ function OnTick()
 	]]
 
 
+
+end
+
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
 
 end
 
@@ -181,10 +222,28 @@ function Auto_caughtAxe()
 
 
 		if CanMove() and CheckDistance(x,z) < 300 and CheckDistance(x,z) > 90 then
+			BlockMove()
 			SetLuaMoveOnly(true)
 			MoveToPos(x, z)
 			delay = CheckDistance(x,z) / GetMoveSpeed(UpdateHeroInfo())
 			time1 = GetTimeGame()
+		end
+	end
+
+end
+
+function Auto_caughtAxe_combo()
+	if Axe ~= 0 then
+
+		local x= GetPosX(Axe.Addr)
+		local z= GetPosZ(Axe.Addr)
+
+		if CanMove() and CheckDistance(x,z) < 300 and CheckDistance(x,z) > 90 then
+			SetLuaMoveOnly(true)
+			MoveToPos(x, z)
+			delay = CheckDistance(x,z) / GetMoveSpeed(UpdateHeroInfo())
+			time1 = GetTimeGame()
+
 		end
 	end
 
@@ -233,18 +292,22 @@ end
 
 
 function Combo()
-	local Target = GetTarget()
+	local Target = GetTarget(1200)
 
 	if QReady() and ValidTarget(Target) and Setting_IsComboUseQ() and CanMove() then
 		CastQ(Target)
 	end
 
-	if EReady() and ValidTarget(Target) and Setting_IsComboUseE() and CanMove() then
-		CastE(Target)
+	if config_Auto_caughtAxe then
+		Auto_caughtAxe_combo()
 	end
 
 	if WReady() and ValidTarget(Target) and Setting_IsComboUseW() and CanMove() then
 		CastW(Target)
+	end
+
+	if EReady() and ValidTarget(Target) and Setting_IsComboUseE() and CanMove() then
+		CastE(Target)
 	end
 
 	if RReady() and ValidTarget(Target) and Setting_IsComboUseR() and CanMove() then

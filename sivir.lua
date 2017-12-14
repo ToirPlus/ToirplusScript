@@ -17,9 +17,6 @@ function UpdateHeroInfo()
 end
 
 
-
-
-
 local Q = 0
 local W = 1
 local E = 2
@@ -32,6 +29,12 @@ local VKeyCode = 86
 
 local HarassUseMana = 60
 local LaneClearUseMana = 60
+
+local config_AutoE = true
+
+if GetChampName(UpdateHeroInfo()) == "Sivir" then
+	config_AutoE  = AddMenuCustom(1, config_AutoE, "Auto E")
+end
 
 local SpellQ = {Speed = 1350, Range = 1075, Delay = 0.250, Width = 85}
 local SpellQ2 = {Speed = 1350, Range = 1100, Delay = 1.04, Width = 90}
@@ -155,12 +158,50 @@ function RReady()
 	return CanCast(R)
 end
 
-function GetTarget()
-	return GetEnemyChampCanKillFastest(1100)
+local priorityTable = {
+    p5 = {"Alistar", "Amumu", "Blitzcrank", "Braum", "ChoGath", "DrMundo", "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu","Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona","Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"},
+    p4 = {"Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax","LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain","Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"},
+    p3 = {"Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin","Kayle", "KhaZix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo","Zilean"},
+    p2 = {"Ahri", "Anivia", "Annie",  "Brand",  "Cassiopeia", "Karma", "Karthus", "Katarina", "Kennen", "Sejuani",  "Lux", "Malzahar", "MasterYi", "Orianna", "Syndra", "Talon",  "TwistedFate", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed", "Ziggs", "Zoe" },
+    p1 = {"Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "KogMaw", "Lucian", "MissFortune", "Quinn", "Sivir", "Teemo", "Tristana", "Twitch", "Varus", "Vayne", "Xayah"},
+}
+
+function GetTarget(range)
+	SearchAllChamp()
+	local Enemies = pObjChamp
+	for i, enemy in pairs(Enemies) do
+        if enemy ~= 0 and ValidTargetRange(enemy,range) then
+			if priorityTable.p1[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p2[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p3[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p4[GetChampName(enemy)] then
+				return enemy
+			end
+			if priorityTable.p5[GetChampName(enemy)] then
+				return enemy
+			end
+		end
+	end
+
+	return GetEnemyChampCanKillFastest(range)
+end
+
+function OnPlayAnimation(unit, action)
+
+end
+
+function OnDoCast(unit, spell)
+
 end
 
 function OnLoad()
-	__PrintTextGame("Sivir v1.0 loaded")
+	--__PrintTextGame("Sivir v1.0 loaded")
 end
 
 function OnUpdate()
@@ -176,6 +217,14 @@ function OnRemoveBuff(unit, buff)
 end
 
 function OnProcessSpell(unit, spell)
+	if GetChampName(UpdateHeroInfo()) ~= "Sirvir" then return end
+	if EReady() and ValidTargetRange(unit.Addr, 1500) and config_AutoE then
+		if spell then
+			if E_SPELLS[spell.Name] and not unit.IsMe then
+				CastSpellTarget(UpdateHeroInfo(), E)
+			end
+		end
+	end
 end
 
 function OnCreateObject(unit)
@@ -184,24 +233,28 @@ end
 function OnDeleteObject(unit)
 end
 
+function OnWndMsg(msg, key)
+
+end
+
 function OnTick()
 	if GetChampName(UpdateHeroInfo()) ~= "Sivir" then return end
 
 	if IsDead(UpdateHeroInfo()) then return end
 
-	local nKeyCode = GetKeyCode()
+	if IsTyping() then return end
 
-	if nKeyCode == SpaceKeyCode then
+	if GetKeyPress(SpaceKeyCode) == 1 then
 		SetLuaCombo(true)
 		Combo()
 	end
 
-	if nKeyCode == CKeyCode then
+	if GetKeyPress(CKeyCode) == 1 then
 		SetLuaHarass(true)
 		Harass()
 	end
 
-	if nKeyCode == VKeyCode then
+	if GetKeyPress(VKeyCode) == 1 then
 		Farm()
 	end
 
@@ -235,14 +288,7 @@ function ValidTargetRange(Target, Range)
 end
 
 function Combo()
-
-	if Setting_IsComboUseE() then
-		if EReady() then
-			AutoE()
-		end
-	end
-
-	local Target = GetTarget()
+	local Target = GetTarget(1100)
 
 	if Target ~= 0 then
 		if ValidTarget(Target) then
@@ -254,51 +300,35 @@ function Combo()
 		end
 	end
 
-	Target = GetTarget()
 	if Target ~= 0 then
 		if ValidTarget(Target) then
-			if Setting_IsComboUseW() and CanMove() then
-				if WReady() and GetDistance(Target) < 600 then
+			if Setting_IsComboUseW() then
+				if WReady() and GetDistance(Target) < GetAttackRange(UpdateHeroInfo()) + GetOverrideCollisionRadius(UpdateHeroInfo()) and not CanAttack() and CanMove() then
 					CastSpellTarget(UpdateHeroInfo(), W)
+					SetLuaBasicAttackOnly(true)
+					BasicAttack(Target)
+					SetLuaBasicAttackOnly(false)
 				end
 			end
 		end
 	end
 
-	Target = GetTarget()
-
-	KS(Target)
-
-end
-
-function AutoE()
-	SearchAllChamp()
-	local Enemies = pObjChamp
-	for i, enemy in ipairs(Enemies) do
-		if enemy ~= 0 then
-			if ValidTargetRange(enemy, 1500) and GetDistance(enemy) >= 475 then
-				local spell = GetSpellCasting(enemy)
-				if spell ~= 0 then
-					--__PrintDebug(GetName_Casting(spell))
-					if E_SPELLS[GetName_Casting(spell)] then
-						CastSpellTarget(UpdateHeroInfo(), E)
-					end
-				end
-			end
-		end
+	if Target ~= 0 then
+		KS(Target)
 	end
+
 end
 
 function KS(Target)
 	if Target ~= 0 then
-		if QReady() and CanMove() and getDmg(Q, Target) > GetHealthPoint(Target) then
+		if QReady() and CanMove() and getDmg(Q, Target) > GetHealthPoint(Target) and GetDistance(Target) < SpellQ.Range then
 			CastQ(Target)
 		end
 	end
 end
 
 function Harass()
-	local Target = GetTarget()
+	local Target = GetTarget(1100)
 
 	if Target ~= 0 then
 		if ValidTarget(Target) then
@@ -377,10 +407,12 @@ function Farm()
 
 		jungle = GetJungleMonster(1100)
 		if jungle ~= 0 then
-			if WReady() and not IsMyManaLowLaneClear() and CanMove() then
-				if ValidTargetJungle(jungle) and GetDistance(jungle) < SpellQ.Range then
+			if WReady() and not IsMyManaLowLaneClear() and not CanAttack() and CanMove() then
+				if ValidTargetJungle(jungle) and GetDistance(jungle) < GetAttackRange(UpdateHeroInfo()) + GetOverrideCollisionRadius(UpdateHeroInfo()) then
 					CastSpellTarget(UpdateHeroInfo(), W)
-
+					SetLuaBasicAttackOnly(true)
+					BasicAttack(jungle)
+					SetLuaBasicAttackOnly(false)
 				end
 			end
 		end
@@ -393,11 +425,31 @@ function Farm()
 
 	GetAllUnitAroundAnObject(UpdateHeroInfo(), 1100)
 	local Enemies = pUnit
-	if WReady() and table.getn(Enemies) > 3 and Setting_IsLaneClearUseW() and not IsMyManaLowLaneClear() then
-		CastSpellTarget(UpdateHeroInfo(), W)
+	if WReady() and table.getn(Enemies) > 3 and Setting_IsLaneClearUseW() then
+		local minion = GetMinion()
+		if minion ~= 0 and GetDistance(minion) < GetAttackRange(UpdateHeroInfo()) + GetOverrideCollisionRadius(UpdateHeroInfo()) and not CanAttack() and CanMove() then
+			CastSpellTarget(UpdateHeroInfo(), W)
+			SetLuaBasicAttackOnly(true)
+			BasicAttack(minion)
+			SetLuaBasicAttackOnly(false)
+		end
 	end
 end
 
+function GetMinion()
+	GetAllUnitAroundAnObject(UpdateHeroInfo(), 1000)
+
+	local Enemies = pUnit
+	for i, minion in pairs(Enemies) do
+		if minion ~= 0 then
+			if IsMinion(minion) and IsEnemy(minion) and not IsDead(minion) and not IsInFog(minion) and GetTargetableToTeam(minion) == 4 then
+				return minion
+			end
+		end
+	end
+
+	return 0
+end
 
 function FarmQ()
 	GetAllUnitAroundAnObject(UpdateHeroInfo(), 1100)
