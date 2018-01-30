@@ -14,4 +14,3 @@ https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotThresh.lua#B5
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTristana.lua#DF369C32D537D0477CEB887D38780739#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTwitch.lua#810981E467A93F9667713237D577228D#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/Lib/TOIR_SDK.lua#69DF2CBCE7E943C18A30DF85FE1F0DDB#Lib
-https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Rengar.lua
