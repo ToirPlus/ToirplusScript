@@ -1,1 +1,16 @@
-
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotAshe.lua#EB0D7A679CD5F536DCE3A251788A16EC#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotBaseult.lua#0C2C4C823C2BE1D4D62DDE28CC308056#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotBlitzcrank.lua#4C7DB64519BCAECAF1055C0FAB8CB87A#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotCaitlyn.lua#6FFC642982599444A7341C844D7BBA8F#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotCorki.lua#34B1A8D22C32ADBB4E6F3FD4EA914F52#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotDraven.lua#CBCEE8B94FBD7BB8F47D1BB4D2E0A866#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotEzreal.lua#C21553EF499B4A5A00A2A68C4112BA93#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotGraves.lua#14F5150DA579B3A4C200257409319E4F#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotJinx.lua#D39129D6132EA196D37DE6456DD2CCBC#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotLucian.lua#961911DF5975501C47720B1C64FD1820#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotMissFortune.lua#97F232C59C9F5D9E76B88DAE6E998503#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotSmite.lua#5C3E46E7AEA6DA0FAEE8B64D3FF9ED31#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotThresh.lua#B526FBD28E293E9BB61930BD2FD9D91D#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTristana.lua#DF369C32D537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTwitch.lua#810981E467A93F9667713237D577228D#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/Lib/TOIR_SDK.lua#69DF2CBCE7E943C18A30DF85FE1F0DDB#Lib
