@@ -13,6 +13,6 @@ https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotSmite.lua#5C3
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotThresh.lua#B526FBD28E293E9BB61930BD2FD9D91D#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTristana.lua#DF369C32D537D0477CEB887D38780739#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTwitch.lua#810981E467A93F9667713237D577228D#Scripts
-https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/Lib/TOIR_SDK.lua#69DF2CBCE7E943C18A30DF85FE1F0DDB#Lib
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/Lib/TOIR_SDK.lua#0A22B83716B4DFA7D60B1F3DEB2F1936#Lib
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Rengar.lua#DF369C32E537D0477CEB887D38780739#Scripts
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Ezreal.lua#DF369C32E537D0577CEB887D38780739#Scripts
