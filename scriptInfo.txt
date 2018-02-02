@@ -14,5 +14,16 @@ https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotThresh.lua#8E
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTristana.lua#4437096825E98C7ABB2F16BCE8A84949#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTwitch.lua#50D47BB80D2D213CB999E947EEB83DC5#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/Lib/TOIR_SDK.lua#CD7D858A3C9D4F61263736C41187F9E6#Lib
+https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Lib/SDK.lua#CD7D858A3C9D4F61263736C41187F9E6#Lib
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Rengar.lua#DF369C32E537D0477CEB887D38780739#Scripts
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Ezreal.lua#DF369C32E537D0577CEB887D38780739#Scripts
+https://raw.githubusercontent.com/Nikruto/Toir_Plus/master/NeafXerath.lua#DF369C32E537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/Nautilus.lua#DF369C32E537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/Nasus.lua#DF369C32E537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/Nechrito/Toir/master/Scripts/NechritoVayne.lua#DF369C32E537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Irelia.lua#DF369C32E537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Lulu.lua#DF369C32E537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/adminzhou/toirplus/master/Janna/Janna.lua#DF369C32E537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/adminzhou/toirplus/master/Soraka/Soraka.lua#DF369C32E537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Urgot.lua#DF369C32E537D0477CEB887D38780739#Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Evelynn.lua#DF369C32E537D0477CEB887D38780739#Scripts
