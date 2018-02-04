@@ -4,7 +4,7 @@ https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotBlitzcrank.lu
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotCaitlyn.lua#8782EABC36CA7F50BB6144B2E7B31389#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotCorki.lua#A9958D9E795A81E95ED11DD6931DFD37#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotDraven.lua#F1C725D16689C54ECFFA448DF33C896C#Scripts
-https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotEzreal.lua#26979434D8E8020BC3B3503A4B25A447#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotEzreal.lua#20991B9236CCCE9546E3A1A45E27AC22#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotGraves.lua#7DA150B8A77C0B0F32A5815A74C50DE8#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotJinx.lua#599FA5951A542CFBE7A746D73D876BD4#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotLucian.lua#EDD367581BB0E863BF59F1248398293A#Scripts
@@ -14,7 +14,7 @@ https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotSivir.lua#2ad
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotThresh.lua#8EB0FC81AFA353A5237F76E0901F3251#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTristana.lua#4437096825E98C7ABB2F16BCE8A84949#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTwitch.lua#50D47BB80D2D213CB999E947EEB83DC5#Scripts
-https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/Lib/TOIR_SDK.lua#CD7D858A3C9D4F61263736C41187F9E6#Lib
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/Lib/TOIR_SDK.lua#F342E61A1FC41443E8D814C12AEC91E4#Lib
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Lib/SDK.lua#CEF08C31342622DC6240D4DAD2D004D8#Lib
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Rengar.lua#0C55B2074CDE2CC3CCD559F374AFAB89#Scripts
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Ezreal.lua#0437D91B157363AA4FBE89BD4E610E68#Scripts
