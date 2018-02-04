@@ -10,7 +10,7 @@ https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotJinx.lua#599F
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotLucian.lua#EDD367581BB0E863BF59F1248398293A#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotMissFortune.lua#CF020C5B71B383B780D4ED9AA80F5331#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotSmite.lua#5C3E46E7AEA6DA0FAEE8B64D3FF9ED31#Scripts
-https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotSivir.lua#2AD4B13017AA5764216DA736B9F55172#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotSivir.lua#0000000#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotThresh.lua#8EB0FC81AFA353A5237F76E0901F3251#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTristana.lua#4437096825E98C7ABB2F16BCE8A84949#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTwitch.lua#50D47BB80D2D213CB999E947EEB83DC5#Scripts
