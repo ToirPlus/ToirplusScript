@@ -22,6 +22,8 @@ https://raw.githubusercontent.com/Nikruto/Toir_Plus/master/NeafXerath.lua#2CF4ED
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Nautilus.lua#F46044E8C661E100B2CE5B0B3F7343B9#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Nasus.lua#252B67526069E4C0BDCDF4537113FB6B#Scripts
 https://raw.githubusercontent.com/Nechrito/Toir/master/Scripts/NechritoVayne.lua#A6AA55B2A66261211FC4947084F7AEF8#Scripts
+https://raw.githubusercontent.com/Nechrito/Toir/master/Scripts/NechritoTristana.lua#A6AA55B2A66261211FC4947084F7AEF8#Scripts
+https://raw.githubusercontent.com/Nechrito/Toir/master/Scripts/NechritoDraven.lua#A6AA55B2A66261211FC4947084F7AEF8#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Irelia.lua#1A7FA91250C0E86218F438E2A80C1A34#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Lulu.lua#ED5AC5B0CE0ADB0BF29B6BD6CAD4D7CC#Scripts
 https://raw.githubusercontent.com/adminzhou/toirplus/master/Janna/Janna.lua#F53CCE0884534BBC4530749228851E56#Scripts
