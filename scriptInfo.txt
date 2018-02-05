@@ -16,7 +16,7 @@ https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTristana.lua#
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTwitch.lua#662eb25ebb45460ec758e825e3f3ac31#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/Lib/TOIR_SDK.lua#E9535FC1E3D9D2013FC236C5489A6FD9#Lib
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Lib/SDK.lua#CEF08C31342622DC6240D4DAD2D004D8#Lib
-https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Rengar.lua#0C55B2074CDE2CC3CCD559F374AFAB89#Scripts
+https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Rengar.lua#21c44a1e41b03b24f24ce47be40fadcc#Scripts
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Ezreal.lua#0437D91B157363AA4FBE89BD4E610E68#Scripts
 https://raw.githubusercontent.com/Nikruto/Toir_Plus/master/NeafXerath.lua#2CF4EDCE32BF9F2310A8E30F1D800A43#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Nautilus.lua#F46044E8C661E100B2CE5B0B3F7343B9#Scripts
