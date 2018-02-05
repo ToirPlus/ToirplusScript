@@ -1,7 +1,7 @@
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotAshe.lua#52c9903825f93c43912156a4acc80b7c#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotBaseult.lua#0C2C4C823C2BE1D4D62DDE28CC308056#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotBlitzcrank.lua#89778402ef1a1a75e1390e69ec90f238#Scripts
-https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotCaitlyn.lua#bfbd0a6c9c322b697b514e2192e74631#Scripts
+https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotCaitlyn.lua#86cbfd5cb72fc3631b994ee5666a63a5#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotCorki.lua#f4f3d63d05e5b2e5cdbbb45098669810#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotDraven.lua#575ca0cb8cdcb322178e734eace0cc47#Scripts
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotEzreal.lua#ba7960260c55ef86fb4b958910dbc862#Scripts
