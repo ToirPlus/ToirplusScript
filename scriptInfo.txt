@@ -20,6 +20,7 @@ https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Lib/SDK.lua#CEF
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Rengar.lua#21c44a1e41b03b24f24ce47be40fadcc#Scripts
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Ezreal.lua#0437D91B157363AA4FBE89BD4E610E68#Scripts
 https://raw.githubusercontent.com/Nikruto/Toir_Plus/master/NeafXerath.lua#2CF4EDCE32BF9F2310A8E30F1D800A43#Scripts
+https://raw.githubusercontent.com/Nikruto/Toir_Plus/master/NeafAwaraness.lua#36C19E57D01C6ED4FED6632FC93E8482#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Nautilus.lua#F46044E8C661E100B2CE5B0B3F7343B9#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Nasus.lua#252B67526069E4C0BDCDF4537113FB6B#Scripts
 https://raw.githubusercontent.com/Nechrito/Toir/master/Scripts/NechritoVayne.lua#66be0c399d2c90ea70c15f1133544e3a#Scripts
