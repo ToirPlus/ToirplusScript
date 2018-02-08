@@ -334,20 +334,6 @@ IsValidTarget = function(unit, range)
         return unit and not unit.IsDead and unit.IsVisible and not unit.IsInvulnerable and distance <= range
 end
 
-WorldToScreen = function(x, y, z)
-        local r1, r2 = 0, 0
-
-        if not x then
-                return Vector(r1, r2)
-        elseif not y then
-                r1, r2 = WorldToScreen(x.x, x.y, x.z)
-                return Vector(r1, r2)
-        else
-                r1, r2 = WorldToScreen(x, y, z)
-                return Vector(r1, r2)
-        end
-end
-
 VectorPointProjectionOnLineSegment = function(v1, v2, v)
         local cx, cy, ax, ay, bx, by = v.x, (v.z or v.y), v1.x, (v1.z or v1.y), v2.x, (v2.z or v2.y)
         local rL = ((cx - ax) * (bx - ax) + (cy - ay) * (by - ay)) / ((bx - ax) ^ 2 + (by - ay) ^ 2)
