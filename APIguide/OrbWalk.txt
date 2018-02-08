@@ -1,0 +1,12 @@
+float 	GetLastBATick()
+bool  	CanMove()
+bool  	CanAttack()
+
+float GetHealthPred(target, time, delay)
+float LaneClearHealthPred(target, time, delay)
+int   GetTargetOrb()
+int   GetTargetSelector(range, dmgType) -- DmgMagical  = 0, DmgPhysical = 1,
+bool  IsForcedTarget()
+void  SetForcedTarget(target)
+void  SetOrbwalkingPoint(x, z)
+int   GetTargetSelected()

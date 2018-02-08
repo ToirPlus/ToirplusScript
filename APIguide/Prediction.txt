@@ -1,0 +1,40 @@
++ local castPosX, castPosZ, unitPosX, unitPosZ, hitChance, _aoeTargetsHitCount
+					= GetPredictionCore(unitAddr, type, delay, radius, range, speed, fromX, fromZ, aoe, collision, limitCollision, collistionType_1, collistionType_2, collistionType_3, collistionType_4, collistionType_5)
+			
+				-- type		: 0=SkillshotLine, 1=SkillshotCircle, 2=SkillshotCone
+				-- radius	: SkillshotCone: radius=angleCone 
+				-- speed	: if(speed == 0) speed = FLT_MAX
+				-- aoe		: true/false
+				-- collision: true/false
+				-- limitCollision : (Lux-Q limitCollision=2, almost = 1)
+				-- collistionType_1,2,3,4,5 : type collistion, 0=Minions, 1=Heroes, 2=YasuoWall, 3=Walls, 4=Allies, 5=none
+				
+				-- hitChance:   Immobile = 8,			///     The target is immobile.
+								Dashing = 7,			///     The unit is dashing.
+								VeryHigh = 6,			///     Very high probability of hitting the target.
+								High = 5,				///     High probability of hitting the target.
+								Medium = 4,				///     Medium probability of hitting the target.
+								Low = 3,				///     Low probability of hitting the target.
+								Impossible = 2,			///     Impossible to hit the target.
+								OutOfRange = 1,			///     The target is out of range.
+								Collision = 0			///     The target is blocked by other units.
+	
+				
++ table CreatePathWays(unitAddr, startX, startY, startZ, endX, endY, endZ, isSmoothPath)
+				return table "pathWays":
+					  
++ local x,y,z = GetPathWayPos(int pos)		
+				local m_Hero = GetMyHero()
+				local xMous,yMous,zMous = GetMousePos()
+				CreatePathWays(GetMyChamp(), m_Hero.x, m_Hero.y, m_Hero.z, xMous, yMous, zMous)
+				for k,v in pairs(pathWays) do
+					if v ~= 0 then 
+						local x, y, z = GetPathWayPos(v)
+						DrawCircleGame(x, y, z, 50, Lua_ARGB(155, 30, 150, 0))
+					end
+				end
+
++ int CountCollision(unitAddrExcept, fromX, fromZ, toX, toZ, delay, radius, range, speed, collistionType_1, collistionType_2, collistionType_3, collistionType_4, collistionType_5)
+				--collistionType_1,2,3,4,5 : type collistion, 0=Minions, 1=Heroes, 2=YasuoWall, 3=Walls, 4=Allies, 5=none
+				
++ bool IsAttacked() -- by skill only

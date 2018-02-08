@@ -48,6 +48,7 @@ float GetGold(int pObject)
 int GetEnemyID(int pObject)
 int GetLevel(int pObject)
 
+float GetBoundingRadius(pObject)
 float GetOverrideCollisionRadius(int pObject)
 int GetTargetable(int pObject)
 int GetTargetableToTeam(int pObject)

@@ -1,0 +1,69 @@
+int  Lua_ARGB(alpha, r, g, b)
+
+void DrawCircleMiniMap(x, y, z, radius) 
+void DrawCircleGame(x, y, z, fRadius, nColor)
+void DrawLineGame(x1, y1, z1, x2, y2, z2, fRadius)
+
+local a,b =  GetHealthBarPos(pObj)
+local a,b =  WorldToMiniMap(x, y, z)
+local a,b =  WorldToScreen(x, y, z)
+
+void DrawLineD3DX(x1, y1, x2, y2, width, int nColor)
+void DrawBorderBoxD3DX(x, y, w, h, fThickness, nColor)
+void DrawTextD3DX(x, y, szText, nColor, nFontHeight)		-- 1:small, 2:normal, 3:big
+
+---- Menu ---------------------------------------------------------------------
+int  GetCurrentLanguage()
+void Menu_Separator()
+void Menu_SameLine()
+void Menu_Text("text")
+void Menu_TextColor(a,r,g,b, "text")
+void Menu_ToolTip("text")
+
+bool Menu_Begin("text")
+void Menu_End()
+
+bool  Menu_Bool("text", value, "sectionText")	-- "sectionText" save to ini file
+float Menu_SliderFloat("text", value, minValue, maxValue, "sectionText")
+int   Menu_SliderInt("text", value, minValue, maxValue, "sectionText")
+int   Menu_KeyBinding("text", keyCode, "sectionText")
+int   Menu_ComboBox("text", index, "listItem","sectionText") -- listItem : "Yes\0ofCourse\0No\0May be\0\0"
+
+bool  ReadIniBoolean("sectionText", "textKey", valueDefault)
+int   ReadIniInteger("sectionText", "textKey", valueDefault)
+float ReadIniFloat("sectionText", "textKey", valueDefault)
+
+
+		local testBool       = ReadIniBoolean("sectionIni_Test", "MenuBoolTest", true)
+		local testFloat      = ReadIniFloat("sectionIni_Test", "SliderFloatTest", 223)
+		local testInt        = ReadIniInteger("sectionIni_Test", "SliderIntTest", 7)
+		local testKeyBinding = ReadIniInteger("sectionIni_Test", "KeyBindingTest", 32) -- space
+		local testComboBox   = ReadIniInteger("sectionIni_Test", "ComboBoxTest", 2)	 
+		
+		if Menu_Begin("Orbwalking") then
+			if Menu_Begin("Hello ok") then
+				Menu_Text("Hello how are you?")
+				
+				testBool	   = Menu_Bool("MenuBoolTest", testBool, "sectionIni_Test")
+				testFloat	   = Menu_SliderFloat("SliderFloatTest", testFloat, 0, 1000, "sectionIni_Test")
+				testInt		   = Menu_SliderInt("SliderIntTest", testInt, 0, 10, "sectionIni_Test")
+				testKeyBinding = Menu_KeyBinding("KeyBindingTest", testKeyBinding, "sectionIni_Test")
+				testComboBox   = Menu_ComboBox("ComboBoxTest", testComboBox, "Yes\0ofCourse\0No\0May be\0\0","sectionIni_Test") -- listItem : "Yes\0ofCourse\0No\0May be\0\0"
+				
+				Menu_End()
+			end
+			Menu_Text("EL: abc def ghijklrtyui")
+			Menu_SameLine()
+			Menu_ToolTip("??????????????")
+			Menu_Separator()
+			Menu_Text("CN: ??????????????")
+			Menu_Text("BR: dos sóes não evisão! preço ca foi tão")
+			Menu_TextColor(Lua_ARGB(255, 250, 250, 0), "CN: ??????????????")
+			Menu_End()
+	    end
+
+
+
+
+
+

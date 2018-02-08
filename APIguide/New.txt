@@ -1,0 +1,12 @@
+- EditFunc : 
+			 + table CreatePathWays(unitAddr, startX, startY, startZ, endX, endY, endZ, isSmoothPath)			
+			 + int CountCollision(unitAddrExcept, fromX, fromZ, toX, toZ, delay, radius, range, speed, collistionType_1, collistionType_2, collistionType_3, collistionType_4, collistionType_5)
+			 --collistionType_1,2,3,4,5 : type collistion, 0=Minions, 1=Heroes, 2=YasuoWall, 3=Walls, 4=Allies, 5=none
+				  
+
+				
+				
+				
+				
+				
+				

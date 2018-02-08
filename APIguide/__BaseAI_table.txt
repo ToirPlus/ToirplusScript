@@ -72,6 +72,10 @@
 					myHero.StackSpell(_W)
 					myHero.StackSpell(_E)
 					myHero.StackSpell(_R)
+					myHero.SpellState(_Q / _W / _E / _R)
+					myHero.SpellAmmo(_Q / _W / _E / _R)
+					myHero.SpellToggle(_Q / _W / _E / _R)
+					myHero.SpellCD(_Q / _W / _E / _R)
 					myHero.Windup
 					myHero.CDBA
 					myHero.CDBAExpires
@@ -154,6 +158,10 @@
 					enemyHero.LevelSpell(_W)
 					enemyHero.LevelSpell(_E)
 					enemyHero.LevelSpell(_R)
+					enemyHero.SpellState(_Q / _W / _E / _R)
+					enemyHero.SpellAmmo(_Q / _W / _E / _R)
+					enemyHero.SpellToggle(_Q / _W / _E / _R)
+					enemyHero.SpellCD(_Q / _W / _E / _R)
 					enemyHero.Windup
 					enemyHero.CDBA
 					enemyHero.CDBAExpires

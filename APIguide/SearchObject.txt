@@ -77,3 +77,5 @@ int CountObjectCollision(int nMode, int pEnemyObj, float fStartPosX, float fStar
 			end
 		end
 - int GetJungleMonster(float fRange)
+- int GetTargetById(nID)
+- int GetTargetByNetworkId(networkID)

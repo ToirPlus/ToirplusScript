@@ -1,3 +1,0 @@
-float 	GetLastBATick()
-bool  	CanMove()
-bool  	CanAttack()
