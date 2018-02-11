@@ -18,8 +18,8 @@ https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/CttbotTwitch.lua#66
 https://raw.githubusercontent.com/cttbot/TOIR/master/Scripts/Lib/TOIR_SDK.lua#E9535FC1E3D9D2013FC236C5489A6FD9#Lib
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Lib/SDK.lua#97FF6192F50528B9677EEC4FDC1E8927#Lib
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Rengar.lua#21c44a1e41b03b24f24ce47be40fadcc#Scripts
-https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Ezreal.lua#0437D91B157363AA4FBE89BD4E610E68#Scripts
-https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Orianna.lua#6FAF7F7B64F32C71171E112812CDA684#Scripts
+https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Ezreal.lua#5fc16268dd1345283755897180702240#Scripts
+https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Orianna.lua#6faf7f7b64f32c71171e112812cda684#Scripts
 https://raw.githubusercontent.com/Nikruto/Toir_Plus/master/NeafXerath.lua#2CF4EDCE32BF9F2310A8E30F1D800A43#Scripts
 https://raw.githubusercontent.com/Nikruto/Toir_Plus/master/NeafAwaraness.lua#36C19E57D01C6ED4FED6632FC93E8482#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Nautilus.lua#F46044E8C661E100B2CE5B0B3F7343B9#Scripts
