@@ -20,6 +20,7 @@ https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Lib/SDK.lua#97F
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Rengar.lua#21c44a1e41b03b24f24ce47be40fadcc#Scripts
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Ezreal.lua#5fc16268dd1345283755897180702240#Scripts
 https://raw.githubusercontent.com/diabaths/ToirPlus/master/D-Orianna.lua#6faf7f7b64f32c71171e112812cda684#Scripts
+https://raw.githubusercontent.com/JaceNithy/New-SDK-/master/Competitive%20Jhin.lua#00000000000#Scripts
 https://raw.githubusercontent.com/Nikruto/Toir_Plus/master/NeafXerath.lua#2CF4EDCE32BF9F2310A8E30F1D800A43#Scripts
 https://raw.githubusercontent.com/Nikruto/Toir_Plus/master/NeafAwaraness.lua#36C19E57D01C6ED4FED6632FC93E8482#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Nautilus.lua#F46044E8C661E100B2CE5B0B3F7343B9#Scripts
