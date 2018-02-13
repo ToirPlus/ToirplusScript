@@ -191,9 +191,9 @@ function Ezreal:OnTick()
 		if GetKeyPress(self.Harass) > 0		then
 			self:EzrealHarass()	end
 
-	  if GetKeyPress(self.Combo) <= 0 or GetKeyPress(self.Harass) <= 0 or GetKeyPress(self.Lane_Clear) <= 0 or GetKeyPress(self.Jungle_Clear) <= 0 then
-	 	self:StuckTear()
-	  	end
+			if GetKeyPress(self.Combo) <= 0 and GetKeyPress(self.Harass) <= 0 and GetKeyPress(self.Lane_Clear) <= 0 and GetKeyPress(self.Jungle_Clear) <= 0 then
+  	 	self:StuckTear()
+  	  	end
 
 		self:EzrealFarmQ()
 		self:OnImmobile()
@@ -438,19 +438,19 @@ function Ezreal:KillSteal()
 		  	local wDmg = GetDamage("W", targetkill)
 				local rDmg = GetDamage("R", targetkill)
   	    	if CanCast(_Q) and targetkill ~= 0 and IsValidTarget(targetkill, self.Q.range) and self.KillstealQ and qDmg >targetkill.HP then
-							local CastPosition, HitChance, Position = self:GetQPrediction(target)
+							local CastPosition, HitChance, Position = self:GetQPrediction(targetkill)
 							if HitChance >= 6  then
 					 				CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
 				 				end
 							end
 		    	if CanCast(_W) and targetkill ~= 0 and IsValidTarget(targetkill, self.W.range) and self.KillstealW  and wDmg > targetkill.HP then
-						local CastPosition, HitChance, Position = self:GetWPrediction(target)
+						local CastPosition, HitChance, Position = self:GetWPrediction(targetkill)
 						if HitChance >= 6  then
 								CastSpellToPos(CastPosition.x, CastPosition.z, _W)
 							end
 						end
-				 if CanCast(_R)  and self.KillstealR and rDmg * 0.8 > targetkill.HP and IsValidTarget(targetkill, self.R.range - 150) and CountEnemyChampAroundObject(myHero.Addr, 800) == 0 then
-					 local CastPosition, HitChance, Position = self:GetRPrediction(target)
+				 if CanCast(_R)  and self.KillstealR and rDmg * 0.8 > targetkill.HP and IsValidTarget(targetkill, self.R.range) and CountEnemyChampAroundObject(myHero.Addr, 800) == 0 then
+					 local CastPosition, HitChance, Position = self:GetRPrediction(targetkill)
 					 if HitChance >= 6  then
 							 CastSpellToPos(CastPosition.x, CastPosition.z, _R)
 						 end
