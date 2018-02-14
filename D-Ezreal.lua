@@ -280,7 +280,7 @@ function Ezreal:OnAttack(unit, target)
 					local minion = GetUnit(minions)
 					if CanCast(_Q) and self.lane_q and myHero.MP / myHero.MaxMP * 100 > self.lane_mana and IsValidTarget(minion.Addr, self.Q.range) and minion.NetworkId ~= GetIndex(orbTarget) then
 						local delay = GetDistance(orbTarget) / self.Q.speed + self.Q.delay
-						local minionHP = GetHealthPred(minion.Addr, delay, 0.07)
+						local minionHP = GetHealthPred(minion.Addr, delay, 0.10)
 						local qdmg = GetDamage("Q", minion)
 						local aadmg = GetAADamageHitEnemy(minion)
 						local Collision = CountObjectCollision(0, minion.Addr, myHero.x, myHero.z, minion.x, minion.z, self.Q.width, self.Q.range, 65)
@@ -309,7 +309,10 @@ function Ezreal:OnAfterAttack(unit, target)
 		 if hero ~= nil then
 			 ally = GetAIHero(hero)
 			 if  GetDistance(ally.Addr) < 600 and not ally.IsMe and not ally.IsDead then
-				 CastSpellToPos(ally.x, ally.z, _W)
+				 local CastPosition, HitChance, Position = self:GetWPrediction(ally)
+				 if HitChance >= 6  then
+						 CastSpellToPos(CastPosition.x, CastPosition.z, _W)
+					 end
 			 end
 		 end
 	 end
@@ -437,6 +440,7 @@ function Ezreal:KillSteal()
 		  	local qDmg = GetDamage("Q", targetkill)
 		  	local wDmg = GetDamage("W", targetkill)
 				local rDmg = GetDamage("R", targetkill)
+				local targetHP = GetHealthPred(targetkill.Addr, delay, 0.10)
   	    	if CanCast(_Q) and targetkill ~= 0 and IsValidTarget(targetkill, self.Q.range) and self.KillstealQ and qDmg >targetkill.HP then
 							local CastPosition, HitChance, Position = self:GetQPrediction(targetkill)
 							if HitChance >= 6  then
@@ -449,7 +453,7 @@ function Ezreal:KillSteal()
 								CastSpellToPos(CastPosition.x, CastPosition.z, _W)
 							end
 						end
-				 if CanCast(_R)  and self.KillstealR and rDmg * 0.8 > targetkill.HP and IsValidTarget(targetkill, self.R.range) and CountEnemyChampAroundObject(myHero.Addr, 800) == 0 then
+				 if CanCast(_R)  and self.KillstealR and rDmg * 0.8 > qdmg >= targetHP and IsValidTarget(targetkill, self.R.range) and CountEnemyChampAroundObject(myHero.Addr, 800) == 0 then
 					 local CastPosition, HitChance, Position = self:GetRPrediction(targetkill)
 					 if HitChance >= 6  then
 							 CastSpellToPos(CastPosition.x, CastPosition.z, _R)
