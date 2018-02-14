@@ -453,7 +453,7 @@ function Ezreal:KillSteal()
 								CastSpellToPos(CastPosition.x, CastPosition.z, _W)
 							end
 						end
-				 if CanCast(_R)  and self.KillstealR and rDmg * 0.8 > qdmg >= targetHP and IsValidTarget(targetkill, self.R.range) and CountEnemyChampAroundObject(myHero.Addr, 800) == 0 then
+				 if CanCast(_R)  and self.KillstealR and rDmg * 0.8 > targetHP and IsValidTarget(targetkill, self.R.range) and CountEnemyChampAroundObject(myHero.Addr, 800) == 0 then
 					 local CastPosition, HitChance, Position = self:GetRPrediction(targetkill)
 					 if HitChance >= 6  then
 							 CastSpellToPos(CastPosition.x, CastPosition.z, _R)
