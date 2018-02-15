@@ -284,7 +284,7 @@ function Ezreal:OnAttack(unit, target)
 						local qdmg = GetDamage("Q", minion)
 						local aadmg = GetAADamageHitEnemy(minion)
 						local Collision = CountObjectCollision(0, minion.Addr, myHero.x, myHero.z, minion.x, minion.z, self.Q.width, self.Q.range, 65)
-						if  minionHP > 0 and Collision == 0 and (qdmg >= minionHP or  aadmg >= minionHP or qdmg + aadmg >= minionHP ) then
+						if  minionHP > 0 and Collision == 0 and (qdmg >= minionHP - 5 or  aadmg >= minionHP - 5 or qdmg + aadmg >= minionHP - 5 ) then
 									CastSpellToPos(minion.x, minion.z, _Q)
 						end
 					end
