@@ -19,8 +19,8 @@ function Rengar:__init()
 	--TS
     self.menu_ts = TargetSelector(1750, 1, myHero, true, true, true)
 
-		self.Q = Spell(_Q, 525)
-	  self.Q:SetSkillShot(0.25, 1500, 70, false)
+		self.Q = Spell(_Q, 250)
+	  self.Q:SetTargetted()
 
 		self.W = Spell(_W, 500)
 	  self.W:SetTargetted()
@@ -234,7 +234,7 @@ function Rengar:OnTick()
 	function Rengar:OnProcessSpell(unit, spell)
 		local spellName = spell.Name:lower()
 		if unit.IsMe then
-		--__PrintTextGame(spell.Name)
+		__PrintTextGame(spell.Name)
 		end
 		if (GetKeyPress(self.Jungle_Clear) > 0 or GetKeyPress(self.Lane_Clear) > 0) then
 			if unit.IsMe and (spellName == "rengarq" or spellName == "rengarq2") and not CanCast(_E) then
@@ -285,10 +285,7 @@ function Rengar:OnTick()
 			end
 			if unit.IsMe and (spellName == "rengarw" ) then
 				if CanCast(_Q) and IsValidTarget(target, self.Q.range) and self.combo_q then
-					local CastPosition, HitChance, Position = vpred:GetLineCastPosition(target, self.Q.delay, self.Q.width, self.Q.range, self.Q.speed, myHero, false)
-							if HitChance >= 1 then
-								CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
-					end
+					CastSpellTarget(myHero.Addr, _Q)
 				end
 			end
 		end
@@ -336,10 +333,7 @@ end
 								CastSpellTarget(myHero.Addr, titanic)
 					end
 					if CanCast(_Q) and IsValidTarget(target, self.Q.range) and self.combo_q then
-						local CastPosition, HitChance, Position = vpred:GetLineCastPosition(target, self.Q.delay, self.Q.width, self.Q.range, self.Q.speed, myHero, false)
-								if HitChance >= 1 then
-									CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
-								end
+						CastSpellTarget(myHero.Addr, _Q)
 							end
 						end
 					end
@@ -377,10 +371,7 @@ function Rengar:Rengarjungle()
 			target = GetUnit(GetTargetOrb())
 			if myHero.MP ~= 4 then
 				if CanCast(_Q) and self.jungle_q and IsValidTarget(target, self.Q.range) then
-					local CastPosition, HitChance, Position = vpred:GetLineCastPosition(target, self.Q.delay, self.Q.width, self.Q.range, self.Q.speed, myHero, false)
-						if HitChance >= 1 then
-							CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
-						end
+					CastSpellTarget(myHero.Addr, _Q)
 					end
 					if CanCast(_W) and self.jungle_w and IsValidTarget(target, self.W.range) then
 						CastSpellTarget(myHero.Addr, _W)
@@ -394,19 +385,13 @@ function Rengar:Rengarjungle()
 				end
 				if myHero.MP >= 4 then
 					if CanCast(_Q) and self.jungle_q and IsValidTarget(target, self.Q.range) then
-						local CastPosition, HitChance, Position = vpred:GetLineCastPosition(target, self.Q.delay, self.Q.width, self.Q.range, self.Q.speed, myHero, false)
-							if HitChance >= 1 then
-								CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
-							end
+						CastSpellTarget(myHero.Addr, _Q)
 						end
 					end
 				end
 			end
 
 function  Rengar:OnCreateObject(obj)
-	if myHero then
-		--__PrintTextGame(obj.Name)
-	end
 
 	if string.find(obj.Name, "Rengar_Base_P_Buf_Enhanced_Ring.troy")  then
 				self.passiveup = true
@@ -461,10 +446,7 @@ function Rengar:RengarHarass()
 	local Target = GetTargetSelector(1500, 1)
 	target = GetAIHero(Target)
 	if CanCast(_Q) and self.harass_q and IsValidTarget(target, self.Q.range) then
-		local CastPosition, HitChance, Position = vpred:GetLineCastPosition(target, self.Q.delay, self.Q.width, self.Q.range, self.Q.speed, myHero, false)
-				if HitChance >= 1 then
-					CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
-			end
+		CastSpellTarget(myHero.Addr, _Q)
 		end
 		if CanCast(_W) and self.harass_w and IsValidTarget(target, self.W.range) then
  		 CastSpellTarget(myHero.Addr, _W)
@@ -512,10 +494,7 @@ function Rengar:RengarCombo()
 							end
 				end
 				if CanCast(_Q) and self.combo_q and IsValidTarget(target, self.Q.range) then
-					local CastPosition, HitChance, Position = vpred:GetLineCastPosition(target, self.Q.delay, self.Q.width, self.Q.range, self.Q.speed, myHero, false)
-							if HitChance >= 1 then
-								CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
-						end
+					CastSpellTarget(myHero.Addr, _Q)
 					end
 				end
 				if CanCast(_W) and self.combo_w and IsValidTarget(target, self.W.range) then
@@ -545,10 +524,7 @@ function Rengar:RengarCombo()
 					CastSpellTarget(myHero.Addr, _W)
 				end
 				if CanCast(_Q) and self.combo_q and IsValidTarget(target, self.Q.range) then
-					local CastPosition, HitChance, Position = vpred:GetLineCastPosition(target, self.Q.delay, self.Q.width, self.Q.range, self.Q.speed, myHero, false)
-							if HitChance >= 1 then
-								CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
-						end
+					CastSpellTarget(myHero.Addr, _Q)
 					end
 				end
 				if myHero.MP >= 4 then
@@ -573,10 +549,7 @@ function Rengar:RengarCombo()
 						end
 			end
 			if CanCast(_Q) and self.combo_q and IsValidTarget(target, self.Q.range) then
-				local CastPosition, HitChance, Position = vpred:GetLineCastPosition(target, self.Q.delay, self.Q.width, self.Q.range, self.Q.speed, myHero, false)
-						if HitChance >= 1 then
-							CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
-						end
+						CastSpellTarget(myHero.Addr, _Q)
 			end
 			if CanCast(_W) and self.combo_w and IsValidTarget(target, self.W.range) then
 				CastSpellTarget(myHero.Addr, _W)
@@ -614,11 +587,8 @@ function Rengar:KillSteal()
 		  	local qDmg = GetDamage("Q", target)
 		  	local wDmg = GetDamage("W", target)
 				local eDmg = GetDamage("E", target)
-  	    	if CanCast(_Q) and target ~= 0 and IsValidTarget(target, self.Q.range) and self.KillstealQ then
-		      local CastPosition, HitChance, Position = vpred:GetLineCastPosition(target, self.Q.delay, self.Q.width, self.Q.range, self.Q.speed, myHero, false)
-		 	       if HitChance >= 2 and qDmg > target.HP then
-			          CastSpellToPos(CastPosition.x, CastPosition.z, _Q)
-						 end
+  	    	if CanCast(_Q) and target ~= 0 and IsValidTarget(target, self.Q.range) and self.KillstealQ and qDmg > target.HP then
+		      	CastSpellTarget(myHero.Addr, _Q)
 	 	      end
 		    	if CanCast(_W) and target ~= 0 and IsValidTarget(target, self.W.range) and self.KillstealW then
 			       if wDmg > target.HP then
