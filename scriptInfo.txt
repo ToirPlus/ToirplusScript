@@ -38,5 +38,7 @@ https://raw.githubusercontent.com/adminzhou/toirplus/master/Janna/Janna.lua#F53C
 https://raw.githubusercontent.com/adminzhou/toirplus/master/Soraka/Soraka.lua#B6E52230BBC11421457966547D22ED69#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Urgot.lua#E22B17ADEAC6E7EB1B4AEA7CEDA4FF7C#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Evelynn.lua#C58C7CF28717416C9104F9E4EAE052A4#Scripts
+https://raw.githubusercontent.com/JaceNithy/New-SDK-/master/Competitive%20Jhin.lua#C58C7CF28717416C9104F9E4EAE052A4#Scripts
+https://raw.githubusercontent.com/JaceNithy/New-SDK-/master/Katarina%20-%20The%20Dance%20of%20the%20Blades.lua#C58C7CF28717416C9104F9E4EAE052A4#Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Kassadin.lua#C58C7CF22717416C9104F9E4EAE052A4#Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Yasuo.lua#C58C7CF22717416C9104F5E4EAE052A4#Scripts
