@@ -33,7 +33,6 @@ https://raw.githubusercontent.com/Nechrito/Toir/master/Scripts/NechritoBlitzcran
 https://raw.githubusercontent.com/Nechrito/Toir/master/Scripts/NechritoRiven.lua#e9c1a5b156b34fee59aa90f85c5d14d0#Scripts
 https://raw.githubusercontent.com/Nechrito/Toir/master/Scripts/NechritoLucian.lua#e9c1a5b156b34fee59aa90f85c5d14d0#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Irelia.lua#1A7FA91250C0E86218F438E2A80C1A34#Scripts
-https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Lulu.lua#ED5AC5B0CE0ADB0BF29B6BD6CAD4D7CC#Scripts
 https://raw.githubusercontent.com/adminzhou/toirplus/master/Janna/Janna.lua#F53CCE0884534BBC4530749228851E56#Scripts
 https://raw.githubusercontent.com/adminzhou/toirplus/master/Soraka/Soraka.lua#B6E52230BBC11421457966547D22ED69#Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/Competitive%20Urgot.lua#E22B17ADEAC6E7EB1B4AEA7CEDA4FF7C#Scripts
@@ -44,6 +43,7 @@ https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyYasuo.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyKatarina.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyVayne.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NcikyWarwick.lua##Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyLulu.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/New-SDK-/master/Competitive%20Jhin.lua#C58C7CF28717416C9104F9E4EAE052A4#Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Kassadin.lua#C58C7CF22717416C9104F9E4EAE052A4#Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Yasuo.lua#C58C7CF22717416C9104F5E4EAE052A4#Scripts
