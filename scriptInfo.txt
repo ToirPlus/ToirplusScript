@@ -45,6 +45,7 @@ https://raw.githubusercontent.com/JaceNithy/Toir/master/NcikyWarwick.lua##Script
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyLulu.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyKalista.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyFizz.lua##Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyYasuo.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/New-SDK-/master/Competitive%20Jhin.lua#C58C7CF28717416C9104F9E4EAE052A4#Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Kassadin.lua#C58C7CF22717416C9104F9E4EAE052A4#Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Yasuo.lua#C58C7CF22717416C9104F5E4EAE052A4#Scripts
