@@ -46,6 +46,7 @@ https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyLulu.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyKalista.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyFizz.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyYasuo.lua##Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyKaisa.lua##Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Kassadin.lua#C58C7CF22717416C9104F9E4EAE052A4#Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Yasuo.lua#C58C7CF22717416C9104F5E4EAE052A4#Scripts
 https://github.com/chienhao10/Toir/blob/master/TaiwanKarthus.lua#C58CCCF22717416C9104F5E4EAE052A4#Scripts
