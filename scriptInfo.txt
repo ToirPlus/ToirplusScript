@@ -51,3 +51,4 @@ https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyJhin.lua##Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Kassadin.lua#C58C7CF22717416C9104F9E4EAE052A4#Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Yasuo.lua#C58C7CF22717416C9104F5E4EAE052A4#Scripts
 https://github.com/chienhao10/Toir/blob/master/TaiwanKarthus.lua#C58CCCF22717416C9104F5E4EAE052A4#Scripts
+https://raw.githubusercontent.com/zero1day/TOIRPLUS/master/ApZilean.lua
