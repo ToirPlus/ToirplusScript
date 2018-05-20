@@ -58,3 +58,4 @@ https://github.com/nguadien/Toirplus/blob/master/Deep%20Xin%20Zhao.lua##Scripts
 https://github.com/nguadien/Toirplus/blob/master/Deep%20Trundle.lua##Scripts
 https://github.com/nguadien/Toirplus/blob/master/Deep%20Kayn.lua##Scripts
 https://github.com/nguadien/Toirplus/blob/master/Deep%20Irelia.lua##Scripts
+https://github.com/nguadien/Toirplus/blob/master/Deep%20Tryndamere.lua##Scripts
