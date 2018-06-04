@@ -49,6 +49,7 @@ https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyKatarina.lua##Scrip
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyTwisted.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Experimental-/master/ExperimentalKatarina.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyXinZhao.lua##Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyIrelia.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/ProjectYasuo.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyJhin.lua##Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Kassadin.lua#C58C7CF22717416C9104F9E4EAE052A4#Scripts
