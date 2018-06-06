@@ -42,7 +42,6 @@ https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyVayne.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NcikyWarwick.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyLulu.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyFizz.lua##Scripts
-https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyKaisa.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyXayah.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyLeBlanc.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyKatarina.lua##Scripts
