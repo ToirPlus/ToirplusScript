@@ -65,3 +65,4 @@ https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepIrelia.lua##Scrip
 https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepTryndamere.lua##Scripts
 https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepZiggs.lua##Scripts
 https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepNunu.lua##Scripts
+https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepVeigar.lua##Scripts
