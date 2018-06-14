@@ -63,3 +63,5 @@ https://github.com/nguadien/Toirplus/blob/master/DeepTrundle.lua##Scripts
 https://github.com/nguadien/Toirplus/blob/master/DeepKayn.lua##Scripts
 https://github.com/nguadien/Toirplus/blob/master/DeepIrelia.lua##Scripts
 https://github.com/nguadien/Toirplus/blob/master/DeepTryndamere.lua##Scripts
+https://github.com/nguadien/Toirplus/blob/master/DeepZiggs.lua##Scripts
+https://github.com/nguadien/Toirplus/blob/master/DeepNunu.lua##Scripts
