@@ -52,6 +52,7 @@ https://raw.githubusercontent.com/JaceNithy/Toir/master/ProjectYasuo.lua##Script
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyJhin.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyXerath.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyPyke.lua##Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyXayah.lua##Scripts
 https://github.com/JaceNithy/Toir/blob/master/GetFuckingLantern.lua##Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Kassadin.lua#C58C7CF22717416C9104F9E4EAE052A4#Scripts
 https://raw.githubusercontent.com/ToirPlus/ToirplusScript/master/Yasuo.lua#C58C7CF22717416C9104F5E4EAE052A4#Scripts
