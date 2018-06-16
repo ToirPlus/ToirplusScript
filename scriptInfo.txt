@@ -42,6 +42,7 @@ https://raw.githubusercontent.com/JaceNithy/Toir/master/NcikyWarwick.lua##Script
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyLulu.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyFizz.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyLeBlanc.lua##Scripts
+https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyVayne.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyFiora.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyTwisted.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Experimental-/master/ExperimentalKatarina.lua##Scripts
