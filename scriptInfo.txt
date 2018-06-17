@@ -68,3 +68,4 @@ https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepZiggs.lua##Script
 https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepNunu.lua##Scripts
 https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepVeigar.lua##Scripts
 https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepSinged.lua##Scripts
+https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepShen.lua##Scripts
