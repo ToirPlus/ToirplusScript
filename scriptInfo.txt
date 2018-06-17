@@ -49,7 +49,6 @@ https://raw.githubusercontent.com/JaceNithy/Experimental-/master/ExperimentalKat
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyXinZhao.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyIrelia.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/ProjectYasuo.lua##Scripts
-https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyJhin.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyXerath.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyPyke.lua##Scripts
 https://raw.githubusercontent.com/JaceNithy/Toir/master/NickyXayah.lua##Scripts
