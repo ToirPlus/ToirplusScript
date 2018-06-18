@@ -70,4 +70,5 @@ https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepVeigar.lua##Scrip
 https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepSinged.lua##Scripts
 https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepShen.lua##Scripts
 https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepMalphite.lua##Scripts
+https://raw.githubusercontent.com/nguadien/Toirplus/master/DeepTiamat.lua##Scripts
 https://raw.githubusercontent.com/clevermatem/tp/master/teemo.lua##Scripts
